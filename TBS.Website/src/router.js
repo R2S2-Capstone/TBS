@@ -41,6 +41,7 @@ export default new Router({
       path: '/Dealer',
       name: 'dealer',
       component: DealerIndex,
+      // TODO: Route protection
       children: [
         {
           path: '',
@@ -57,6 +58,7 @@ export default new Router({
       path: '/Transporter',
       name: 'transporter',
       component: TransporterIndex,
+      // TODO: Route protection
       children: [
         {
           path: '',
@@ -79,5 +81,10 @@ export default new Router({
       name: 'browsePosts',
       component: null
     },
+    {
+      // This will match all other routes (404)
+      path: '*',
+      component: Home
+    }
   ]
 })
