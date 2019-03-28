@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import TheHeader from '@/components/navigation/Header.vue'
-import TheFooter from '@/components/navigation/Footer.vue'
+import TheHeader from '@/components/Navigation/Header.vue'
+import TheFooter from '@/components/Navigation/Footer.vue'
 export default {
 	name: 'app',
 	components: {
@@ -37,5 +37,12 @@ body {
 }
 .bg-blue {
 	background-color: color(colorPrimary);
+}
+.btn-main {
+    font-size: 0.75rem;
+    border-radius: 5rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
 }
 </style>
