@@ -9,7 +9,7 @@
 			<FormPassword v-model="password" :validator="$v.password"/>
 
 			<div class="mb-3">
-				<router-link :to="{ name: 'register' }">Register here</router-link>
+				<router-link :to="{ name: 'register' }">Don't have an account? Register here</router-link>
 			</div>
 
 			<div class="mb-3">
