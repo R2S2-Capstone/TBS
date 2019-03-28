@@ -5,6 +5,7 @@ const Home = () => import('@/views/Home.vue')
 
 const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
+const ResetPassword = () => import('@/views/ResetPassword.vue')
 
 // Dealer
 const DealerIndex = () => import('@/views/Dealer/Index.vue')
@@ -36,6 +37,11 @@ export default new Router({
       path: '/Register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/ResetPassword/:token?',
+      name: 'resetPassword',
+      component: ResetPassword
     },
     {
       path: '/Dealer',
