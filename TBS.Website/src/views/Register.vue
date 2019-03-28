@@ -20,12 +20,14 @@
         <FormEmail v-model="email" :validator="$v.email"/>
         <FormPassword v-model="password" :validator="$v.password"/>
         <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+        <!-- TODO: More data -->
       </div>
 
       <div v-else>
         <FormEmail v-model="email" :validator="$v.email"/>
         <FormPassword v-model="password" :validator="$v.password"/>
         <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+        <!-- TODO: More data -->
       </div>
 
 			<div class="mb-3">
@@ -46,6 +48,7 @@ import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/valid
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
 
 export default {
+  name: 'register',
   components: {
     FormNarrowCard,
     FormEmail,

@@ -6,6 +6,16 @@ const Home = () => import('@/views/Home.vue')
 const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
 
+// Dealer
+const DealerIndex = () => import('@/views/Dealer/Index.vue')
+const DealerHome = () => import('@/views/Dealer/Home.vue')
+const DealerCreatePost = () => import('@/views/Dealer/CreatePost.vue')
+
+// Transporter
+const TransporterIndex = () => import('@/views/Transporter/Index.vue')
+const TransporterHome = () => import('@/views/Transporter/Home.vue')
+const TransporterCreatePost = () => import('@/views/Transporter/CreatePost.vue')
+
 Vue.use(Router)
 
 export default new Router({
@@ -28,9 +38,36 @@ export default new Router({
       component: Register
     },
     {
-      path: '/CreatePost',
-      name: 'createPost',
-      component: null
+      path: '/Dealer',
+      name: 'dealer',
+      component: DealerIndex,
+      children: [
+        {
+          path: '',
+          component: DealerHome
+        },
+        {
+          path: 'CreatePost',
+          name: 'dealerCreatePost',
+          component: DealerCreatePost
+        }
+      ]
+    },
+    {
+      path: '/Transporter',
+      name: 'transporter',
+      component: TransporterIndex,
+      children: [
+        {
+          path: '',
+          component: TransporterHome
+        },
+        {
+          path: 'createPost',
+          name: 'transporterCreatePost',
+          component: TransporterCreatePost
+        }
+      ]
     },
     {
       path: '/ManagePosts',

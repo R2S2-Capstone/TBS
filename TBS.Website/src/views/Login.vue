@@ -32,7 +32,7 @@ import FormPassword from '@/components/Form/Input/FormPassword.vue'
 import { required, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
-	name: "LoginIndex",
+	name: 'login',
 	components: {
 		FormNarrowCard,
 		FormEmail,

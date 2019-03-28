@@ -45,4 +45,7 @@ body {
     font-weight: bold;
     padding: 1rem;
 }
+.pointer {
+	cursor: pointer;
+}
 </style>

@@ -32,7 +32,7 @@
 					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">
-							<span class="btn text-white fade-on-hover" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
+							<span class="btn text-white fade-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
 					</li>
 				</ul>
 		</div>
