@@ -19,17 +19,22 @@
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<router-link :to="{ name: 'managePosts' }" class="btn text-white fade-on-hover">Manage Posts</router-link>
-					</li>
 					<!-- TODO: User must not be logged in -->
 					<li class="nav-item">
 						<router-link :to="{ name: 'login' }" class="btn text-white fade-on-hover"><i class="fas fa-sign-in-alt"></i> Login</router-link>
 					</li>
+					<!-- TODO: User must not be logged in -->
+					<li class="nav-item">
+						<router-link :to="{ name: 'register' }" class="btn text-white fade-on-hover"><i class="fas fa-sign-in-alt"></i> Register</router-link>
+					</li>
 					<!-- TODO: User must be logged in -->
-                    <li class="nav-item">
-                        <span class="btn text-white fade-on-hover" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
-                    </li>
+					<li class="nav-item">
+						<router-link :to="{ name: 'managePosts' }" class="btn text-white fade-on-hover">Manage Posts</router-link>
+					</li>
+					<!-- TODO: User must be logged in -->
+					<li class="nav-item">
+							<span class="btn text-white fade-on-hover" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
+					</li>
 				</ul>
 		</div>
 	</nav>
