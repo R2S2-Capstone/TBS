@@ -9,12 +9,12 @@
 					<li class="nav-item">
 						<router-link :to="{ name: 'home' }" class="btn text-white fade-on-hover">Home</router-link>
 					</li>
+					<li class="nav-item">
+						<router-link :to="{ name: 'viewPosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
+					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">
 						<router-link :to="{ name: 'dealerCreatePost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
-					</li>
-					<li class="nav-item">
-						<router-link :to="{ name: 'browsePosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
@@ -28,7 +28,7 @@
 					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">
-						<router-link :to="{ name: 'managePosts' }" class="btn text-white fade-on-hover">Manage Posts</router-link>
+						<router-link :to="{ name: 'dealerHome' }" class="btn text-white fade-on-hover">Manage Posts</router-link>
 					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">

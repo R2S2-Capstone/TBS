@@ -1,42 +1,44 @@
 <template>
-  <FormNarrowCard title="Register" :submit="submit">
-    <div slot="card-information">
-      <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
-      <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
-    </div>
-
-    <div slot="card-content" class="text-center">
-      <ul class="nav nav-tabs nav-justified mb-2" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="dealer"
-            aria-selected="true" @click="isDealer = true">Dealer/Wholesaler</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="transporter"
-            aria-selected="false" @click="isDealer = false">Transporter</a>
-        </li>
-      </ul>
-      <div v-if="isDealer">
-        <FormEmail v-model="email" :validator="$v.email"/>
-        <FormPassword v-model="password" :validator="$v.password"/>
-        <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
-        <!-- TODO: More data -->
+  <div class="container pt-5">
+    <FormNarrowCard title="Register" :submit="submit">
+      <div slot="card-information">
+        <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+        <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
       </div>
 
-      <div v-else>
-        <FormEmail v-model="email" :validator="$v.email"/>
-        <FormPassword v-model="password" :validator="$v.password"/>
-        <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
-        <!-- TODO: More data -->
+      <div slot="card-content" class="text-center">
+        <ul class="nav nav-tabs nav-justified mb-2" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="dealer"
+              aria-selected="true" @click="isDealer = true">Dealer/Wholesaler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="transporter"
+              aria-selected="false" @click="isDealer = false">Transporter</a>
+          </li>
+        </ul>
+        <div v-if="isDealer">
+          <FormEmail v-model="email" :validator="$v.email"/>
+          <FormPassword v-model="password" :validator="$v.password"/>
+          <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+          <!-- TODO: More data -->
+        </div>
+
+        <div v-else>
+          <FormEmail v-model="email" :validator="$v.email"/>
+          <FormPassword v-model="password" :validator="$v.password"/>
+          <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+          <!-- TODO: More data -->
+        </div>
+
+        <div class="mb-3">
+          <router-link :to="{ name: 'login' }">Already have an account? Login here</router-link>
+        </div>
+
+        <button class="btn btn-main btn-lg bg-blue fade-on-hover btn-block text-uppercase text-white" type="submit">Register</button>
       </div>
-
-			<div class="mb-3">
-				<router-link :to="{ name: 'login' }">Already have an account? Login here</router-link>
-			</div>
-
-			<button class="btn btn-main btn-lg bg-blue fade-on-hover btn-block text-uppercase text-white" type="submit">Register</button>
-    </div>
-  </FormNarrowCard>
+    </FormNarrowCard>
+  </div>
 </template>
 
 <script>

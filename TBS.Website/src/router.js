@@ -7,15 +7,18 @@ const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
 const ResetPassword = () => import('@/views/ResetPassword.vue')
 
+// General
+const ViewPosts = () => import('@/views/ViewPosts.vue')
+
 // Dealer
 const DealerIndex = () => import('@/views/Dealer/Index.vue')
 const DealerHome = () => import('@/views/Dealer/Home.vue')
-const DealerCreatePost = () => import('@/views/Dealer/CreatePost.vue')
+const DealerModifyPost = () => import('@/views/Dealer/Modify.vue')
 
 // Transporter
 const TransporterIndex = () => import('@/views/Transporter/Index.vue')
 const TransporterHome = () => import('@/views/Transporter/Home.vue')
-const TransporterCreatePost = () => import('@/views/Transporter/CreatePost.vue')
+const TransporterModifyPost = () => import('@/views/Transporter/Modify.vue')
 
 Vue.use(Router)
 
@@ -50,14 +53,19 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'dealer',
+          name: 'dealerHome',
           component: DealerHome
         },
         {
           path: 'CreatePost',
           name: 'dealerCreatePost',
-          component: DealerCreatePost
-        }
+          component: DealerModifyPost
+        },
+        {
+          path: 'EditPost',
+          name: 'dealerEditPost',
+          component: DealerModifyPost
+        },
       ]
     },
     {
@@ -67,25 +75,25 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'transporter',
+          name: 'transporterHome',
           component: TransporterHome
         },
         {
-          path: 'createPost',
+          path: 'CreatePost',
           name: 'transporterCreatePost',
-          component: TransporterCreatePost
-        }
+          component: TransporterModifyPost
+        },
+        {
+          path: 'EditPost',
+          name: 'transporterEditPost',
+          component: TransporterModifyPost
+        },
       ]
     },
     {
-      path: '/ManagePosts',
-      name: 'managePosts',
-      component: null
-    },
-    {
-      path: '/Browse',
-      name: 'browsePosts',
-      component: null
+      path: '/ViewPosts',
+      name: 'viewPosts',
+      component: ViewPosts
     },
     {
       // This will match all other routes (404)

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pt-5">
     <WideCard title="Create Availability Post">
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">

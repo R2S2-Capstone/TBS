@@ -1,31 +1,33 @@
 <template>
-  <FormNarrowCard title="Reset Password" :submit="submit">
-    <div slot="card-information">
-      <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
-      <p v-if="passwordReset" class="text-success text-center mb-3">Password has been reset</p>
-      <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
-    </div>
-    <div slot="card-content">
-      <div v-if="!token">
-        <FormEmail
-          v-model="email"
-          :validator="$v.email"
-        />
+  <div class="container pt-5">
+    <FormNarrowCard title="Reset Password" :submit="submit">
+      <div slot="card-information">
+        <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
+        <p v-if="passwordReset" class="text-success text-center mb-3">Password has been reset</p>
+        <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
       </div>
-      <div v-else>
-        <FormPassword
-          v-model="password"
-          :validator="$v.password"
-        />
-        <FormPassword
-          v-model="confirmationPassword"
-          confirmationPassword="true"
-          :validator="$v.confirmationPassword"
-        />
+      <div slot="card-content">
+        <div v-if="!token">
+          <FormEmail
+            v-model="email"
+            :validator="$v.email"
+          />
+        </div>
+        <div v-else>
+          <FormPassword
+            v-model="password"
+            :validator="$v.password"
+          />
+          <FormPassword
+            v-model="confirmationPassword"
+            confirmationPassword="true"
+            :validator="$v.confirmationPassword"
+          />
+        </div>
+        <button class="btn btn-main btn-lg bg-blue fade-on-hover btn-block text-uppercase text-white" type="submit">Reset Password</button>
       </div>
-      <button class="btn btn-main btn-lg bg-blue fade-on-hover btn-block text-uppercase" type="submit">Reset Password</button>
-    </div>
-  </FormNarrowCard>
+    </FormNarrowCard>
+  </div>
 </template>
 
 <script>
