@@ -13,9 +13,8 @@
 					<li class="nav-item">
 						<router-link :to="{ name: 'createPost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
 					</li>
-					<!-- TODO: If user is a dealer show TSP posts instead of dealerPosts -->
 					<li class="nav-item">
-						<router-link :to="{ name: 'dealerPosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
+						<router-link :to="{ name: 'browsePosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
@@ -42,7 +41,11 @@
 
 <script>
 export default {
-	name: 'header',
-
+	name: 'navigationHeader',
+	methods: {
+		logout() {
+			// TODO: Logout
+		}
+	}
 }
 </script>
