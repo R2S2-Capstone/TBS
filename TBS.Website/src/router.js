@@ -39,12 +39,12 @@ export default new Router({
     },
     {
       path: '/Dealer',
-      name: 'dealer',
       component: DealerIndex,
       // TODO: Route protection
       children: [
         {
           path: '',
+          name: 'dealer',
           component: DealerHome
         },
         {
@@ -56,12 +56,12 @@ export default new Router({
     },
     {
       path: '/Transporter',
-      name: 'transporter',
       component: TransporterIndex,
       // TODO: Route protection
       children: [
         {
           path: '',
+          name: 'transporter',
           component: TransporterHome
         },
         {

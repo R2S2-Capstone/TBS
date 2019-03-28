@@ -11,7 +11,7 @@
 					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">
-						<router-link :to="{ name: 'createPost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
+						<router-link :to="{ name: 'dealerCreatePost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
 					</li>
 					<li class="nav-item">
 						<router-link :to="{ name: 'browsePosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
