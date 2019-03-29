@@ -1,5 +1,6 @@
 <template>
   <div class="container pt-5">
+    <Back/>
     <div class="row">
       <div class="col-12">
         <div class="row pb-3">
@@ -56,8 +57,13 @@
 </template>
 
 <script>
+import Back from '@/components/Back.vue'
+
 export default {
   name: 'manageDealerBids',
+  components: {
+    Back
+  },
   beforeCreate() {
     // A post ID must be passed, if not return to previous route
     if (this.$route.params.id == null) this.$router.go(-1)

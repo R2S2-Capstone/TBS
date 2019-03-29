@@ -1,5 +1,6 @@
 <template>
   <div class="container pt-5">
+    <Back/>
     <WideCard title="Create Post">
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
@@ -134,11 +135,13 @@
 </template>
 
 <script>
+import Back from '@/components/Back.vue'
 import WideCard from '@/components/Card/WideCard.vue'
 
 export default {
   name: 'dealerCreatePost',
   components: {
+    Back,
     WideCard,
   },
   data() {

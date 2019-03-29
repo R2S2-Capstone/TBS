@@ -1,5 +1,6 @@
 <template>
   <div class="container pt-5">
+    <Back/>
     <WideCard :title="'Bid from ' + bid.bidder.name">
       <div slot="card-content" class="text-center">
         <div class="row">
@@ -89,7 +90,7 @@
               </div>
             </div>
           </div>
-          <div class="col-12">
+          <div class="col-12" v-if="!post.acceptedBid">
             <div class="row">
                 <div class="col-12 pb-3">
 			            <button class="btn btn-main btn- bg-blue fade-on-hover text-uppercase text-white" type="submit">Accept Bid</button>
@@ -106,11 +107,13 @@
 </template>
 
 <script>
+import Back from '@/components/Back.vue'
 import WideCard from '@/components/Card/WideCard.vue'
 
 export default {
   name: 'transporterViewBidDetails',
   components: {
+    Back,
     WideCard
   },
   beforeCreate() {
@@ -119,6 +122,9 @@ export default {
   },
   data() {
     return {
+      post: {
+        acceptedBid: false,
+      },
       bid: {
         id: '1',
         bidder: {

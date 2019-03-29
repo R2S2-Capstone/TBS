@@ -20,10 +20,10 @@
                 <td>{{ post.address }}</td>
                 <td>{{ post.status }}</td>
                 <td>
-                  <router-link class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'dealerManageBids', params: { id: post.id } }">Manage Bids</router-link>
+                  <router-link class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'transporterManageBids', params: { id: post.id } }">Manage Bids</router-link>
                 </td>
                 <td>
-                  <router-link class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'dealerEditPost', params: { id: post.id } }">Edit</router-link>
+                  <router-link class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'transporterEditPost', params: { id: post.id } }">Edit</router-link>
                 </td>
               </tr>
             </tbody>
