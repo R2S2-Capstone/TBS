@@ -93,10 +93,10 @@
           <div class="col-12" v-if="!post.acceptedBid">
             <div class="row">
                 <div class="col-12 pb-3">
-			            <button class="btn btn-main btn- bg-blue fade-on-hover text-uppercase text-white" type="submit">Accept Bid</button>
+                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="acceptBid(bid.id)">Accept Bid</button>
                 </div>
                 <div class="col-12">
-			            <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">Decline Bid</button>
+                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline Bid</button>
                 </div>
               </div>
           </div>

@@ -85,7 +85,7 @@
                   <input type="text" class="form-control" placeholder="2000">
                 </div>
                 <div class="col-12">
-			            <button class="btn btn-main btn- bg-blue fade-on-hover text-uppercase text-white" type="submit">Post</button>
+                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">Post</button>
                 </div>
               </div>
             </div>
