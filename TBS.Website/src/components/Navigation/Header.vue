@@ -28,7 +28,7 @@
 					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">
-						<router-link :to="{ name: 'dealerHome' }" class="btn text-white fade-on-hover">Manage Posts</router-link>
+						<router-link :to="{ name: 'dealerHome' }" class="btn text-white fade-on-hover">Dashboard</router-link>
 					</li>
 					<!-- TODO: User must be logged in -->
 					<li class="nav-item">
