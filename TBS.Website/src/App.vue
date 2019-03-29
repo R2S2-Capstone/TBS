@@ -51,4 +51,7 @@ body {
 .pointer {
   cursor: pointer;
 }
+.fa-star {
+	color: #efce4a;
+}
 </style>

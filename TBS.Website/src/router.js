@@ -21,6 +21,7 @@ const TransporterIndex = () => import('@/views/Transporter/Index.vue')
 const TransporterHome = () => import('@/views/Transporter/Home.vue')
 const TransporterModifyPost = () => import('@/views/Transporter/Modify.vue')
 const TransporterManageBids = () => import('@/views/Transporter/Bids.vue')
+const TransporterViewBidDetails = () => import('@/views/Transporter/BidDetails.vue')
 
 Vue.use(Router)
 
@@ -99,6 +100,11 @@ export default new Router({
           path: 'ManageBids/:id?',
           name: 'transporterManageBids',
           component: TransporterManageBids
+        },
+        {
+          path: 'ViewBid/:id?',
+          name: 'transporterViewBidDetails',
+          component: TransporterViewBidDetails
         },
       ]
     },
