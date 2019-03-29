@@ -14,11 +14,13 @@ const ViewPosts = () => import('@/views/ViewPosts.vue')
 const DealerIndex = () => import('@/views/Dealer/Index.vue')
 const DealerHome = () => import('@/views/Dealer/Home.vue')
 const DealerModifyPost = () => import('@/views/Dealer/Modify.vue')
+const DealerManageBids = () => import('@/views/Dealer/Bids.vue')
 
 // Transporter
 const TransporterIndex = () => import('@/views/Transporter/Index.vue')
 const TransporterHome = () => import('@/views/Transporter/Home.vue')
 const TransporterModifyPost = () => import('@/views/Transporter/Modify.vue')
+const TransporterManageBids = () => import('@/views/Transporter/Bids.vue')
 
 Vue.use(Router)
 
@@ -62,9 +64,14 @@ export default new Router({
           component: DealerModifyPost
         },
         {
-          path: 'EditPost',
+          path: 'EditPost/:id?',
           name: 'dealerEditPost',
           component: DealerModifyPost
+        },
+        {
+          path: 'ManageBids/:id?',
+          name: 'dealerManageBids',
+          component: DealerManageBids
         },
       ]
     },
@@ -84,9 +91,14 @@ export default new Router({
           component: TransporterModifyPost
         },
         {
-          path: 'EditPost',
+          path: 'EditPost/:id?',
           name: 'transporterEditPost',
           component: TransporterModifyPost
+        },
+        {
+          path: 'ManageBids/:id?',
+          name: 'transporterManageBids',
+          component: TransporterManageBids
         },
       ]
     },
