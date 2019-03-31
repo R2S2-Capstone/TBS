@@ -19,7 +19,7 @@ const global = {
         },
     },
     actions: {
-        register(payload) {
+        register({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
