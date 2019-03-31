@@ -21,6 +21,7 @@ const global = {
     actions: {
         register(payload) {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
                         // commit("authenticate", response.user)
@@ -29,10 +30,14 @@ const global = {
                     .catch((error) => {
                         reject(error)
                     })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
+                    })
             })
         },
         signin({ commit }, payload) {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         commit("authenticate", response.user)
@@ -40,6 +45,8 @@ const global = {
                     })
                     .catch((error) => {
                         reject(error)
+                    }).finally(() => {
+                        commit('global/setLoading', false, { root: true })
                     })
             })
         },
@@ -47,6 +54,7 @@ const global = {
             return new Promise((resolve, reject) => {
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
+                        commit('global/setLoading', true, { root: true })
                         firebase.auth().currentUser.getIdToken(true)
                             .then((response) => {
                                 commit("authenticate", {
@@ -57,6 +65,9 @@ const global = {
                             })
                             .catch((error) => {
                                 reject(error)
+                            })
+                            .finally(() => {
+                                commit('global/setLoading', false, { root: true })
                             })
                     }
                 })

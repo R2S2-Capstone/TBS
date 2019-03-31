@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Spinner v-if="loading"/>
     <TheHeader />
     <router-view />
     <TheFooter />
@@ -7,16 +8,24 @@
 </template>
 
 <script>
-import TheHeader from '@/components/Navigation/Header.vue';
-import TheFooter from '@/components/Navigation/Footer.vue';
+import Spinner from '@/components/Spinner.vue'
+import TheHeader from '@/components/Navigation/Header.vue'
+import TheFooter from '@/components/Navigation/Footer.vue'
+
 export default {
   name: 'app',
   components: {
+    Spinner,
     TheHeader,
     TheFooter
   },
   created() {
     this.$store.dispatch("authentication/refreshToken")
+  },
+  computed: {
+    loading() {
+      return this.$store.getters['global/isLoading']
+    }
   }
 }
 </script>
