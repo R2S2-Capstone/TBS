@@ -7,15 +7,18 @@
 </template>
 
 <script>
-import TheHeader from "@/components/Navigation/Header.vue";
-import TheFooter from "@/components/Navigation/Footer.vue";
+import TheHeader from '@/components/Navigation/Header.vue';
+import TheFooter from '@/components/Navigation/Footer.vue';
 export default {
-  name: "app",
+  name: 'app',
   components: {
     TheHeader,
     TheFooter
+  },
+  created() {
+    this.$store.dispatch("authentication/refreshToken")
   }
-};
+}
 </script>
 
 
