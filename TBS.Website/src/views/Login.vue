@@ -61,6 +61,13 @@ export default {
 			if (this.$v.$invalid) {
 				return;
 			}
+			this.$store.dispatch('authentication/login', { email: this.email, password: this.password })
+          .then(() => {
+						this.$router.push({ name: 'home' })
+          })
+          .catch(() => {
+            this.error = true
+          })
 			// TODO: Login stuff here
 		}
 	}

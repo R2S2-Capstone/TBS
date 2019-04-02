@@ -35,11 +35,15 @@ const global = {
                     })
             })
         },
-        signin({ commit }, payload) {
+        login({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
+                        if (!response.user.emailVerified) {
+                            firebase.auth().signOut()
+                            reject('Email not verified')
+                        }
                         commit("authenticate", response.user)
                         resolve(response)
                     })
