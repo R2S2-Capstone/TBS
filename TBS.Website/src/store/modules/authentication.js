@@ -43,8 +43,7 @@ const global = {
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
-                            firebase.auth().signOut()
-                            reject('Email not verified')
+                            reject("Email not verified")
                         }
                         commit("authenticate", response.user)
                         resolve(response)
@@ -60,21 +59,25 @@ const global = {
             return new Promise((resolve, reject) => {
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
-                        commit('global/setLoading', true, { root: true })
-                        firebase.auth().currentUser.getIdToken(true)
-                            .then((response) => {
-                                commit("authenticate", {
-                                    _lat: response,
-                                    email: firebase.auth().currentUser.email
+                        if (!user.emailVerified) {
+                            commit('logout')
+                        } else {
+                            commit('global/setLoading', true, { root: true })
+                            firebase.auth().currentUser.getIdToken(true)
+                                .then((response) => {
+                                    commit("authenticate", {
+                                        _lat: response,
+                                        email: firebase.auth().currentUser.email
+                                    })
+                                    resolve()
                                 })
-                                resolve()
-                            })
-                            .catch((error) => {
-                                reject(error)
-                            })
-                            .finally(() => {
-                                commit('global/setLoading', false, { root: true })
-                            })
+                                .catch((error) => {
+                                    reject(error)
+                                })
+                                .finally(() => {
+                                    commit('global/setLoading', false, { root: true })
+                                })
+                        }
                     }
                 })
             })
