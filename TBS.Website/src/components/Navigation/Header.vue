@@ -12,26 +12,21 @@
 					<li class="nav-item">
 						<router-link :to="{ name: 'viewPosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
 					</li>
-					<!-- TODO: User must be logged in -->
-					<li class="nav-item">
+					<li class="nav-item" v-if="isAuthenticated">
 						<router-link :to="{ name: 'dealerCreatePost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
-					<!-- TODO: User must not be logged in -->
-					<li class="nav-item">
+					<li class="nav-item" v-if="!isAuthenticated">
 						<router-link :to="{ name: 'login' }" class="btn text-white fade-on-hover"><i class="fas fa-sign-in-alt"></i> Login</router-link>
 					</li>
-					<!-- TODO: User must not be logged in -->
-					<li class="nav-item">
+					<li class="nav-item" v-if="!isAuthenticated">
 						<router-link :to="{ name: 'register' }" class="btn text-white fade-on-hover"><i class="fas fa-sign-in-alt"></i> Register</router-link>
 					</li>
-					<!-- TODO: User must be logged in -->
-					<li class="nav-item">
+					<li class="nav-item" v-if="isAuthenticated">
 						<router-link :to="{ name: 'dealerHome' }" class="btn text-white fade-on-hover">Dashboard</router-link>
 					</li>
-					<!-- TODO: User must be logged in -->
-					<li class="nav-item">
+					<li class="nav-item" v-if="isAuthenticated">
 							<span class="btn text-white fade-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
 					</li>
 				</ul>
@@ -45,6 +40,11 @@ export default {
 	methods: {
 		logout() {
 			this.$store.commit('authentication/logout')
+		},
+	},
+	computed: {
+		isAuthenticated() {
+			return this.$store.getters['authentication/isAuthenticated']
 		}
 	}
 }

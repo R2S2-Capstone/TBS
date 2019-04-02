@@ -15,6 +15,7 @@ const global = {
         },
         logout(state) {
             state.email = null
+            state.token = null
             firebase.auth().signOut()
         },
     },
@@ -35,7 +36,7 @@ const global = {
                     })
             })
         },
-        login({ commit }, payload) {
+        login({ commit, dispatch }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
