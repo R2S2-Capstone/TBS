@@ -24,7 +24,7 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
-                        // commit("authenticate", response.user)
+                        firebase.auth().currentUser.sendEmailVerification()
                         resolve()
                     })
                     .catch((error) => {

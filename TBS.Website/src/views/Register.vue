@@ -2,7 +2,7 @@
   <div class="container pt-5">
     <FormNarrowCard title="Register" :submit="submit">
       <div slot="card-information">
-        <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent.</p>
+        <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent. Emails may take up to five minutes to send</p>
         <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
       </div>
 
@@ -89,6 +89,13 @@ export default {
         if (this.$v.$invalid) {
             return
         }
+        this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
+          .then((response) => {
+            this.success = true
+          })
+          .catch(() => {
+            this.error = true
+          })
         // TODO: Register
     },
   }
