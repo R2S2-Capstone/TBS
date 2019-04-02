@@ -2,6 +2,7 @@
   <div class="container pt-5">
     <FormNarrowCard title="Login" :submit="submit" v-if="this.$route.name === 'login'">
       <div slot="card-information">
+				<p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
         <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
       </div>
 
@@ -41,6 +42,7 @@ export default {
 		return {
 			email: '',
 			password: '',
+			redirect: this.$route.params.redirect,
 			error: false,
 			errorMessage: "Failed to login. Please try again"
 		};

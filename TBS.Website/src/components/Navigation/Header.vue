@@ -40,6 +40,7 @@ export default {
 	methods: {
 		logout() {
 			this.$store.commit('authentication/logout')
+			this.$router.push({ name: 'home' })
 		},
 	},
 	computed: {

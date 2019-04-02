@@ -4,6 +4,8 @@ import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store/store.js'
 
+store.dispatch("authentication/refreshToken", { global: true })
+
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 

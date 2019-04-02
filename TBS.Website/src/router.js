@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store/store.js'
 
 const Home = () => import('@/views/Home.vue')
 
@@ -25,6 +26,31 @@ const TransporterViewBidDetails = () => import('@/views/Transporter/BidDetails.v
 
 Vue.use(Router)
 
+const LoggedIn = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const token = store.getters['authentication/getToken']
+      if (token) {
+        next()
+      } else {
+        next({ name: 'login',  params: { redirect: to.fullPath } })
+      }
+    }
+    if (store.getters['global/isLoading']) {
+      store.watch(
+        (getters) => {
+          getters['global/isLoading']
+        },
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -37,12 +63,12 @@ export default new Router({
     {
       path: '/Login',
       name: 'login',
-      component: Login
+      component: Login,
     },
     {
       path: '/Register',
       name: 'register',
-      component: Register
+      component: Register,
     },
     {
       path: '/ResetPassword/:token?',
@@ -52,7 +78,8 @@ export default new Router({
     {
       path: '/Dealer',
       component: DealerIndex,
-      // TODO: Route protection
+      ...LoggedIn,
+      // TODO: Make sure user is a dealer
       children: [
         {
           path: '',
@@ -79,7 +106,8 @@ export default new Router({
     {
       path: '/Transporter',
       component: TransporterIndex,
-      // TODO: Route protection
+      ...LoggedIn,
+      // TODO: Make sure user is a transporter
       children: [
         {
           path: '',

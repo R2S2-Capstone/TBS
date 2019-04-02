@@ -19,9 +19,6 @@ export default {
     TheHeader,
     TheFooter
   },
-  created() {
-    this.$store.dispatch("authentication/refreshToken")
-  },
   computed: {
     loading() {
       return this.$store.getters['global/isLoading']

@@ -90,7 +90,7 @@ export default {
             return
         }
         this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
-          .then((response) => {
+          .then(() => {
             this.success = true
           })
           .catch(() => {

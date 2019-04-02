@@ -6,6 +6,7 @@ const global = {
         token: '',
     },
     getters: {
+        getToken: state => state.token,
         isAuthenticated: state => state.token
     },
     mutations: {
@@ -36,7 +37,7 @@ const global = {
                     })
             })
         },
-        login({ commit, dispatch }, payload) {
+        login({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
