@@ -44,7 +44,7 @@ export default {
 	name: 'navigationHeader',
 	methods: {
 		logout() {
-			// TODO: Logout
+			this.$store.commit('authentication/logout')
 		}
 	}
 }

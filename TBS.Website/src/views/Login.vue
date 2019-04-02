@@ -68,7 +68,6 @@ export default {
           .catch(() => {
             this.error = true
           })
-			// TODO: Login stuff here
 		}
 	}
 }
