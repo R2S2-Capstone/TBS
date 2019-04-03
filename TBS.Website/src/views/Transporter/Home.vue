@@ -28,23 +28,30 @@
               </tr>
             </tbody>
           </table>
-          <ul class="pagination">
-            <li class="page-item" :class="currentPostPage == 1 ? 'disabled' : ''">
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <ul class="pagination">
+              <li class="page-item" :class="currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(currentPostPage-1)">Previous</span>
-            </li>
-            <li class="page-item" :class="currentPostPage == 1 ? 'disabled' : ''">
+              </li>
+              <li class="page-item" :class="currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(1)">First</span>
-            </li>
-            <li v-for="(page, index) in  postPageCount" :key="index" class="page-item" :class="page == currentPostPage ? 'active' : ''">
+              </li>
+              <li v-for="(page, index) in  postPageCount" :key="index" class="page-item" :class="page == currentPostPage ? 'active' : ''">
                 <span class="page-link" @click="setPostPage(page)">{{ page }}</span>
-            </li>
-            <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
+              </li>
+              <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(postPageCount)">Last</span>
-            </li>
-            <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
+              </li>
+              <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(currentPostPage+1)">Next</span>
-            </li>
-          </ul>
+              </li>
+              <li class="page-item ml-auto">
+                <router-link :to="{ name: 'transporterCreatePost' }" class="btn btn-main bg-blue fade-on-hover text-white">New Post</router-link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
