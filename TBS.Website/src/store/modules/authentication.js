@@ -4,10 +4,12 @@ const global = {
     state: {
         email: '',
         token: '',
+        refreshing: false,
     },
     getters: {
         getToken: state => state.token,
-        isAuthenticated: state => state.token
+        isAuthenticated: state => state.token,
+        isRefreshing: state => state.refreshing,
     },
     mutations: {
         authenticate(state, userData) {
@@ -19,6 +21,10 @@ const global = {
             state.token = null
             firebase.auth().signOut()
         },
+        refresh(state, refreshing) {
+            console.log('Refreshing ' + refreshing)
+            state.refreshing = refreshing
+        }
     },
     actions: {
         register({ commit }, payload) {
@@ -57,13 +63,14 @@ const global = {
         },
         refreshToken({ commit }) {
             return new Promise((resolve, reject) => {
+                commit('authentication/refresh', true, { root: true })
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
                         if (!user.emailVerified) {
                             commit('logout')
                         } else {
                             commit('global/setLoading', true, { root: true })
-                            firebase.auth().currentUser.getIdToken(true)
+                            firebase.auth().currentUser.getIdToken()
                                 .then((response) => {
                                     commit("authenticate", {
                                         _lat: response,
@@ -75,11 +82,15 @@ const global = {
                                     reject(error)
                                 })
                                 .finally(() => {
+                                    commit('authentication/refresh', false, { root: true })
                                     commit('global/setLoading', false, { root: true })
                                 })
+                            }
                         }
-                    }
-                })
+                        else {
+                            commit('authentication/refresh', false, { root: true })
+                        }
+                    })
             })
         }
     }

@@ -36,11 +36,8 @@ const LoggedIn = {
         next({ name: 'login',  params: { redirect: to.fullPath } })
       }
     }
-    if (store.getters['global/isLoading']) {
-      store.watch(
-        (getters) => {
-          getters['global/isLoading']
-        },
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
         () => {
           redirect()
         }

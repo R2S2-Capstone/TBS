@@ -24,7 +24,7 @@
 						<router-link :to="{ name: 'register' }" class="btn text-white fade-on-hover"><i class="fas fa-sign-in-alt"></i> Register</router-link>
 					</li>
 					<li class="nav-item" v-if="isAuthenticated">
-						<router-link :to="{ name: 'dealerHome' }" class="btn text-white fade-on-hover">Dashboard</router-link>
+						<router-link :to="{ name: 'transporterHome' }" class="btn text-white fade-on-hover">Dashboard</router-link>
 					</li>
 					<li class="nav-item" v-if="isAuthenticated">
 							<span class="btn text-white fade-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
