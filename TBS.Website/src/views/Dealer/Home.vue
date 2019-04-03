@@ -47,9 +47,6 @@
               <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(currentPostPage+1)">Next</span>
               </li>
-              <li class="page-item ml-auto">
-                <router-link :to="{ name: 'dealerCreatePost' }" class="btn btn-main bg-blue fade-on-hover text-white">New Post</router-link>
-              </li>
             </ul>
           </div>
         </div>

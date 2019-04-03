@@ -22,7 +22,6 @@ const global = {
             firebase.auth().signOut()
         },
         refresh(state, refreshing) {
-            console.log('Refreshing ' + refreshing)
             state.refreshing = refreshing
         }
     },
