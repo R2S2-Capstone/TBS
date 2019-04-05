@@ -147,13 +147,7 @@ export default {
       ]
     }
   },
-  methods: {
-    manageBids(postId) {
-      // TODO:
-    },
-    editPost(postId) {
-      this.$router.push({ name: 'dealerManageBids', params: { id: postId }})
-    },        
+  methods: {      
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     },

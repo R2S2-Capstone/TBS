@@ -27,7 +27,7 @@
                 <td>{{ bid.status }}</td>
                 <td><router-link :to="{ name: 'transporterViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
-                  <div v-if="bid.status == 'Pending' && !post.acceptedBid">
+                  <div v-if="bid.status == 'Pending'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -123,10 +123,10 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      this.post.acceptedBid = true
+      this.bids.find(b => b.id == bidId).status = 'Accepted'
     },
     declineBid(bidId) {
-      console.log(`Decline bid ${bidId}`)
+      this.bids.find(b => b.id == bidId).status = 'Declined'
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });

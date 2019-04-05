@@ -16,7 +16,7 @@
               <th>Amount</th>
               <th>Rating</th>
               <th>Status</th>
-              <th>Management</th>
+              <th v-if="!post.acceptedBid">Management</th>
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
@@ -24,8 +24,8 @@
                 <td>{{ format(bid.amount) }}</td>
                 <td>{{ bid.bidder.rating }} <i class="fas fa-star"></i></td>
                 <td>{{ bid.status }}</td>
-                <td >
-                  <div v-if="bid.status == 'Pending' && !post.acceptedBid">
+                <td v-if="bid.status == 'Pending' && !post.acceptedBid">
+                  <div>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -74,7 +74,7 @@ export default {
       bidPageCount: 1,
       post: {
         address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-        acceptedBid: true,
+        acceptedBid: false,
       },
       bids: [
         {
@@ -119,9 +119,10 @@ export default {
   methods: {
     acceptBid(bidId) {
       this.post.acceptedBid = true
+      this.bids.find(b => b.id == bidId).status = 'Accepted'
     },
     declineBid(bidId) {
-      console.log(`Decline bid ${bidId}`)
+      this.bids.find(b => b.id == bidId).status = 'Declined'
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
