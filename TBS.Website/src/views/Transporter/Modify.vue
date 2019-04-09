@@ -1,13 +1,12 @@
 <template>
   <div class="container pt-5">
     <Back/>
-    <WideCard title="Create Availability Post">
+    <WideCard :title="type + ' Availability Post'">
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
           <div class="row">
             <div class="col-12">
               <h5>Your Vehicle Information</h5>
-              <!-- This should be auto loaded -->
               <hr>
             </div>
             <div class="col-12">
@@ -23,7 +22,7 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Avaialable Vehicle Capacity</label>
+                  <label>Available Vehicle Capacity</label>
                   <input type="text" class="form-control" placeholder="2">
                 </div>
                   <div class="col-lg-6 col-md-6 col-sm-12 form-group">
@@ -85,7 +84,7 @@
                   <input type="text" class="form-control" placeholder="2000">
                 </div>
                 <div class="col-12">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">Post</button>
+                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
                 </div>
               </div>
             </div>
@@ -121,6 +120,20 @@ export default {
     },
     submit() {
       // TODO: Submit
+    }
+  },
+  computed: {
+    type() {
+      if (this.$route.params.id != null) {
+        return 'Edit'
+      } else {
+        return 'Create'
+      }
+    }
+  },
+  created() {
+    if (this.type == 'Edit') {
+      // Load post here
     }
   }
 }

@@ -13,7 +13,7 @@
 						<router-link :to="{ name: 'viewPosts' }" class="btn text-white fade-on-hover">View Posts</router-link>
 					</li>
 					<li class="nav-item" v-if="isAuthenticated">
-						<router-link :to="{ name: 'dealerCreatePost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
+						<router-link :to="{ name: 'transporterCreatePost' }" class="btn text-white fade-on-hover">Create a Post</router-link>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
@@ -27,7 +27,7 @@
 						<router-link :to="{ name: 'transporterHome' }" class="btn text-white fade-on-hover">Dashboard</router-link>
 					</li>
 					<li class="nav-item" v-if="isAuthenticated">
-							<span class="btn text-white fade-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
+						<span class="btn text-white fade-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
 					</li>
 				</ul>
 		</div>

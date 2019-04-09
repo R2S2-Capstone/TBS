@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-5">
     <Back/>
-    <WideCard title="Create Post">
+    <WideCard :title="type + ' Post'">
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
           <div class="row">
@@ -123,7 +123,7 @@
                   <input type="text" class="form-control" placeholder="1500">
                 </div>
                 <div class="col-12">
-                  <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" type="submit">Post</button>
+                  <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
                 </div>
               </div>
             </div>
@@ -159,6 +159,20 @@ export default {
     },
     submit() {
       // TODO: Submit
+    }
+  },
+  computed: {
+    type() {
+      if (this.$route.params.id != null) {
+        return 'Edit'
+      } else {
+        return 'Create'
+      }
+    }
+  },
+  created() {
+    if (this.type == 'Edit') {
+      // Load post here
     }
   }
 }
