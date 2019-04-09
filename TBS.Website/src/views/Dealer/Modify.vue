@@ -125,6 +125,9 @@
                 <div class="col-12">
                   <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
                 </div>
+                <div class="col-12 pt-2" v-if="type == 'Edit'">
+                  <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
+                </div>
               </div>
             </div>
           </div>
@@ -159,6 +162,10 @@ export default {
     },
     submit() {
       // TODO: Submit
+      this.$router.push({ name: 'dealerHome' })
+    },
+    deletePost() {
+      this.$router.push({ name: 'dealerHome' })
     }
   },
   computed: {

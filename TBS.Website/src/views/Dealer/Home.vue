@@ -66,12 +66,14 @@
               <th>Address</th>
               <th>Amount</th>
               <th>Bid Status</th>
+              <th>Management</th>
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
                 <td>{{ bid.address }}</td>
                 <td>{{ format(bid.amount) }}</td>
                 <td>{{ bid.bidStatus }}</td>
+                <td><button v-if="bid.bidStatus == 'Pending'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button></td>
               </tr>
             </tbody>
           </table>
@@ -162,6 +164,9 @@ export default {
       this.bidPage = number
       // TODO: filter based on these results
     },
+    cancelBid(bidId) {
+      this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
+    }
   },
   computed: {
     currentPostPage() {
