@@ -48,6 +48,12 @@ body {
     opacity: 0.75;
   }
 }
+.font-blue-on-hover {
+  &:hover {
+    color: colour(colorPrimary);
+    opacity: 0.75;
+  }
+}
 .bg-blue {
   background-color: colour(colorPrimary);
 }
