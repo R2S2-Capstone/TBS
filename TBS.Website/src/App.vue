@@ -34,9 +34,10 @@ export default {
   padding: 0;
   margin: 0;
   font-family: "Montserrat", sans-serif;
-  color: color(mainText);
+  color: colour(mainText);
 }
 body {
+  background-color: colour(body);
   @include mobile {
     margin-bottom: 80px;
   }
@@ -48,7 +49,7 @@ body {
   }
 }
 .bg-blue {
-  background-color: color(colorPrimary);
+  background-color: colour(colorPrimary);
 }
 .btn-main {
   font-size: 0.75rem;
