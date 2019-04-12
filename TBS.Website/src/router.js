@@ -11,18 +11,18 @@ const ResetPassword = () => import('@/views/ResetPassword.vue')
 // General
 const ViewPosts = () => import('@/views/ViewPosts.vue')
 
-// Dealer
-const DealerIndex = () => import('@/views/Dealer/Index.vue')
-const DealerHome = () => import('@/views/Dealer/Home.vue')
-const DealerModifyPost = () => import('@/views/Dealer/Modify.vue')
-const DealerManageBids = () => import('@/views/Dealer/Bids.vue')
+// Shipper
+const ShipperIndex = () => import('@/views/Shipper/Index.vue')
+const ShipperHome = () => import('@/views/Shipper/Home.vue')
+const ShipperModifyPost = () => import('@/views/Shipper/Modify.vue')
+const ShipperManageBids = () => import('@/views/Shipper/Bids.vue')
 
-// Transporter
-const TransporterIndex = () => import('@/views/Transporter/Index.vue')
-const TransporterHome = () => import('@/views/Transporter/Home.vue')
-const TransporterModifyPost = () => import('@/views/Transporter/Modify.vue')
-const TransporterManageBids = () => import('@/views/Transporter/Bids.vue')
-const TransporterViewBidDetails = () => import('@/views/Transporter/BidDetails.vue')
+// Carrier
+const CarrierIndex = () => import('@/views/Carrier/Index.vue')
+const CarrierHome = () => import('@/views/Carrier/Home.vue')
+const CarrierModifyPost = () => import('@/views/Carrier/Modify.vue')
+const CarrierManageBids = () => import('@/views/Carrier/Bids.vue')
+const CarrierViewBidDetails = () => import('@/views/Carrier/BidDetails.vue')
 
 Vue.use(Router)
 
@@ -73,63 +73,63 @@ export default new Router({
       component: ResetPassword
     },
     {
-      path: '/Dealer',
-      component: DealerIndex,
+      path: '/Shipper',
+      component: ShipperIndex,
       ...LoggedIn,
-      // TODO: Make sure user is a dealer
+      // TODO: Make sure user is a shipper
       children: [
         {
           path: '',
-          name: 'dealerHome',
-          component: DealerHome
+          name: 'shipperHome',
+          component: ShipperHome
         },
         {
           path: 'CreatePost',
-          name: 'dealerCreatePost',
-          component: DealerModifyPost
+          name: 'shipperCreatePost',
+          component: ShipperModifyPost
         },
         {
           path: 'EditPost/:id?',
-          name: 'dealerEditPost',
-          component: DealerModifyPost
+          name: 'shipperEditPost',
+          component: ShipperModifyPost
         },
         {
           path: 'ManageBids/:id?',
-          name: 'dealerManageBids',
-          component: DealerManageBids
+          name: 'shipperManageBids',
+          component: ShipperManageBids
         },
       ]
     },
     {
-      path: '/Transporter',
-      component: TransporterIndex,
+      path: '/Carrier',
+      component: CarrierIndex,
       ...LoggedIn,
-      // TODO: Make sure user is a transporter
+      // TODO: Make sure user is a carrier
       children: [
         {
           path: '',
-          name: 'transporterHome',
-          component: TransporterHome
+          name: 'carrierHome',
+          component: CarrierHome
         },
         {
           path: 'CreatePost',
-          name: 'transporterCreatePost',
-          component: TransporterModifyPost
+          name: 'carrierCreatePost',
+          component: CarrierModifyPost
         },
         {
           path: 'EditPost/:id?',
-          name: 'transporterEditPost',
-          component: TransporterModifyPost
+          name: 'carrierEditPost',
+          component: CarrierModifyPost
         },
         {
           path: 'ManageBids/:id?',
-          name: 'transporterManageBids',
-          component: TransporterManageBids
+          name: 'carrierManageBids',
+          component: CarrierManageBids
         },
         {
           path: 'ViewBid/:id?',
-          name: 'transporterViewBidDetails',
-          component: TransporterViewBidDetails
+          name: 'carrierViewBidDetails',
+          component: CarrierViewBidDetails
         },
       ]
     },

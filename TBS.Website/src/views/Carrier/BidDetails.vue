@@ -111,7 +111,7 @@ import Back from '@/components/Back.vue'
 import WideCard from '@/components/Card/WideCard.vue'
 
 export default {
-  name: 'transporterViewBidDetails',
+  name: 'carrierViewBidDetails',
   components: {
     Back,
     WideCard

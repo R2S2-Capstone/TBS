@@ -9,15 +9,15 @@
       <div slot="card-content" class="text-center">
         <ul class="nav nav-tabs nav-justified mb-2" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="dealer"
-              aria-selected="true" @click="isDealer = true">Dealer/Wholesaler</a>
+            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="shipper"
+              aria-selected="true" @click="isShipper = true">Shipper</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="transporter"
-              aria-selected="false" @click="isDealer = false">Transporter</a>
+            <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="carrier"
+              aria-selected="false" @click="isShipper = false">Carrier</a>
           </li>
         </ul>
-        <div v-if="isDealer">
+        <div v-if="isShipper">
           <FormEmail v-model="email" :validator="$v.email"/>
           <FormPassword v-model="password" :validator="$v.password"/>
           <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
@@ -61,7 +61,7 @@ export default {
       email: '',
       password: '',
       confirmationPassword: '',
-      isDealer: true,
+      isShipper: true,
       success: null,
       error: null,
       errorMessage: 'An error has occured, make sure your passwords match and your email is unique'

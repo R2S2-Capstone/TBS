@@ -5,7 +5,7 @@
       <div class="col-12">
         <div class="row pb-3">
           <div class="col-12 text-center">
-            <h2>Manage Bids for {{ post.address }}</h2>
+            <h2>Manage Bids for {{ post.pickupCity }} ({{ post.pickupDate }}) - {{ post.deliveryCity }} ({{ post.deliveryDate }})</h2>
             <p class="text-success" v-if="post.acceptedBid">You have already accepted a bid</p>
           </div>
         </div>
@@ -16,7 +16,8 @@
               <th>Amount</th>
               <th>Rating</th>
               <th>Status</th>
-              <th v-if="!post.acceptedBid">Management</th>
+              <th>Details</th>
+              <th>Management</th>
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
@@ -24,8 +25,9 @@
                 <td>{{ format(bid.amount) }}</td>
                 <td>{{ bid.bidder.rating }} <i class="fas fa-star"></i></td>
                 <td>{{ bid.status }}</td>
-                <td v-if="bid.status == 'Pending' && !post.acceptedBid">
-                  <div>
+                <td><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
+                <td >
+                  <div v-if="bid.status == 'Pending'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -40,7 +42,7 @@
             <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setBidPage(1)">First</span>
             </li>
-            <li v-for="(page, index) in  bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
+            <li v-for="(page, index) in bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
                 <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
             </li>
             <li class="page-item" :class="currentBidPage == bidPageCount || currentBidPage == 1 ? 'disabled' : ''">
@@ -60,7 +62,7 @@
 import Back from '@/components/Back.vue'
 
 export default {
-  name: 'manageDealerBids',
+  name: 'carrierManageBids',
   components: {
     Back
   },
@@ -73,7 +75,10 @@ export default {
       bidPage: 1,
       bidPageCount: 1,
       post: {
-        address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
+        pickupCity: 'Oakville',
+        pickupDate: '03/28/2019',
+        deliveryCity: 'Brampton',
+        deliveryDate: '03/29/2019',
         acceptedBid: false,
       },
       bids: [
@@ -118,7 +123,6 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      this.post.acceptedBid = true
       this.bids.find(b => b.id == bidId).status = 'Accepted'
     },
     declineBid(bidId) {
@@ -148,9 +152,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.fa-star {
-  color: #efce4a;
-}
-</style>

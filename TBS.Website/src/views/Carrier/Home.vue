@@ -20,11 +20,11 @@
                 <td>{{ post.address }}</td>
                 <td>{{ post.status }}</td>
                 <td>
-                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'transporterManageBids', params: { id: post.id } }">Manage Bids</router-link>
-                  <router-link v-else class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'transporterManageBids', params: { id: post.id } }">View Bids</router-link>
+                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">Manage Bids</router-link>
+                  <router-link v-else class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">View Bids</router-link>
                 </td>
                 <td>
-                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'transporterEditPost', params: { id: post.id } }">Edit</router-link>
+                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierEditPost', params: { id: post.id } }">Edit</router-link>
                 </td>
               </tr>
             </tbody>
@@ -102,7 +102,7 @@
 
 <script>
 export default {
-  name: 'dealerHome',
+  name: 'shipperHome',
   components: {
   },
   data() {
