@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-nav navbar-expand-lg navbar-light bg-white">
+	<nav class="navbar navbar-expand-lg navbar-light bg-white">
 		<!-- <router-link :to="{ name: 'home' }" class="navbar-brand font-blue-on-hover text-white"><i class="fas fa-truck"></i> TBS </router-link> -->
 		<router-link class="navbar-brand" :to="{ name: 'home' }">
 			<img src="https://static.reecerose.com/images/tbs/logo.png" alt="TBS">

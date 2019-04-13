@@ -50,12 +50,12 @@ body {
 }
 .font-blue-on-hover {
   &:hover {
-    color: colour(colorPrimary);
+    color: colour(colourPrimary);
     opacity: 0.75;
   }
 }
 .bg-blue {
-  background-color: colour(colorPrimary);
+  background-color: colour(colourPrimary);
 }
 .btn-main {
   font-size: 0.75rem;
