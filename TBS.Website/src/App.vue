@@ -57,6 +57,9 @@ body {
 .bg-blue {
   background-color: colour(colourPrimary);
 }
+.text-blue {
+  color: colour(colourPrimary);
+}
 .btn-main {
   font-size: 0.75rem;
   border-radius: 5rem;
