@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="row">
+  <div>
+    <div class="container">
       <div class="row pt-5 pb-5">
         <div class="col-lg-8 col-md-8 col-sm-12">
           <img src="https://static.reecerose.com/images/tbs/shipper.jpeg" class="img-fluid shipper" alt="">
@@ -13,18 +13,24 @@
           <router-link class="how-link pb-2" :to="{ name: 'home' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
         </div>
       </div>
-      <div class="row pt-5 pb-5 bg-white">
-        <div class="col-lg-4 col-md-4 col-sm-12 pb-2">
-          <p class="sub-heading pt-2">Available truck space</p>
-          <h3 class="heading">Directly connect with shippers</h3>
-          <hr>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, pariatur numquam rerum nulla dolore totam iusto quasi blanditiis eos.</p>
-          <router-link class="how-link" :to="{ name: 'home' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
-        </div>
-        <div class="col">
-          <img src="https://static.reecerose.com/images/tbs/carrier.jpg" class="img-fluid carrier" alt="">
+    </div>
+    <div class="container-fluid bg-white">
+      <div class="container">
+        <div class="row pt-5 pb-5">
+          <div class="col-lg-4 col-md-4 col-sm-12 pb-2">
+            <p class="sub-heading pt-2">Available truck space</p>
+            <h3 class="heading">Directly connect with shippers</h3>
+            <hr>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, pariatur numquam rerum nulla dolore totam iusto quasi blanditiis eos.</p>
+            <router-link class="how-link pb-2" :to="{ name: 'home' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
+          </div>
+          <div class="col">
+            <img src="https://static.reecerose.com/images/tbs/carrier.jpg" class="img-fluid carrier" alt="">
+          </div>
         </div>
       </div>
+    </div>
+    <div class="container">
       <div class="row pt-5 pb-5">
         <div class="col-lg-4 col-md-4 col-sm-12 pb-2 text-center">
           <i class="fas fa-dollar-sign fa-4x pb-3 text-blue"></i>
@@ -45,17 +51,18 @@
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, pariatur numquam rerum nulla dolore totam iusto quasi blanditiis eos.</p>
         </div>
       </div>
-      <div class="row pt-5 pb-5 mb-5 bg-white">
-        <div class="col">
-          <p class="sub-heading pt-2">Transportation Bidding System</p>
-          <h3 class="heading">What We Do</h3>
-          <hr>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, pariatur numquam rerum nulla dolore totam iusto quasi blanditiis eos.</p>
-          <router-link class="how-link" :to="{ name: 'home' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
+    </div>
+    <div class="container-fluid bg-white">
+      <div class="container">
+        <div class="row pt-5 pb-5 mb-5">
+          <div class="col">
+            <p class="sub-heading pt-2">Transportation Bidding System</p>
+            <h3 class="heading">What We Do</h3>
+            <hr>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, pariatur numquam rerum nulla dolore totam iusto quasi blanditiis eos.</p>
+            <router-link class="how-link" :to="{ name: 'home' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
+          </div>
         </div>
-        <!-- <div class="col">
-          <img src="https://static.reecerose.com/images/tbs/logo.png" class="img-fluid carrier" alt="">
-        </div> -->
       </div>
     </div>
   </div>
@@ -108,9 +115,6 @@ export default {
   @include desktop {
     clip-path: polygon(0 0, 50% 0, 100% 100%, 0% 100%);
   }
-}
-.white {
-  background-color: #fff;
 }
 </style>
 
