@@ -18,7 +18,7 @@
       <div class="container">
         <div class="row pt-5 pb-5">
           <div class="col-lg-4 col-md-4 col-sm-12 pb-2">
-            <p class="sub-heading pt-2">Available truck space</p>
+            <p class="sub-heading pt-2">Fill Your Empty Space</p>
             <h3 class="heading">Directly connect with shippers</h3>
             <hr>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, pariatur numquam rerum nulla dolore totam iusto quasi blanditiis eos.</p>
