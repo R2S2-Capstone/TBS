@@ -20,11 +20,12 @@ namespace TBS.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
             services.AddApiVersioning();
+            services.AddCors();
 
             services.AddFirebaseAuthentication(Configuration["Firebase:Issuer"], Configuration["Firebase:Audience"]);
 
-            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -55,6 +56,8 @@ namespace TBS.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Transportation Bidding System API V1");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseHealthChecks("/health");
 
             app.UseCors(builder =>
             {
