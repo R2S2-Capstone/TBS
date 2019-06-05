@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using TBS.Data.Models.User.Authentication;
 
 namespace TBS.API.Controllers.v1
 {
@@ -8,6 +11,17 @@ namespace TBS.API.Controllers.v1
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        [HttpPost("Login")]
+        [Authorize]
+        public async Task<IActionResult> PostLoginAsync(UserLogin userLogin)
+        {
+            return Ok(userLogin.FirebaseUserId);
+        }
 
+        [HttpPost("Register")]
+        public async Task<IActionResult> PostRegisterAsync([FromBody] string accountType)
+        {
+            return Ok();
+        }
     }
 }

@@ -1,4 +1,6 @@
 import firebase from '@/firebase/Config.js'
+import axios from '@/axios.js'
+
 const global = {
     namespaced: true,
     state: {
@@ -31,7 +33,6 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
-                        firebase.auth().currentUser.sendEmailVerification()
                         resolve()
                     })
                     .catch((error) => {
@@ -48,10 +49,22 @@ const global = {
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
+                            firebase.auth().currentUser.sendEmailVerification()
                             reject("Email not verified")
                         }
-                        commit("authenticate", response.user)
-                        resolve(response)
+                        console.log(firebase.auth().currentUser.uid);
+                        axios({
+                            method: 'post',
+                            url: 'authentication/login',
+                            data: { firebaseUserId: firebase.auth().currentUser.uid },
+                            headers: { Authorization: `Bearer ${response.user._lat}`}
+                        }).then(() => {
+                            commit("authenticate", response.user)
+                            resolve(response)
+                        })
+                        .catch((error) => {
+                            reject(error)
+                        })
                     })
                     .catch((error) => {
                         reject(error)
