@@ -21,16 +21,16 @@ namespace TBS.API.Controllers.v1
 
         [HttpPost("Login")]
         [Authorize]
-        public async Task<IActionResult> PostLoginAsync(UserLogin userLogin)
+        public async Task<IActionResult> PostLoginAsync(UserLoginDto login)
         {
-            _authenticationService.Login(userLogin.FirebaseUserId);
-            return Ok(userLogin.FirebaseUserId);
+            _authenticationService.Login(login.FirebaseUserId);
+            return Ok();
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> PostRegisterAsync(UserRegister userRegister)
+        public async Task<IActionResult> PostRegisterAsync(UserRegisterDto register)
         {
-            _authenticationService.Register(userRegister.FirebaseUserId);
+            _authenticationService.Register(register.FirebaseUserId);
             return Ok();
         }
     }

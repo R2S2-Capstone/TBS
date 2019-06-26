@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using TBS.Data.Database;
+using TBS.Data.Interfaces.User.Authentication;
+using TBS.Services.User.Authentication;
 
 namespace TBS.API
 {
@@ -29,6 +31,7 @@ namespace TBS.API
 
             services.AddSingleton(Configuration);
             services.AddScoped<DatabaseContext, DatabaseContext>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 
