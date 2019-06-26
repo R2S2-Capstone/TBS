@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TBS.Data.Models.User
+namespace TBS.Data.Models.User.Information
 {
     public class Contact
     {

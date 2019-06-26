@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TBS.Data.Models.User.Account.Information;
+using TBS.Data.Models.User.Information;
 
-namespace TBS.Data.Models.User.Account
+namespace TBS.Data.Models.User
 {
-    public class Shipper
+    public class Carrier
     {
         public int Id { get; set; }
 
@@ -12,5 +12,11 @@ namespace TBS.Data.Models.User.Account
 
         [Required(ErrorMessage = "Company information required")]
         public Company Company { get; set; }
+
+        public string RIN { get; set; }
+
+        public string DealerNumber { get; set; }
+
+        // Payment information
     }
 }

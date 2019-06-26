@@ -52,7 +52,6 @@ const global = {
                             firebase.auth().currentUser.sendEmailVerification()
                             reject("Email not verified")
                         }
-                        console.log(firebase.auth().currentUser.uid);
                         axios({
                             method: 'post',
                             url: 'authentication/login',
