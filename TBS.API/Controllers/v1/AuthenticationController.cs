@@ -30,7 +30,7 @@ namespace TBS.API.Controllers.v1
         [HttpPost("Register")]
         public async Task<IActionResult> PostRegisterAsync(UserRegister userRegister)
         {
-            _authenticationService.Register(userRegister.FirebaseUserId)
+            _authenticationService.Register(userRegister.FirebaseUserId);
             return Ok();
         }
     }
