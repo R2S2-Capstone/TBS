@@ -2,7 +2,7 @@
 
 namespace TBS.Services.User.Authentication
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : IAuthentication
     {
         public void Login(string fireabaseId)
         {
