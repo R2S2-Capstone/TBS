@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TBS.Data.Models.User.Account;
 
 namespace TBS.Data.Database
 {

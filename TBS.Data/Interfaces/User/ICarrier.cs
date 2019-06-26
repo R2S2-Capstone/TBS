@@ -3,16 +3,10 @@ using TBS.Data.Models.User;
 
 namespace TBS.Data.Interfaces.User
 {
-    public interface ICarrier
+    public interface ICarrierService
     {
         Carrier Get(int id);
 
         IEnumerable<Carrier> GetAll();
-
-        //Get all posts
-
-        //Get all bids
-
-
     }
 }

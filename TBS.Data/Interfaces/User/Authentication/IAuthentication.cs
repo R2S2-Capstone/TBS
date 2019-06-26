@@ -1,7 +1,8 @@
 ﻿namespace TBS.Data.Interfaces.User.Authentication
 {
-    public interface IAuthentication
+    public interface IAuthenticationService
     {
-
+        void Login(string fireabaseId);
+        void Register(string firebaseId);
     }
 }
