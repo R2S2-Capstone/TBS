@@ -1,6 +1,6 @@
 ﻿namespace TBS.Data.Models.User.Authentication
 {
-    public class UserRegisterDto
+    public class RegisterDto
     {
         public string FirebaseUserId { get; set; }
     }

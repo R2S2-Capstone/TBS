@@ -1,8 +1,11 @@
-﻿namespace TBS.Data.Interfaces.User.Authentication
+﻿using System.Threading.Tasks;
+using TBS.Data.Models.User.Authentication;
+
+namespace TBS.Data.Interfaces.User.Authentication
 {
     public interface IAuthenticationService
     {
-        void Login(string fireabaseId);
-        void Register(string firebaseId);
+        Task<LoginResult> LoginAsync(string fireabaseId);
+        Task<RegisterResult> RegisterAsync(string firebaseId);
     }
 }
