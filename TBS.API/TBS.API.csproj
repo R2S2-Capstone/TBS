@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TBS.Data\TBS.Data.csproj" />
+    <ProjectReference Include="..\TBS.Services\TBS.Services.csproj" />
   </ItemGroup>
 
 </Project>

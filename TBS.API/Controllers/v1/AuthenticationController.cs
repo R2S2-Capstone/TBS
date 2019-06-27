@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.User.Authentication;
-using TBS.Data.Models.User.Authentication;
+using TBS.Data.Models.User.Authentication.Request;
 
 namespace TBS.API.Controllers.v1
 {
@@ -21,9 +21,9 @@ namespace TBS.API.Controllers.v1
 
         [HttpPost("Login")]
         [Authorize]
-        public async Task<IActionResult> PostLoginAsync(LoginDto login) => Ok(new { result = await _authenticationService.LoginAsync(login.FirebaseUserId) });
+        public async Task<IActionResult> PostLoginAsync(LoginRequest login) => Ok(new { result = await _authenticationService.LoginAsync(login) });
 
         [HttpPost("Register")]
-        public async Task<IActionResult> PostRegisterAsync(RegisterDto register) => Ok(new { result = await _authenticationService.RegisterAsync(register.FirebaseUserId) });
+        public async Task<IActionResult> PostRegisterAsync(RegisterRequest register) => Ok(new { result = await _authenticationService.RegisterAsync(register) });
     }
 }
