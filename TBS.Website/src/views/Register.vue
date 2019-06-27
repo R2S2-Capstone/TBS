@@ -89,12 +89,14 @@ export default {
         if (this.$v.$invalid) {
             return
         }
-        this.$store.dispatch('authentication/register', { email: this.email, password: this.password })
+        this.$store.dispatch('authentication/register', { email: this.email, password: this.password, accountType: this.isShipper ? 'Shipper' : 'Carrier' })
           .then(() => {
+            this.error = false
             this.success = true
           })
           .catch(() => {
             this.error = true
+            this.success = false
           })
     },
   }

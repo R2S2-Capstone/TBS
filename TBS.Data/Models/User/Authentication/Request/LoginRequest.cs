@@ -2,6 +2,6 @@
 {
     public class LoginRequest
     {
-        public string FirebaseUserId { get; set; }
+        public string UserFirebaseId { get; set; }
     }
 }

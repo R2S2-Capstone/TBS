@@ -33,7 +33,17 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
-                        resolve()
+                        firebase.auth().currentUser.sendEmailVerification()
+                        axios({
+                            method: 'post',
+                            url: 'authentication/register',
+                            data: { userFirebaseId: firebase.auth().currentUser.uid, accountType: payload.accountType },
+                        }).then(() => {
+                            resolve()
+                        })
+                        .catch(() => {
+                            reject()
+                        })
                     })
                     .catch((error) => {
                         reject(error)
@@ -51,21 +61,24 @@ const global = {
                         if (!response.user.emailVerified) {
                             firebase.auth().currentUser.sendEmailVerification()
                             reject("Email not verified")
+                            return
                         }
                         axios({
                             method: 'post',
                             url: 'authentication/login',
-                            data: { firebaseUserId: firebase.auth().currentUser.uid },
+                            data: { userFirebaseId: firebase.auth().currentUser.uid },
                             headers: { Authorization: `Bearer ${response.user._lat}`}
                         }).then(() => {
                             commit("authenticate", response.user)
                             resolve(response)
                         })
                         .catch((error) => {
+                            commit('logout')
                             reject(error)
                         })
                     })
                     .catch((error) => {
+                        commit('logout')
                         reject(error)
                     }).finally(() => {
                         commit('global/setLoading', false, { root: true })

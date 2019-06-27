@@ -3,6 +3,7 @@
     public enum AccountType
     {
         Carrier,
-        Shipper
+        Shipper,
+        Administrator
     }
 }
