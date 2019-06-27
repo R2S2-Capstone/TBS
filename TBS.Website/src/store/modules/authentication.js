@@ -33,15 +33,17 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
-                        firebase.auth().currentUser.sendEmailVerification()
+                        var user = firebase.auth().currentUser
+                        user.sendEmailVerification()
                         axios({
                             method: 'post',
                             url: 'authentication/register',
-                            data: { userFirebaseId: firebase.auth().currentUser.uid, accountType: payload.accountType },
+                            data: { userFirebaseId: user.uid, accountType: payload.accountType, email: payload.email },
                         }).then(() => {
                             resolve()
                         })
                         .catch(() => {
+                            user.delete()
                             reject()
                         })
                     })
