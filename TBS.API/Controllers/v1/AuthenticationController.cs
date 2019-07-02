@@ -19,6 +19,7 @@ namespace TBS.API.Controllers.v1
             _authenticationService = authenticationService;
         }
 
+        //The authorize tag is here as the user will already be logged in via Firebase
         [HttpPost("Login")]
         [Authorize]
         public async Task<IActionResult> PostLoginAsync(LoginRequest login) => Ok(new { result = await _authenticationService.LoginAsync(login) });

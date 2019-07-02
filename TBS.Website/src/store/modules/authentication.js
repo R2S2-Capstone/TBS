@@ -34,24 +34,26 @@ const global = {
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
                         var user = firebase.auth().currentUser
-                        user.sendEmailVerification()
+                        user.sendEmailVerification()     
                         axios({
                             method: 'post',
                             url: 'authentication/register',
                             data: { userFirebaseId: user.uid, accountType: payload.accountType, email: payload.email },
-                        }).then(() => {
+                        })
+                        .then(() => {
                             resolve()
                         })
                         .catch(() => {
                             user.delete()
                             reject()
                         })
+                        .finally(() => {
+                            commit('global/setLoading', false, { root: true })
+                        })
                     })
                     .catch((error) => {
-                        reject(error)
-                    })
-                    .finally(() => {
                         commit('global/setLoading', false, { root: true })
+                        reject(error)
                     })
             })
         },
@@ -65,12 +67,14 @@ const global = {
                             reject("Email not verified")
                             return
                         }
+                        // commit('global/setLoading', true, { root: true })
                         axios({
                             method: 'post',
                             url: 'authentication/login',
                             data: { userFirebaseId: firebase.auth().currentUser.uid },
                             headers: { Authorization: `Bearer ${response.user._lat}`}
-                        }).then(() => {
+                        })
+                        .then(() => {
                             commit("authenticate", response.user)
                             resolve(response)
                         })
@@ -78,12 +82,15 @@ const global = {
                             commit('logout')
                             reject(error)
                         })
+                        .finally(() => {
+                            console.log('here')
+                            commit('global/setLoading', false, { root: true })
+                        })
                     })
                     .catch((error) => {
+                        commit('global/setLoading', false, { root: true })
                         commit('logout')
                         reject(error)
-                    }).finally(() => {
-                        commit('global/setLoading', false, { root: true })
                     })
             })
         },
