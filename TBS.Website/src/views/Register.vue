@@ -9,20 +9,30 @@
       <div slot="card-content" class="text-center">
         <ul class="nav nav-tabs nav-justified mb-2" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="shipper"
-              aria-selected="true" @click="isShipper = true">Shipper</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="carrier"
               aria-selected="false" @click="isShipper = false">Carrier</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="shipper"
+              aria-selected="true" @click="isShipper = true">Shipper</a>
+          </li>
         </ul>
-        <div v-if="isShipper">
+        <!-- <div v-if="isShipper"> -->
           <h5>Your Information</h5>
           <FormEmail v-model="email" :validator="$v.email"/>
           <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
           <FormPassword v-model="password" :validator="$v.password"/>
           <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+          <div v-if="!isShipper">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <FormText v-model="dealerNumber" placeHolder="Dealer Number" errorMessage="Please enter a company address" :validator="$v.dealerNumber"/>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <FormText v-model="rin" placeHolder="RIN # (Drivers license)" errorMessage="Please enter a company address" :validator="$v.rin"/>
+              </div>
+            </div>
+          </div>
           <h5>Company Information</h5>
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12">
@@ -42,10 +52,10 @@
           </div>
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.provinceCode" placeHolder="Province" errorMessage="Please enter a province" :validator="$v.company.address.provinceCode"/>
+              <FormProvince v-model="company.address.province" />
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.postalCode" placeHolder="Postal code" errorMessage="Please enter a valid postal code" :validator="$v.company.address.postalCode"/>
+              <FormText v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.company.address.postalCode"/>
             </div>
           </div>
           <h5>Contact Information</h5>
@@ -58,9 +68,9 @@
               <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.company.contact.phoneNumber"/>
             </div>
           </div>
-        </div>
+        <!-- </div> -->
 
-        <div v-else>
+        <!-- <div v-else>
           <h5>Your Information</h5>
           <FormEmail v-model="email" :validator="$v.email"/>
           <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
@@ -92,24 +102,23 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.provinceCode" placeHolder="Province" errorMessage="Please enter a province" :validator="$v.company.address.provinceCode"/>
+            <div class="col-lg-6 col-md-6 col-sm-12">  
+              <FormProvince v-model="company.address.province" />
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.postalCode" placeHolder="Postal code" errorMessage="Please enter a valid postal code" :validator="$v.company.address.postalCode"/>
+              <FormText v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code (A0A 0A0)" :validator="$v.company.address.postalCode"/>
             </div>
           </div>
           <h5>Contact Information</h5>
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12">
               <FormText v-model="company.contact.name" placeHolder="Name" errorMessage="Please enter a name" :validator="$v.company.contact.name"/>
-
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
               <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.company.contact.phoneNumber"/>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="mb-3">
           <router-link :to="{ name: 'login' }">Already have an account? Login here</router-link>
@@ -126,9 +135,12 @@ import FormWideCard from '@/components/Form/Card/FormWideCard.vue'
 import FormEmail from '@/components/Form/Input/FormEmail.vue'
 import FormPassword from '@/components/Form/Input/FormPassword.vue'
 import FormText from '@/components/Form/Input/FormText.vue'
+import FormProvince from '@/components/Form/Input/FormProvince.vue'
 
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
+const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
+const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
 
 export default {
   name: 'register',
@@ -136,7 +148,8 @@ export default {
     FormWideCard,
     FormEmail,
     FormPassword,
-    FormText
+    FormText,
+    FormProvince
   },
   data() {
     return {
@@ -153,7 +166,7 @@ export default {
         address: {
           addressLine: '',
           city: '',
-          provinceCode: '',
+          province: 'Ontario',
           country: '',
           postalCode: '',
         },
@@ -194,16 +207,12 @@ export default {
         city: {
           required
         },
-        provinceCode: {
-          required,
-          // provinceCodeRegex
-        },
         country: {
           required
         },
         postalCode: {
           required,
-          // postalCodeRegex
+          postalCodeRegex
         },
       },
       contact: {
@@ -212,7 +221,7 @@ export default {
         },
         phoneNumber: {
           required,
-          // phoneNumberRegex
+          phoneNumberRegex
         }
       }
     },
