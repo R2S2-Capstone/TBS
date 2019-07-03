@@ -17,65 +17,13 @@
               aria-selected="true" @click="isShipper = true">Shipper</a>
           </li>
         </ul>
-        <!-- <div v-if="isShipper"> -->
-          <h5>Your Information</h5>
-          <FormEmail v-model="email" :validator="$v.email"/>
-          <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
-          <FormPassword v-model="password" :validator="$v.password"/>
-          <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
-          <div v-if="!isShipper">
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <FormText v-model="dealerNumber" placeHolder="Dealer Number" errorMessage="Please enter a company address" :validator="$v.dealerNumber"/>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <FormText v-model="rin" placeHolder="RIN # (Drivers license)" errorMessage="Please enter a company address" :validator="$v.rin"/>
-              </div>
-            </div>
-          </div>
-          <h5>Company Information</h5>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.company.address.addressLine"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.company.address.city"/>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.country" placeHolder="Country" errorMessage="Please enter a country" :validator="$v.company.address.country"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormProvince v-model="company.address.province" />
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.company.address.postalCode"/>
-            </div>
-          </div>
-          <h5>Contact Information</h5>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.contact.name" placeHolder="Name" errorMessage="Please enter a name" :validator="$v.company.contact.name"/>
-
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.company.contact.phoneNumber"/>
-            </div>
-          </div>
-        <!-- </div> -->
-
-        <!-- <div v-else>
-          <h5>Your Information</h5>
-          <FormEmail v-model="email" :validator="$v.email"/>
-          <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
-          <FormPassword v-model="password" :validator="$v.password"/>
-          <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+        
+        <h5>Your Information</h5>
+        <FormEmail v-model="email" :validator="$v.email"/>
+        <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
+        <FormPassword v-model="password" :validator="$v.password"/>
+        <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
+        <div v-if="!isShipper">
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12">
               <FormText v-model="dealerNumber" placeHolder="Dealer Number" errorMessage="Please enter a company address" :validator="$v.dealerNumber"/>
@@ -84,41 +32,41 @@
               <FormText v-model="rin" placeHolder="RIN # (Drivers license)" errorMessage="Please enter a company address" :validator="$v.rin"/>
             </div>
           </div>
-          <h5>Company Information</h5>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.addressLine" placeHolder="Address Line" errorMessage="Please enter a address" :validator="$v.company.address.addressLine"/>
-            </div>
+        </div>
+        <h5>Company Information</h5>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
           </div>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.company.address.city"/>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.country" placeHolder="Country" errorMessage="Please enter a country" :validator="$v.company.address.country"/>
-            </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.address.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.company.address.addressLine"/>
           </div>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">  
-              <FormProvince v-model="company.address.province" />
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code (A0A 0A0)" :validator="$v.company.address.postalCode"/>
-            </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.company.address.city"/>
           </div>
-          <h5>Contact Information</h5>
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.contact.name" placeHolder="Name" errorMessage="Please enter a name" :validator="$v.company.contact.name"/>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.company.contact.phoneNumber"/>
-            </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.address.country" placeHolder="Country" errorMessage="Please enter a country" :validator="$v.company.address.country"/>
           </div>
-        </div> -->
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormProvince v-model="company.address.province" />
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.company.address.postalCode"/>
+          </div>
+        </div>
+        <h5>Contact Information</h5>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.contact.name" placeHolder="Name" errorMessage="Please enter a name" :validator="$v.company.contact.name"/>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.company.contact.phoneNumber"/>
+          </div>
+        </div>
 
         <div class="mb-3">
           <router-link :to="{ name: 'login' }">Already have an account? Login here</router-link>

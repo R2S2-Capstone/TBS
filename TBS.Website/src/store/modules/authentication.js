@@ -61,8 +61,6 @@ const global = {
         login({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
-                console.log('set loading to true')
-
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
@@ -85,7 +83,6 @@ const global = {
                             reject(error)
                         })
                         .finally(() => {
-                            console.log('set loading to false')
                             commit('global/setLoading', false, { root: true })
                         })
                     })
