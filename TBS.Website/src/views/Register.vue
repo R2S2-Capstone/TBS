@@ -1,6 +1,6 @@
 <template>
   <div class="container pt-5">
-    <FormNarrowCard title="Register" :submit="submit">
+    <FormWideCard title="Register" :submit="submit">
       <div slot="card-information">
         <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent. Emails may take up to five minutes to send</p>
         <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
@@ -18,17 +18,39 @@
           </li>
         </ul>
         <div v-if="isShipper">
+          <h5>Your Information</h5>
           <FormEmail v-model="email" :validator="$v.email"/>
           <FormPassword v-model="password" :validator="$v.password"/>
           <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
-          <!-- TODO: More data -->
+          <h5>Company Information</h5>
+          <FormText v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
+          <FormText v-model="company.address.street" placeHolder="Address" errorMessage="Please enter a company address" :validator="$v.company.address.street"/>
+          <FormText v-model="company.address.city" placeHolder="City" errorMessage="Please enter a company address" :validator="$v.company.address.city"/>
+          <FormText v-model="company.address.provinceCode" placeHolder="Province code" errorMessage="Please enter a company address" :validator="$v.company.address.provinceCode"/>
+          <FormText v-model="company.address.country" placeHolder="Country" errorMessage="Please enter a company address" :validator="$v.company.address.country"/>
+          <FormText v-model="company.address.postalCode" placeHolder="Postal code" errorMessage="Please enter a company address" :validator="$v.company.address.postalCode"/>
+          <h5>Contact Information</h5>
+          <FormText v-model="company.contact.name" placeHolder="Name" errorMessage="Please enter a company address" :validator="$v.company.contact.name"/>
+          <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a company address" :validator="$v.company.contact.phoneNumber"/>
         </div>
 
         <div v-else>
+          <h5>Your Information</h5>
           <FormEmail v-model="email" :validator="$v.email"/>
           <FormPassword v-model="password" :validator="$v.password"/>
           <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
-          <!-- TODO: More data -->
+          <FormText v-model="dealerNumber" placeHolder="Dealer Number" errorMessage="Please enter a company address" :validator="$v.dealerNumber"/>
+          <FormText v-model="rin" placeHolder="RIN # (Drivers license)" errorMessage="Please enter a company address" :validator="$v.rin"/>
+          <h5>Company Information</h5>
+          <FormText v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
+          <FormText v-model="company.address.street" placeHolder="Address" errorMessage="Please enter a company address" :validator="$v.company.address.street"/>
+          <FormText v-model="company.address.city" placeHolder="City" errorMessage="Please enter a company address" :validator="$v.company.address.city"/>
+          <FormText v-model="company.address.provinceCode" placeHolder="Province code" errorMessage="Please enter a company address" :validator="$v.company.address.provinceCode"/>
+          <FormText v-model="company.address.country" placeHolder="Country" errorMessage="Please enter a company address" :validator="$v.company.address.country"/>
+          <FormText v-model="company.address.postalCode" placeHolder="Postal code" errorMessage="Please enter a company address" :validator="$v.company.address.postalCode"/>
+          <h5>Contact Information</h5>
+          <FormText v-model="company.contact.name" placeHolder="Name" errorMessage="Please enter a company address" :validator="$v.company.contact.name"/>
+          <FormText v-model="company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a company address" :validator="$v.company.contact.phoneNumber"/>
         </div>
 
         <div class="mb-3">
@@ -37,14 +59,15 @@
 
         <button class="btn btn-main btn-lg bg-blue fade-on-hover btn-block text-uppercase text-white" type="submit">Register</button>
       </div>
-    </FormNarrowCard>
+    </FormWideCard>
   </div>
 </template>
 
 <script>
-import FormNarrowCard from '@/components/Form/Card/FormNarrowCard.vue'
+import FormWideCard from '@/components/Form/Card/FormWideCard.vue'
 import FormEmail from '@/components/Form/Input/FormEmail.vue'
 import FormPassword from '@/components/Form/Input/FormPassword.vue'
+import FormText from '@/components/Form/Input/FormText.vue'
 
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
@@ -52,9 +75,10 @@ const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=
 export default {
   name: 'register',
   components: {
-    FormNarrowCard,
+    FormWideCard,
     FormEmail,
-    FormPassword
+    FormPassword,
+    FormText
   },
   data() {
     return {
@@ -64,7 +88,23 @@ export default {
       isShipper: true,
       success: null,
       error: null,
-      errorMessage: 'An error has occured, make sure your passwords match and your email is unique'
+      errorMessage: 'An error has occured, make sure your passwords match and your email is unique',
+      company: {
+        name: '',
+        address: {
+          street: '',
+          city: '',
+          provinceCode: '',
+          country: '',
+          postalCode: '',
+        },
+        contact: {
+          name: '',
+          phoneNumber: ''
+        }
+      },
+      dealerNumber: '',
+      rin: ''
     }
   },
   validations: {
@@ -80,6 +120,45 @@ export default {
     confirmationPassword: {
       required,
       sameAsPassword: sameAs('password')
+    },
+    company: {
+      name: {
+        required
+      },
+      address: {
+        street: {
+          required
+        },
+        city: {
+          required
+        },
+        provinceCode: {
+          required,
+          // provinceCodeRegex
+        },
+        country: {
+          required
+        },
+        postalCode: {
+          required,
+          // postalCodeRegex
+        },
+      },
+      contact: {
+        name: {
+          required
+        },
+        phoneNumber: {
+          required,
+          // phoneNumberRegex
+        }
+      }
+    },
+    dealerNumber: {
+      required
+    },
+    rin: {
+      required
     }
   },
   methods: {

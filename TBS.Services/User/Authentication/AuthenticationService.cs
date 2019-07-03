@@ -54,7 +54,7 @@ namespace TBS.Services.User.Authentication
         public async Task<RegisterResult> RegisterAsync(RegisterRequest request)
         {
             // This is temporary while we wait for the form to have the company informaiton
-            var company = new Company { Contact = new Contact { FirstName = "Temp", LastName = "User", PhoneNumber = "5191234567" }, CompanyName = "Company", Address = new Address { City = "Oakville", County = "Canada", PostalCode = "L6H 4N1", ProvinceCode = "ON", Street = "1 Trafalgar Road" } };
+            var company = new Company { Contact = new Contact { Name = "Temp User", PhoneNumber = "5191234567" }, Name = "Company", Address = new Address { City = "Oakville", Country = "Canada", PostalCode = "L6H 4N1", ProvinceCode = "ON", Street = "1 Trafalgar Road" } };
             if (request.AccountType == AccountType.Shipper)
             {
                 try

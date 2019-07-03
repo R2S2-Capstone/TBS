@@ -7,7 +7,7 @@ namespace TBS.Data.Models.User.Information
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Company name is required")]
-        public string CompanyName { get; set; }
+        public string Name { get; set; }
 
         [Required(ErrorMessage = "Address required")]
         public Address Address { get; set; }

@@ -2,7 +2,7 @@
 
 namespace TBS.Data.Migrations
 {
-    public partial class UserAccounts : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace TBS.Data.Migrations
                     Street = table.Column<string>(nullable: false),
                     City = table.Column<string>(nullable: false),
                     ProvinceCode = table.Column<string>(nullable: false),
-                    County = table.Column<string>(nullable: false),
+                    Country = table.Column<string>(nullable: false),
                     PostalCode = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -29,9 +29,8 @@ namespace TBS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    PhoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,7 +43,7 @@ namespace TBS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    CompanyName = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     AddressId = table.Column<int>(nullable: false),
                     ContactId = table.Column<int>(nullable: false)
                 },
@@ -72,6 +71,7 @@ namespace TBS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     UserFirebaseId = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
                     CompanyId = table.Column<int>(nullable: false),
                     RIN = table.Column<string>(nullable: true),
                     DealerNumber = table.Column<string>(nullable: true)
@@ -94,6 +94,7 @@ namespace TBS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     UserFirebaseId = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
                     CompanyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

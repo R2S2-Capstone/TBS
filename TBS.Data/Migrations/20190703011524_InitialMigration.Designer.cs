@@ -8,8 +8,8 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190627234745_AddedEmailFieldToUsers")]
-    partial class AddedEmailFieldToUsers
+    [Migration("20190703011524_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,7 +49,7 @@ namespace TBS.Data.Migrations
                     b.Property<string>("City")
                         .IsRequired();
 
-                    b.Property<string>("County")
+                    b.Property<string>("Country")
                         .IsRequired();
 
                     b.Property<string>("PostalCode")
@@ -73,10 +73,10 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("AddressId");
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired();
-
                     b.Property<int>("ContactId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -92,14 +92,10 @@ namespace TBS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired();
+                    b.Property<string>("PhoneNumber");
 
                     b.HasKey("Id");
 

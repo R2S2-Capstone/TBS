@@ -15,8 +15,9 @@ namespace TBS.Data.Models.User.Information
         [Required(ErrorMessage = "Provincial code must only be two characters long")]
         public string ProvinceCode { get; set; }
 
-        [Required(ErrorMessage = "City name required")]
-        public string County { get; set; }
+        [Required(ErrorMessage = "Country required")]
+        public string Country { get; set; }
+
         [Required(ErrorMessage = "Postal code required")]
         public string PostalCode { get; set; }
     }

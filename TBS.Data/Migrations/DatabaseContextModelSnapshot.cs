@@ -47,7 +47,7 @@ namespace TBS.Data.Migrations
                     b.Property<string>("City")
                         .IsRequired();
 
-                    b.Property<string>("County")
+                    b.Property<string>("Country")
                         .IsRequired();
 
                     b.Property<string>("PostalCode")
@@ -71,10 +71,10 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("AddressId");
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired();
-
                     b.Property<int>("ContactId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -90,14 +90,10 @@ namespace TBS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired();
+                    b.Property<string>("PhoneNumber");
 
                     b.HasKey("Id");
 
