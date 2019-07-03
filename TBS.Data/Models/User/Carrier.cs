@@ -10,6 +10,9 @@ namespace TBS.Data.Models.User
         [Required(ErrorMessage = "User firebase ID required")]
         public string UserFirebaseId { get; set; }
 
+        [Required(ErrorMessage = "Name required")]
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "Email required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; }

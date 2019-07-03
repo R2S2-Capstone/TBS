@@ -12,9 +12,9 @@ namespace TBS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    Street = table.Column<string>(nullable: false),
+                    AddressLine = table.Column<string>(nullable: false),
                     City = table.Column<string>(nullable: false),
-                    ProvinceCode = table.Column<string>(nullable: false),
+                    Province = table.Column<string>(nullable: false),
                     Country = table.Column<string>(nullable: false),
                     PostalCode = table.Column<string>(nullable: false)
                 },
@@ -71,6 +71,7 @@ namespace TBS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     UserFirebaseId = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     CompanyId = table.Column<int>(nullable: false),
                     RIN = table.Column<string>(nullable: true),
@@ -93,6 +94,7 @@ namespace TBS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
+                    Name = table.Column<string>(nullable: false),
                     UserFirebaseId = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     CompanyId = table.Column<int>(nullable: false)

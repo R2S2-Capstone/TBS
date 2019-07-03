@@ -8,7 +8,7 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190703011524_InitialMigration")]
+    [Migration("20190703214757_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,9 @@ namespace TBS.Data.Migrations
                     b.Property<string>("Email")
                         .IsRequired();
 
+                    b.Property<string>("Name")
+                        .IsRequired();
+
                     b.Property<string>("RIN");
 
                     b.Property<string>("UserFirebaseId")
@@ -46,6 +49,9 @@ namespace TBS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AddressLine")
+                        .IsRequired();
+
                     b.Property<string>("City")
                         .IsRequired();
 
@@ -55,10 +61,7 @@ namespace TBS.Data.Migrations
                     b.Property<string>("PostalCode")
                         .IsRequired();
 
-                    b.Property<string>("ProvinceCode")
-                        .IsRequired();
-
-                    b.Property<string>("Street")
+                    b.Property<string>("Province")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -110,6 +113,9 @@ namespace TBS.Data.Migrations
                     b.Property<int>("CompanyId");
 
                     b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<string>("UserFirebaseId")

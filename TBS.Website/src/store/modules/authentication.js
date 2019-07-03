@@ -34,13 +34,14 @@ const global = {
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
                         var user = firebase.auth().currentUser
-                        user.sendEmailVerification()     
                         axios({
                             method: 'post',
                             url: 'authentication/register',
                             data: { userFirebaseId: user.uid, accountType: payload.accountType, email: payload.email },
                         })
                         .then(() => {
+                            // Email will only be sent once backend registration is complete
+                            user.sendEmailVerification()
                             resolve()
                         })
                         .catch(() => {
@@ -60,6 +61,8 @@ const global = {
         login({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
+                console.log('set loading to true')
+
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
@@ -67,7 +70,6 @@ const global = {
                             reject("Email not verified")
                             return
                         }
-                        // commit('global/setLoading', true, { root: true })
                         axios({
                             method: 'post',
                             url: 'authentication/login',
@@ -83,7 +85,7 @@ const global = {
                             reject(error)
                         })
                         .finally(() => {
-                            console.log('here')
+                            console.log('set loading to false')
                             commit('global/setLoading', false, { root: true })
                         })
                     })

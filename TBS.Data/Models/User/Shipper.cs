@@ -7,6 +7,9 @@ namespace TBS.Data.Models.User
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Name required")]
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "User firebase ID required")]
         public string UserFirebaseId { get; set; }
 
