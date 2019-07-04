@@ -1,12 +1,17 @@
 # Changelog
-## v0.0.2 (July XX, 2019)
+## v0.0.2 (July 03, 2019)
 #### Features:
-*No features for this release.*
+ - Created API
+ - Added database connectivity
+ - Impleneted Azure key vault
+ - Expanded register form
+ - Details from register form are now being saved on the database
+ - Login request now also runs through the backend to verify user is authenticated with Firebase
 #### Enhancements:
-*No enhancements for this release.*
+ - File logging
 
 #### Bug Fixes:
-*No bug fixes for this release.*
+ - Loading indicator not working on login
 
 ---
 

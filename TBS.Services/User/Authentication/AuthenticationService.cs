@@ -8,7 +8,6 @@ using TBS.Data.Interfaces.User.Authentication;
 using TBS.Data.Models.User;
 using TBS.Data.Models.User.Authentication.Request;
 using TBS.Data.Models.User.Authentication.Result;
-using TBS.Data.Models.User.Information;
 
 namespace TBS.Services.User.Authentication
 {

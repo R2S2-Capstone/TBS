@@ -20,8 +20,7 @@
 import FormNarrowCard from '@/components/Form/Card/FormNarrowCard.vue'
 import FormEmail from '@/components/Form/Input/FormEmail.vue'
 
-import { required, minLength, email, sameAs, helpers } from "vuelidate/lib/validators"
-const passwordRegex = helpers.regex("passwordRegex", /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'resetPassword',
