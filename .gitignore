@@ -341,3 +341,6 @@ ASALocalRun/
 .vscode
 
 TBS.Website/src/firebase/Config.js
+**/azure-secrets.json
+
+TBS.API/Logs
