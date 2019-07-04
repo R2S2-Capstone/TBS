@@ -53,13 +53,11 @@ namespace TBS.Services.User.Authentication
 
         public async Task<RegisterResult> RegisterAsync(RegisterRequest request)
         {
-            // This is temporary while we wait for the form to have the company informaiton
-            var company = new Company { Contact = new Contact { Name = "Temp User", PhoneNumber = "5191234567" }, Name = "Company", Address = new Address { City = "Oakville", Country = "Canada", PostalCode = "L6H 4N1", Province = "ON", AddressLine = "1 Trafalgar Road" } };
             if (request.AccountType == AccountType.Shipper)
             {
                 try
                 {
-                    await _context.Shippers.AddAsync(new Shipper { UserFirebaseId = request.UserFirebaseId, Company = company, Email = request.Email, Name = "Temp" });
+                    await _context.Shippers.AddAsync(new Shipper { UserFirebaseId = request.UserFirebaseId, Company = request.Company, Email = request.Email, Name = request.Name });
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception)
@@ -72,7 +70,7 @@ namespace TBS.Services.User.Authentication
             {
                 try
                 {
-                    await _context.Carriers.AddAsync(new Carrier { UserFirebaseId = request.UserFirebaseId, Company = company, DealerNumber = "!23", RIN = "123", Email = request.Email, Name = "Temp" });
+                    await _context.Carriers.AddAsync(new Carrier { UserFirebaseId = request.UserFirebaseId, Company = request.Company, DealerNumber = request.DealerNumber, RIN = request.RIN, Email = request.Email, Name = request.Name });
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception)

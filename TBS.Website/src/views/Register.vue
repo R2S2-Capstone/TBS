@@ -9,15 +9,15 @@
       <div slot="card-content" class="text-center">
         <ul class="nav nav-tabs nav-justified mb-2" role="tablist">
           <li class="nav-item">
-            <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="carrier"
-              aria-selected="false" @click="isShipper = false">Carrier</a>
+            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="carrier"
+              aria-selected="true" @click="isShipper = false">Carrier</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="" data-toggle="tab" role="tab" aria-controls="shipper"
-              aria-selected="true" @click="isShipper = true">Shipper</a>
+            <a class="nav-link" href="" data-toggle="tab" role="tab" aria-controls="shipper"
+              aria-selected="false" @click="isShipper = true">Shipper</a>
           </li>
         </ul>
-        
+
         <h5>Your Information</h5>
         <FormEmail v-model="email" :validator="$v.email"/>
         <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
@@ -105,7 +105,7 @@ export default {
       email: '',
       password: '',
       confirmationPassword: '',
-      isShipper: true,
+      isShipper: false,
       success: null,
       error: null,
       errorMessage: 'An error has occured, make sure your passwords match and your email is unique',
@@ -186,7 +186,7 @@ export default {
         if (this.$v.$invalid && (!this.isShipper && (this.$v.$dealerNumber.$error || this.$v.$rin.$error))) {
           return
         }
-        this.$store.dispatch('authentication/register', { email: this.email, password: this.password, accountType: this.isShipper ? 'Shipper' : 'Carrier' })
+        this.$store.dispatch('authentication/register', { email: this.email, password: this.password, name: this.name, company: this.company, accountType: this.isShipper ? 'Shipper' : 'Carrier', dealerNumber: this.dealerNumber, rin: this.rin })
           .then(() => {
             this.error = false
             this.success = true
