@@ -1,4 +1,6 @@
 import firebase from '@/firebase/Config.js'
+import axios from '@/axios.js'
+
 const global = {
     namespaced: true,
     state: {
@@ -31,14 +33,29 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
-                        firebase.auth().currentUser.sendEmailVerification()
-                        resolve()
+                        console
+                        var user = firebase.auth().currentUser
+                        axios({
+                            method: 'post',
+                            url: 'authentication/register',
+                            data: { userFirebaseId: user.uid, name: payload.name, email: payload.email, company: payload.company, accountType: payload.accountType, dealerNumber: payload.dealerNumber, rin: payload.rin },
+                        })
+                        .then(() => {
+                            // Email will only be sent once backend registration is complete
+                            user.sendEmailVerification()
+                            resolve()
+                        })
+                        .catch(() => {
+                            user.delete()
+                            reject()
+                        })
+                        .finally(() => {
+                            commit('global/setLoading', false, { root: true })
+                        })
                     })
                     .catch((error) => {
-                        reject(error)
-                    })
-                    .finally(() => {
                         commit('global/setLoading', false, { root: true })
+                        reject(error)
                     })
             })
         },
@@ -48,14 +65,46 @@ const global = {
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
+                            firebase.auth().currentUser.sendEmailVerification()
                             reject("Email not verified")
+                            return
                         }
-                        commit("authenticate", response.user)
-                        resolve(response)
+                        axios({
+                            method: 'post',
+                            url: 'authentication/login',
+                            data: { userFirebaseId: firebase.auth().currentUser.uid },
+                            headers: { Authorization: `Bearer ${response.user._lat}`}
+                        })
+                        .then(() => {
+                            commit("authenticate", response.user)
+                            resolve(response)
+                        })
+                        .catch((error) => {
+                            commit('logout')
+                            reject(error)
+                        })
+                        .finally(() => {
+                            commit('global/setLoading', false, { root: true })
+                        })
                     })
                     .catch((error) => {
+                        commit('global/setLoading', false, { root: true })
+                        commit('logout')
                         reject(error)
-                    }).finally(() => {
+                    })
+            })
+        },
+        resetPassword({ commit }, payload) {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                firebase.auth().sendPasswordResetEmail(payload.email)
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
                         commit('global/setLoading', false, { root: true })
                     })
             })

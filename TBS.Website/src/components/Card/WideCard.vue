@@ -7,6 +7,9 @@
           <slot name="card-content">
 
           </slot>
+          <slot name="card-content-below">
+
+          </slot>
         </div>
       </div>
     </div>

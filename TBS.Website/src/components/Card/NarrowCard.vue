@@ -3,7 +3,7 @@
     <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
       <div class="card custom-card my-5">
         <div class="custom-card-body">
-          <h5 class="custom-card-title text-center">{{ title }}</h5>
+          <h3 class="custom-card-title text-center">{{ title }}</h3>
           <slot name="card-content">
 
           </slot>
@@ -37,8 +37,8 @@ export default {
 
   .custom-card-title {
     margin-bottom: 2rem;
-    font-weight: 300;
-    font-size: 1.5rem;
+    // font-weight: 300;
+    // font-size: 1.5rem;
   }
 }
 </style>
