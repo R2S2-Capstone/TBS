@@ -46,8 +46,12 @@
           <div class="col-lg-6 col-md-6 col-sm-12">
             <FormText v-model="company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.company.address.city"/>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <FormText v-model="company.address.country" placeHolder="Country" errorMessage="Please enter a country" :validator="$v.company.address.country"/>
+          <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
+            <select v-model="company.address.country" class="form-control text-center">
+              <option value="Canada">Canada</option>
+              <option value="USA">USA</option>
+              <option value="Mexico">Mexico</option>
+            </select>
           </div>
         </div>
         <div class="row">
@@ -115,7 +119,7 @@ export default {
           addressLine: '',
           city: '',
           province: 'Ontario',
-          country: '',
+          country: 'Canada',
           postalCode: '',
         },
         contact: {
@@ -153,9 +157,6 @@ export default {
           required
         },
         city: {
-          required
-        },
-        country: {
           required
         },
         postalCode: {
