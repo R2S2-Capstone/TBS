@@ -33,6 +33,7 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
+                        console
                         var user = firebase.auth().currentUser
                         axios({
                             method: 'post',
@@ -90,6 +91,21 @@ const global = {
                         commit('global/setLoading', false, { root: true })
                         commit('logout')
                         reject(error)
+                    })
+            })
+        },
+        resetPassword({ commit }, payload) {
+            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                firebase.auth().sendPasswordResetEmail(payload.email)
+                    .then(() => {
+                        resolve()
+                    })
+                    .catch(() => {
+                        reject()
+                    })
+                    .finally(() => {
+                        commit('global/setLoading', false, { root: true })
                     })
             })
         },
