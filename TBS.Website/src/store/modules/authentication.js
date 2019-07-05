@@ -7,11 +7,13 @@ const global = {
         email: '',
         token: '',
         refreshing: false,
+        isLoggingIn: false,
     },
     getters: {
         getToken: state => state.token,
         isAuthenticated: state => state.token,
         isRefreshing: state => state.refreshing,
+        isLoggingIn: state => state.isLoggingIn,
     },
     mutations: {
         authenticate(state, userData) {
@@ -25,7 +27,8 @@ const global = {
         },
         refresh(state, refreshing) {
             state.refreshing = refreshing
-        }
+        },
+        setIsLoggingIn: (state, isLoggingIn) => state.isLoggingIn = isLoggingIn,
     },
     actions: {
         register({ commit }, payload) {
@@ -62,6 +65,7 @@ const global = {
         login({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
+                commit('setIsLoggingIn', true)
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
@@ -75,7 +79,7 @@ const global = {
                             data: { userFirebaseId: firebase.auth().currentUser.uid },
                             headers: { Authorization: `Bearer ${response.user._lat}`}
                         })
-                        .then(() => {
+                        .then((result) => {
                             commit("authenticate", response.user)
                             resolve(response)
                         })
@@ -85,10 +89,12 @@ const global = {
                         })
                         .finally(() => {
                             commit('global/setLoading', false, { root: true })
+                            commit('setIsLoggingIn', false)
                         })
                     })
                     .catch((error) => {
                         commit('global/setLoading', false, { root: true })
+                        commit('setIsLoggingIn', false)
                         commit('logout')
                         reject(error)
                     })
@@ -109,7 +115,7 @@ const global = {
                     })
             })
         },
-        refreshToken({ commit }) {
+        refreshToken({ commit, rootGetters }) {
             return new Promise((resolve, reject) => {
                 commit('authentication/refresh', true, { root: true })
                 firebase.auth().onAuthStateChanged(user => {
@@ -117,7 +123,6 @@ const global = {
                         if (!user.emailVerified) {
                             commit('logout')
                         } else {
-                            commit('global/setLoading', true, { root: true })
                             firebase.auth().currentUser.getIdToken()
                                 .then((response) => {
                                     commit("authenticate", {
@@ -130,15 +135,16 @@ const global = {
                                     reject(error)
                                 })
                                 .finally(() => {
-                                    commit('authentication/refresh', false, { root: true })
-                                    commit('global/setLoading', false, { root: true })
+                                    if (!(rootGetters['authentication/isLoggingIn'])) {
+                                        commit('authentication/refresh', false, { root: true })
+                                    }
                                 })
-                            }
                         }
-                        else {
-                            commit('authentication/refresh', false, { root: true })
-                        }
-                    })
+                    }
+                    else {
+                        commit('authentication/refresh', false, { root: true })
+                    }
+                })
             })
         }
     }
