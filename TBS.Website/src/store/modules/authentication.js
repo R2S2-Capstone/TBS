@@ -79,7 +79,7 @@ const global = {
                             data: { userFirebaseId: firebase.auth().currentUser.uid },
                             headers: { Authorization: `Bearer ${response.user._lat}`}
                         })
-                        .then((result) => {
+                        .then(() => {
                             commit("authenticate", response.user)
                             resolve(response)
                         })

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from '@/store/store.js'
 
 const Home = () => import('@/views/Home.vue')
+const Error404 = () => import('@/views/Error404.vue')
 
 const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
@@ -141,7 +142,7 @@ export default new Router({
     {
       // This will match all other routes (404)
       path: '*',
-      component: Home
+      component: Error404
     }
   ]
 })
