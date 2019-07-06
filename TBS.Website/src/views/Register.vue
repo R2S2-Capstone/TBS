@@ -23,15 +23,18 @@
         <FormText v-model="name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.name"/>
         <FormPassword v-model="password" :validator="$v.password"/>
         <FormPassword v-model="confirmationPassword" confirmationPassword="true" :validator="$v.confirmationPassword"/>
-        <div v-if="!isShipper">
+        <div v-if="isShipper">
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="dealerNumber" placeHolder="Dealer Number" errorMessage="Please enter a company address" :validator="$v.dealerNumber"/>
+              <FormText v-model="dealerNumber" placeHolder="Dealer Number" errorMessage="Please enter a dealer number" :validator="$v.dealerNumber"/>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
-              <FormText v-model="rin" placeHolder="RIN # (Drivers license)" errorMessage="Please enter a company address" :validator="$v.rin"/>
+              <FormText v-model="rin" placeHolder="RIN #" errorMessage="Please enter a RIN number" :validator="$v.rin"/>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <FormText v-model="driversLicense" placeHolder="Drivers License" errorMessage="Please enter a drivers license number" :validator="$v.driversLicense"/>
         </div>
         <h5>Company Information</h5>
         <div class="row">
@@ -128,7 +131,8 @@ export default {
         }
       },
       dealerNumber: '',
-      rin: ''
+      rin: '',
+      driversLicense: '',
     }
   },
   validations: {
@@ -179,15 +183,17 @@ export default {
     },
     rin: {
       required
+    },
+    driversLicense: {
+      required
     }
   },
   methods: {
     submit() {
         this.$v.$touch()
-        if (this.$v.$invalid && (!this.isShipper && (this.$v.$dealerNumber.$error || this.$v.$rin.$error))) {
-          return
-        }
-        this.$store.dispatch('authentication/register', { email: this.email, password: this.password, name: this.name, company: this.company, accountType: this.isShipper ? 'Shipper' : 'Carrier', dealerNumber: this.dealerNumber, rin: this.rin })
+        if (this.$v.$invalid && this.isShipper && (this.$v.dealerNumber.$error || this.$v.rin.$error)) return
+        if (this.$v.$invalid && !this.isShipper && this.$v.driversLicense.$error) return
+        this.$store.dispatch('authentication/register', { email: this.email, password: this.password, name: this.name, company: this.company, accountType: this.isShipper ? 'Shipper' : 'Carrier', dealerNumber: this.dealerNumber, rin: this.rin, driversLicense: this.driversLicense })
           .then(() => {
             this.error = false
             this.success = true

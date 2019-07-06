@@ -22,15 +22,13 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("CompanyId");
 
-                    b.Property<string>("DealerNumber");
+                    b.Property<string>("DriversLicense");
 
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
-
-                    b.Property<string>("RIN");
 
                     b.Property<string>("UserFirebaseId")
                         .IsRequired();
@@ -110,11 +108,15 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("CompanyId");
 
+                    b.Property<string>("DealerNumber");
+
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<string>("RIN");
 
                     b.Property<string>("UserFirebaseId")
                         .IsRequired();

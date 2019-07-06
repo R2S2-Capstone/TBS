@@ -41,7 +41,7 @@ const global = {
                         axios({
                             method: 'post',
                             url: 'authentication/register',
-                            data: { userFirebaseId: user.uid, name: payload.name, email: payload.email, company: payload.company, accountType: payload.accountType, dealerNumber: payload.dealerNumber, rin: payload.rin },
+                            data: { userFirebaseId: user.uid, name: payload.name, email: payload.email, company: payload.company, accountType: payload.accountType, dealerNumber: payload.dealerNumber, rin: payload.rin, driversLicense: payload.driversLicense },
                         })
                         .then(() => {
                             // Email will only be sent once backend registration is complete

@@ -74,8 +74,7 @@ namespace TBS.Data.Migrations
                     Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     CompanyId = table.Column<int>(nullable: false),
-                    RIN = table.Column<string>(nullable: true),
-                    DealerNumber = table.Column<string>(nullable: true)
+                    DriversLicense = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,7 +96,9 @@ namespace TBS.Data.Migrations
                     Name = table.Column<string>(nullable: false),
                     UserFirebaseId = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false)
+                    CompanyId = table.Column<int>(nullable: false),
+                    RIN = table.Column<string>(nullable: true),
+                    DealerNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -3,6 +3,7 @@ using TBS.Data.Models.User.Information;
 
 namespace TBS.Data.Models.User
 {
+    // Transporter
     public class Carrier
     {
         public int Id { get; set; }
@@ -20,10 +21,6 @@ namespace TBS.Data.Models.User
         [Required(ErrorMessage = "Company information required")]
         public Company Company { get; set; }
 
-        public string RIN { get; set; }
-
-        public string DealerNumber { get; set; }
-
-        // Payment information
+        public string DriversLicense { get; set; }
     }
 }

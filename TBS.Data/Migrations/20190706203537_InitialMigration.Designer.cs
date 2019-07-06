@@ -8,7 +8,7 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190703214757_InitialMigration")]
+    [Migration("20190706203537_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,15 +24,13 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("CompanyId");
 
-                    b.Property<string>("DealerNumber");
+                    b.Property<string>("DriversLicense");
 
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
-
-                    b.Property<string>("RIN");
 
                     b.Property<string>("UserFirebaseId")
                         .IsRequired();
@@ -112,11 +110,15 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("CompanyId");
 
+                    b.Property<string>("DealerNumber");
+
                     b.Property<string>("Email")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<string>("RIN");
 
                     b.Property<string>("UserFirebaseId")
                         .IsRequired();

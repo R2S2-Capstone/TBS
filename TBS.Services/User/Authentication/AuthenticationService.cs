@@ -56,7 +56,7 @@ namespace TBS.Services.User.Authentication
             {
                 try
                 {
-                    await _context.Shippers.AddAsync(new Shipper { UserFirebaseId = request.UserFirebaseId, Company = request.Company, Email = request.Email, Name = request.Name });
+                    await _context.Shippers.AddAsync(new Shipper { UserFirebaseId = request.UserFirebaseId, Company = request.Company, DealerNumber = request.DealerNumber, RIN = request.RIN, Email = request.Email, Name = request.Name });
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception)
@@ -69,7 +69,7 @@ namespace TBS.Services.User.Authentication
             {
                 try
                 {
-                    await _context.Carriers.AddAsync(new Carrier { UserFirebaseId = request.UserFirebaseId, Company = request.Company, DealerNumber = request.DealerNumber, RIN = request.RIN, Email = request.Email, Name = request.Name });
+                    await _context.Carriers.AddAsync(new Carrier { UserFirebaseId = request.UserFirebaseId, Company = request.Company,  DriversLicense = request.DriversLicense, Email = request.Email, Name = request.Name });
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception)

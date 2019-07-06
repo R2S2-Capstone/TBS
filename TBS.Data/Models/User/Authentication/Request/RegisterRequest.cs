@@ -11,5 +11,6 @@ namespace TBS.Data.Models.User.Authentication.Request
         public AccountType AccountType { get; set; }
         public string DealerNumber { get; set; }
         public string RIN { get; set; }
+        public string DriversLicense { get; set; }
     }
 }
