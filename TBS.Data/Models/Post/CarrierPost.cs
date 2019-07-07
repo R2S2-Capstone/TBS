@@ -33,7 +33,5 @@ namespace TBS.Data.Models.Post
 
         [Required(ErrorMessage = "Post status required")]
         public PostStatus PostStatus { get; set; }
-
-        public CarrierVehicle Vehicle { get; set; }
     }
 }

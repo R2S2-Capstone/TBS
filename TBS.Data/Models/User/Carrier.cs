@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.User.Information;
+using TBS.Data.Models.Vehicle;
 
 namespace TBS.Data.Models.User
 {
@@ -23,5 +24,7 @@ namespace TBS.Data.Models.User
 
         [Required(ErrorMessage = "Drivers license required")]
         public string DriversLicense { get; set; }
+
+        public CarrierVehicle Vehicle { get; set; }
     }
 }

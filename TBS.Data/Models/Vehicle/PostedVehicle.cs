@@ -18,5 +18,8 @@ namespace TBS.Data.Models.Vehicle
 
         [Required(ErrorMessage = "VIN required")]
         public string VIN { get; set; }
+
+        [Required(ErrorMessage = "Vehicle condition required")]
+        public VehicleCondition Condition { get; set; }
     }
 }
