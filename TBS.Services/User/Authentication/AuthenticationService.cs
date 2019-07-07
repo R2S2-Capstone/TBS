@@ -26,9 +26,6 @@ namespace TBS.Services.User.Authentication
         {
             // These include statements will make sure that all data in other tables are loaded (In relation to this user)
             var shipper = await _context.Shippers
-                .Include(s => s.Company)
-                .Include(s => s.Company.Address)
-                .Include(s => s.Company.Contact)
                 .FirstOrDefaultAsync(s => s.UserFirebaseId == request.UserFirebaseId);
             if (shipper != null)
             {
@@ -36,9 +33,6 @@ namespace TBS.Services.User.Authentication
                 return new LoginResult { AccountType = AccountType.Shipper, User = shipper };
             }
             var carrier = await _context.Carriers
-                .Include(s => s.Company)
-                .Include(s => s.Company.Address)
-                .Include(s => s.Company.Contact)
                 .FirstOrDefaultAsync(c => c.UserFirebaseId == request.UserFirebaseId);
             if (carrier != null)
             {
