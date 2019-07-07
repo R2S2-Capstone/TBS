@@ -21,6 +21,7 @@ namespace TBS.Data.Models.User
         [Required(ErrorMessage = "Company information required")]
         public Company Company { get; set; }
 
+        [Required(ErrorMessage = "Drivers license required")]
         public string DriversLicense { get; set; }
     }
 }

@@ -21,8 +21,10 @@ namespace TBS.Data.Models.User
         [Required(ErrorMessage = "Company information required")]
         public Company Company { get; set; }
 
+        [Required(ErrorMessage = "RIN required")]
         public string RIN { get; set; }
 
+        [Required(ErrorMessage = "Dealer number required")]
         public string DealerNumber { get; set; }
     }
 }
