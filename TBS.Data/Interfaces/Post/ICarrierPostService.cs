@@ -14,7 +14,7 @@ namespace TBS.Data.Interfaces.Post
 
         Task<bool> CreatePostAsync(CarrierPost post);
 
-        Task<bool> UpdatePostAsync(CarrierPost post);
+        Task<bool> UpdatePostAsync(int id, CarrierPost post);
 
         Task<bool> RemovePostAsync(int id);
     }
