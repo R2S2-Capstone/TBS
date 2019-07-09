@@ -32,7 +32,7 @@ const global = {
         },
         setIsLoggingIn: (state, isLoggingIn) => state.isLoggingIn = isLoggingIn,
         setAccountType(state, data) {
-            console.log(data)
+            console.log('here')
             if (data.data.result.accountType == 0) {
                 state.accountType = "Carrier"
             } else if (data.data.result.accountType == 1) {
@@ -48,7 +48,6 @@ const global = {
                 commit('global/setLoading', true, { root: true })
                 firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(() => {
-                        console
                         var user = firebase.auth().currentUser
                         axios({
                             method: 'post',
@@ -77,7 +76,6 @@ const global = {
         login({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
-                commit('setIsLoggingIn', true)
                 firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then((response) => {
                         if (!response.user.emailVerified) {
@@ -88,10 +86,11 @@ const global = {
                         resolve()
                     })
                     .catch((error) => {
-                        commit('global/setLoading', false, { root: true })
-                        commit('setIsLoggingIn', false)
                         commit('logout')
                         reject(error)
+                    })
+                    .finally(() => {
+                        commit('authentication/refresh', false, { root: true })
                     })
             })
         },
@@ -119,9 +118,9 @@ const global = {
                             commit('logout')
                         } else {
                             firebase.auth().currentUser.getIdToken()
-                                .then((response) => {
-                                    console.log(user.uid)
+                                .then(() => {
                                     commit('global/setLoading', true, { root: true })
+                                    commit('setIsLoggingIn', true)
                                     axios({
                                         method: 'post',
                                         url: 'authentication/login',
@@ -131,6 +130,7 @@ const global = {
                                     .then((data) => {
                                         commit("setAccountType", data)
                                         commit("authenticate", user)
+                                        commit('setIsLoggingIn', false)
                                         resolve()
                                     })
                                     .catch((error) => {
@@ -138,18 +138,16 @@ const global = {
                                         reject(error)
                                     })
                                     .finally(() => {
+                                        console.log('set to false')
+                                        commit('authentication/refresh', false, { root: true })
                                         commit('global/setLoading', false, { root: true })
-                                        commit('setIsLoggingIn', false)
+
                                     })
-                                    resolve()
                                 })
                                 .catch((error) => {
+                                    commit('global/setLoading', false, { root: true })
+                                    commit('authentication/refresh', false, { root: true })
                                     reject(error)
-                                })
-                                .finally(() => {
-                                    if (!(rootGetters['authentication/isLoggingIn'])) {
-                                        commit('authentication/refresh', false, { root: true })
-                                    }
                                 })
                         }
                     }

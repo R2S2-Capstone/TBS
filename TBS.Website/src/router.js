@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import store from '@/store/store.js'
 
 const Home = () => import('@/views/Home.vue')
-const Error404 = () => import('@/views/Error404.vue')
+const Error401 = () => import('@/views/Error/401.vue')
+const Error404 = () => import('@/views/Error/404.vue')
 
 const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
@@ -49,6 +50,52 @@ const LoggedIn = {
   }
 }
 
+const CarrierOnly = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const accountType = store.getters['authentication/getAccountType']
+      // We do this because we want all other account types (Carrier and administrator) to access it
+      if (accountType == "Shipper") {
+        next({ name: 'error401' })
+      } else {
+        next()
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+const ShipperOnly = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const accountType = store.getters['authentication/getAccountType']
+      // We do this because we want all other account types (Shipper and administrator) to access it
+      if (accountType == "Carrier") {
+        next({ name: 'error401' })
+      } else {
+        next()
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -69,7 +116,7 @@ export default new Router({
       component: Register,
     },
     {
-      path: '/ResetPassword/:token?',
+      path: '/ResetPassword/',
       name: 'resetPassword',
       component: ResetPassword
     },
@@ -77,7 +124,7 @@ export default new Router({
       path: '/Shipper',
       component: ShipperIndex,
       ...LoggedIn,
-      // TODO: Make sure user is a shipper
+      ...ShipperOnly,
       children: [
         {
           path: '',
@@ -105,7 +152,7 @@ export default new Router({
       path: '/Carrier',
       component: CarrierIndex,
       ...LoggedIn,
-      // TODO: Make sure user is a carrier
+      ...CarrierOnly,
       children: [
         {
           path: '',
@@ -138,6 +185,11 @@ export default new Router({
       path: '/ViewPosts',
       name: 'viewPosts',
       component: ViewPosts
+    },
+    {
+      path: '/401',
+      name: 'error401',
+      component: Error401
     },
     {
       // This will match all other routes (404)
