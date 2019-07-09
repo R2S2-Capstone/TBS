@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TBS.Data.Interfaces.Post;
-using TBS.Data.Models.Post;
+using TBS.Data.Interfaces.Post.Carrier;
+using TBS.Data.Models.Post.Carrier;
 
 namespace TBS.API.Controllers.v1.Posts
 {

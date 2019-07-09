@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TBS.Data.Models.Post;
+using TBS.Data.Models.Post.Shipper;
 
-namespace TBS.Data.Interfaces.Post
+namespace TBS.Data.Interfaces.Post.Shipper
 {
     public interface IShipperPostService
     {

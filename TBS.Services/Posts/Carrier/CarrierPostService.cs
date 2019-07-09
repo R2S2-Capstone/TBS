@@ -4,46 +4,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
-using TBS.Data.Interfaces.Post;
+using TBS.Data.Interfaces.Post.Carrier;
 using TBS.Data.Models.Post;
+using TBS.Data.Models.Post.Carrier;
 
-namespace TBS.Services.User.Posts
+namespace TBS.Services.Posts.Carrier
 {
-    public class ShipperPostService : IShipperPostService
+    public class CarrierPostService : ICarrierPostService
     {
         private readonly DatabaseContext _context;
 
-        public ShipperPostService(DatabaseContext databaseContext)
+        public CarrierPostService(DatabaseContext databaseContext)
         {
             _context = databaseContext;
         }
 
-        public async Task<IEnumerable<ShipperPost>> GetAllPostsAsync()
+        public async Task<IEnumerable<CarrierPost>> GetAllPostsAsync()
         {
-            return await _context.ShipperPosts.ToListAsync();
+            return await _context.CarrierPosts.ToListAsync();
         }
 
-        public async Task<IEnumerable<ShipperPost>> GetAllActivePostsAsync()
+        public async Task<IEnumerable<CarrierPost>> GetAllActivePostsAsync()
         {
-            return await _context.ShipperPosts.Where(p => p.PostStatus == PostStatus.Open).ToListAsync();
+            return await _context.CarrierPosts.Where(p => p.PostStatus == PostStatus.Open).ToListAsync();
         }
 
-        public async Task<ShipperPost> GetPostByIdAsync(int id)
+        public async Task<CarrierPost> GetPostByIdAsync(int id)
         {
-            var carrierPost = await _context.ShipperPosts.FirstAsync(p => p.Id == id);
+            var carrierPost = await _context.CarrierPosts.FirstAsync(p => p.Id == id);
 
             if (carrierPost == null)
             {
                 // TODO: implement exception
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             return carrierPost;
         }
 
-        public async Task<bool> CreatePostAsync(ShipperPost post)
+        public async Task<bool> CreatePostAsync(CarrierPost post)
         {
-            await _context.ShipperPosts.AddAsync(post);
+            await _context.CarrierPosts.AddAsync(post);
             await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
@@ -55,20 +56,20 @@ namespace TBS.Services.User.Posts
             if (carrierPost == null)
             {
                 // TODO: implement exception
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
-            _context.ShipperPosts.Remove(await GetPostByIdAsync(id));
+            _context.CarrierPosts.Remove(await GetPostByIdAsync(id));
             await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdatePostAsync(int id, ShipperPost post)
+        public async Task<bool> UpdatePostAsync(int id, CarrierPost post)
         {
             if (id != post.Id)
             {
                 // TODO: implement exception
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             _context.Entry(post).State = EntityState.Modified;
@@ -80,7 +81,7 @@ namespace TBS.Services.User.Posts
             catch (Exception)
             {
                 // TODO: implement exception
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             return await Task.FromResult(true);

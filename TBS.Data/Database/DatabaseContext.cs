@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TBS.Data.Models.Post;
+using TBS.Data.Models.Post.Carrier;
+using TBS.Data.Models.Post.Shipper;
 using TBS.Data.Models.User;
 
 namespace TBS.Data.Database

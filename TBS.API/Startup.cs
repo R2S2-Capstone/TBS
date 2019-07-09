@@ -9,10 +9,12 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TBS.Data.Database;
-using TBS.Data.Interfaces.Post;
+using TBS.Data.Interfaces.Post.Carrier;
+using TBS.Data.Interfaces.Post.Shipper;
 using TBS.Data.Interfaces.User.Authentication;
+using TBS.Services.Posts.Carrier;
+using TBS.Services.Posts.Shipper;
 using TBS.Services.User.Authentication;
-using TBS.Services.User.Posts;
 
 namespace TBS.API
 {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TBS.Data.Models.Post;
+using TBS.Data.Models.Post.Carrier;
 
-namespace TBS.Data.Interfaces.Post
+namespace TBS.Data.Interfaces.Post.Carrier
 {
     public interface ICarrierPostService
     {

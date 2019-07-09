@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TBS.Data.Models.Vehicle
+namespace TBS.Data.Models.Vehicle.Carrier
 {
     public class CarrierVehicle
     {

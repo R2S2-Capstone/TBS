@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TBS.Data.Interfaces.Post;
-using TBS.Data.Models.Post;
+using TBS.Data.Interfaces.Post.Shipper;
+using TBS.Data.Models.Post.Shipper;
 
 namespace TBS.API.Controllers.v1.Shipper
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.User.Information;
-using TBS.Data.Models.Vehicle;
+using TBS.Data.Models.Vehicle.Carrier;
 
 namespace TBS.Data.Models.User
 {
