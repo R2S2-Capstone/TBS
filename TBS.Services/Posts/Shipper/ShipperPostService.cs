@@ -33,7 +33,7 @@ namespace TBS.Services.Posts.Shipper
 
         public async Task<ShipperPost> GetPostByIdAsync(int id)
         {
-            var carrierPost = await _context.ShipperPosts.FirstAsync(p => p.Id == id);
+            var carrierPost = await _context.ShipperPosts.FirstOrDefaultAsync(p => p.Id == id);
 
             if (carrierPost == null)
             {
