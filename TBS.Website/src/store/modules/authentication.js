@@ -8,17 +8,19 @@ const global = {
         token: '',
         refreshing: false,
         isLoggingIn: false,
+        accountType: null,
     },
     getters: {
         getToken: state => state.token,
         isAuthenticated: state => state.token,
         isRefreshing: state => state.refreshing,
         isLoggingIn: state => state.isLoggingIn,
+        getAccountType: state => state.accountType,
     },
     mutations: {
-        authenticate(state, userData) {
-            state.email = userData.email
-            state.token = userData._lat
+        authenticate(state, data) {
+            state.email = data.email
+            state.token = data._lat
         },
         logout(state) {
             state.email = null
@@ -29,6 +31,16 @@ const global = {
             state.refreshing = refreshing
         },
         setIsLoggingIn: (state, isLoggingIn) => state.isLoggingIn = isLoggingIn,
+        setAccountType(state, data) {
+            console.log(data)
+            if (data.data.result.accountType == 0) {
+                state.accountType = "Carrier"
+            } else if (data.data.result.accountType == 1) {
+                state.accountType = "Shipper"
+            } else {
+                state.accountType = "Administrator"
+            }
+        }
     },
     actions: {
         register({ commit }, payload) {
@@ -73,24 +85,7 @@ const global = {
                             reject("Email not verified")
                             return
                         }
-                        axios({
-                            method: 'post',
-                            url: 'authentication/login',
-                            data: { userFirebaseId: firebase.auth().currentUser.uid },
-                            headers: { Authorization: `Bearer ${response.user._lat}`}
-                        })
-                        .then(() => {
-                            commit("authenticate", response.user)
-                            resolve(response)
-                        })
-                        .catch((error) => {
-                            commit('logout')
-                            reject(error)
-                        })
-                        .finally(() => {
-                            commit('global/setLoading', false, { root: true })
-                            commit('setIsLoggingIn', false)
-                        })
+                        resolve()
                     })
                     .catch((error) => {
                         commit('global/setLoading', false, { root: true })
@@ -125,9 +120,26 @@ const global = {
                         } else {
                             firebase.auth().currentUser.getIdToken()
                                 .then((response) => {
-                                    commit("authenticate", {
-                                        _lat: response,
-                                        email: firebase.auth().currentUser.email
+                                    console.log(user.uid)
+                                    commit('global/setLoading', true, { root: true })
+                                    axios({
+                                        method: 'post',
+                                        url: 'authentication/login',
+                                        data: { userFirebaseId: user.uid },
+                                        headers: { Authorization: `Bearer ${user._lat}`}
+                                    })
+                                    .then((data) => {
+                                        commit("setAccountType", data)
+                                        commit("authenticate", user)
+                                        resolve()
+                                    })
+                                    .catch((error) => {
+                                        commit('logout')
+                                        reject(error)
+                                    })
+                                    .finally(() => {
+                                        commit('global/setLoading', false, { root: true })
+                                        commit('setIsLoggingIn', false)
                                     })
                                     resolve()
                                 })

@@ -14,7 +14,6 @@ namespace TBS.API
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://*:7001;https://*:7000")
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     config.AddJsonFile("azure-secrets.json", optional: false, reloadOnChange: true);
