@@ -9,8 +9,10 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TBS.Data.Database;
+using TBS.Data.Interfaces.Post;
 using TBS.Data.Interfaces.User.Authentication;
 using TBS.Services.User.Authentication;
+using TBS.Services.User.Posts;
 
 namespace TBS.API
 {
@@ -37,6 +39,8 @@ namespace TBS.API
             services.AddSingleton(Configuration);
             services.AddScoped<DatabaseContext, DatabaseContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<ICarrierPostService, CarrierPostService>();
+            services.AddScoped<IShipperPostService, ShipperPostService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 
