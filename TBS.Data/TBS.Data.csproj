@@ -8,4 +8,9 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.16" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\Posts\Carrier\" />
+    <Folder Include="Exceptions\Posts\Shipper\" />
+  </ItemGroup>
+
 </Project>

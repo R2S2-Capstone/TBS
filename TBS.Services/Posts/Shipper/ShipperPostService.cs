@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
+using TBS.Data.Exceptions.Posts;
+using TBS.Data.Exceptions.Posts.Shipper;
 using TBS.Data.Interfaces.Post.Shipper;
 using TBS.Data.Models.Post;
 using TBS.Data.Models.Post.Shipper;
@@ -35,8 +37,7 @@ namespace TBS.Services.Posts.Shipper
 
             if (carrierPost == null)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new InvalidShipperPostException();
             }
 
             return carrierPost;
@@ -55,8 +56,7 @@ namespace TBS.Services.Posts.Shipper
 
             if (carrierPost == null)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new InvalidShipperPostException();
             }
 
             _context.ShipperPosts.Remove(await GetPostByIdAsync(id));
@@ -68,8 +68,7 @@ namespace TBS.Services.Posts.Shipper
         {
             if (id != post.Id)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new InvalidShipperPostException();
             }
 
             _context.Entry(post).State = EntityState.Modified;
@@ -80,8 +79,7 @@ namespace TBS.Services.Posts.Shipper
             }
             catch (Exception)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new FailedToUpdatePostException();
             }
 
             return await Task.FromResult(true);

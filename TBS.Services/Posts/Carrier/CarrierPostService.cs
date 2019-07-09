@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
+using TBS.Data.Exceptions.Posts;
+using TBS.Data.Exceptions.Posts.Carrier;
 using TBS.Data.Interfaces.Post.Carrier;
 using TBS.Data.Models.Post;
 using TBS.Data.Models.Post.Carrier;
@@ -35,8 +37,7 @@ namespace TBS.Services.Posts.Carrier
 
             if (carrierPost == null)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new InvalidCarrierPostException();
             }
 
             return carrierPost;
@@ -55,8 +56,7 @@ namespace TBS.Services.Posts.Carrier
 
             if (carrierPost == null)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new InvalidCarrierPostException();
             }
 
             _context.CarrierPosts.Remove(await GetPostByIdAsync(id));
@@ -68,8 +68,7 @@ namespace TBS.Services.Posts.Carrier
         {
             if (id != post.Id)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new InvalidCarrierPostException();
             }
 
             _context.Entry(post).State = EntityState.Modified;
@@ -80,8 +79,7 @@ namespace TBS.Services.Posts.Carrier
             }
             catch (Exception)
             {
-                // TODO: implement exception
-                throw new NotImplementedException();
+                throw new FailedToUpdatePostException();
             }
 
             return await Task.FromResult(true);
