@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.User;
-using TBS.Data.Models;
 using TBS.Data.Models.Post.Request;
 using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
