@@ -8,7 +8,7 @@ const global = {
         token: '',
         refreshing: false,
         isLoggingIn: false,
-        accountType: null,
+        accountType: '',
     },
     getters: {
         getToken: state => state.token,
@@ -119,6 +119,7 @@ const global = {
                         } else {
                             firebase.auth().currentUser.getIdToken()
                                 .then(() => {
+                                    commit("authenticate", user)
                                     commit('global/setLoading', true, { root: true })
                                     commit('setIsLoggingIn', true)
                                     axios({
@@ -129,7 +130,6 @@ const global = {
                                     })
                                     .then((data) => {
                                         commit("setAccountType", data)
-                                        commit("authenticate", user)
                                         commit('setIsLoggingIn', false)
                                         resolve()
                                     })
