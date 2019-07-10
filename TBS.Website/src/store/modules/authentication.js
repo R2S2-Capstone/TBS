@@ -7,14 +7,12 @@ const global = {
         email: '',
         token: '',
         refreshing: false,
-        isLoggingIn: false,
         accountType: '',
     },
     getters: {
         getToken: state => state.token,
         isAuthenticated: state => state.token,
         isRefreshing: state => state.refreshing,
-        isLoggingIn: state => state.isLoggingIn,
         getAccountType: state => state.accountType,
     },
     mutations: {
@@ -30,9 +28,7 @@ const global = {
         refresh(state, refreshing) {
             state.refreshing = refreshing
         },
-        setIsLoggingIn: (state, isLoggingIn) => state.isLoggingIn = isLoggingIn,
         setAccountType(state, data) {
-            console.log('here')
             if (data.data.result.accountType == 0) {
                 state.accountType = "Carrier"
             } else if (data.data.result.accountType == 1) {
@@ -109,7 +105,7 @@ const global = {
                     })
             })
         },
-        refreshToken({ commit, rootGetters }) {
+        refreshToken({ commit }) {
             return new Promise((resolve, reject) => {
                 commit('authentication/refresh', true, { root: true })
                 firebase.auth().onAuthStateChanged(user => {
@@ -121,7 +117,6 @@ const global = {
                                 .then(() => {
                                     commit("authenticate", user)
                                     commit('global/setLoading', true, { root: true })
-                                    commit('setIsLoggingIn', true)
                                     axios({
                                         method: 'post',
                                         url: 'authentication/login',
@@ -130,7 +125,6 @@ const global = {
                                     })
                                     .then((data) => {
                                         commit("setAccountType", data)
-                                        commit('setIsLoggingIn', false)
                                         resolve()
                                     })
                                     .catch((error) => {
@@ -138,7 +132,6 @@ const global = {
                                         reject(error)
                                     })
                                     .finally(() => {
-                                        console.log('set to false')
                                         commit('authentication/refresh', false, { root: true })
                                         commit('global/setLoading', false, { root: true })
 
