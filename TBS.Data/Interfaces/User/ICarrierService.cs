@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
-using TBS.Data.Models.User;
+using System.Threading.Tasks;
+using TBS.Data.Models.Post.Carrier;
+using TBS.Data.Models.Post.Request;
 
 namespace TBS.Data.Interfaces.User
 {
     public interface ICarrierService
     {
-        Carrier Get(int id);
+        Task<IEnumerable<CarrierPost>> GetAllPosts(GetAllUsersPostsRequest request);
 
-        IEnumerable<Carrier> GetAll();
+        Task<CarrierPost> GetPostById(int id);
+
+        Task<bool> CreateCarrierPostAsync(CarrierPost post);
+
+        Task<bool> UpdateCarrierPostAsync(int id, CarrierPost post);
+
+        Task<bool> RemoveCarrierPostAsync(int id);
     }
 }

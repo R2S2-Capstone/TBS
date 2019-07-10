@@ -9,6 +9,8 @@ namespace TBS.Data.Models.Post.Carrier
     {
         public int Id { get; set; }
 
+        public TBS.Data.Models.User.Carrier Carrier { get; set; }
+
         [Required(ErrorMessage = "Pickup city required")]
         public string PickupCity { get; set; }
 

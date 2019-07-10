@@ -3,7 +3,26 @@ const posts = {
     state: {},
     getters: {},
     mutations: {},
-    actions: {}
+    actions: {
+        getPosts() {
+
+        },
+        getMyPosts({ rootGetters,}, payload) {
+
+        },
+        getPostById(payload) {
+             
+        },
+        createPost() {
+
+        },
+        updatePost() {
+
+        },
+        deletePost() {
+
+        }
+    }
 }
 
 export default posts

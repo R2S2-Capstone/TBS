@@ -10,6 +10,8 @@ namespace TBS.Data.Models.Post.Shipper
     {
         public int Id { get; set; }
 
+        public TBS.Data.Models.User.Shipper Shipper { get; set; }
+
         [Required(ErrorMessage = "Vehicle required")]
         public PostedVehicle Vehicle { get; set; }
 
