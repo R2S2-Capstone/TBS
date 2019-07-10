@@ -111,23 +111,7 @@ export default {
       postPageCount: 1,
       bidPage: 1,
       bidPageCount: 1,
-      posts: [
-        {
-          id: '1',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          status: 'In Transport'
-        },
-        {
-          id: '12',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          status: 'Pending Approval'
-        },
-        {
-          id: '123',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          status: 'Delivered'
-        }
-      ],
+      posts: [],
       bids: [
         {
           id: '1',
