@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using TBS.Data.Models.Post.Carrier;
 using TBS.Data.Models.User.Information;
 using TBS.Data.Models.Vehicle.Carrier;
 
@@ -26,5 +28,7 @@ namespace TBS.Data.Models.User
         public string DriversLicense { get; set; }
 
         public CarrierVehicle Vehicle { get; set; }
+
+        public virtual IEnumerable<CarrierPost> Posts { get; set; }
     }
 }

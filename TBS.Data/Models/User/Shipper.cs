@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using TBS.Data.Models.Post.Shipper;
 using TBS.Data.Models.User.Information;
 
 namespace TBS.Data.Models.User
@@ -26,5 +28,7 @@ namespace TBS.Data.Models.User
 
         [Required(ErrorMessage = "Dealer number required")]
         public string DealerNumber { get; set; }
+
+        public virtual IEnumerable<ShipperPost> Posts { get; set; }
     }
 }

@@ -9,11 +9,11 @@ using TBS.Data.Models.Post.Response;
 
 namespace TBS.Services.Posts.Carrier
 {
-    public class CarrierPostService : IPostService
+    public class PostService : IPostService
     {
         private readonly DatabaseContext _context;
 
-        public CarrierPostService(DatabaseContext databaseContext)
+        public PostService(DatabaseContext databaseContext)
         {
             _context = databaseContext;
         }
