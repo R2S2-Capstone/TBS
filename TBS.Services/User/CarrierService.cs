@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
@@ -9,6 +8,7 @@ using TBS.Data.Exceptions.Posts.Carrier;
 using TBS.Data.Interfaces.User;
 using TBS.Data.Models.Post.Carrier;
 using TBS.Data.Models.Post.Request;
+using TBS.Data.Models.Post.Response;
 
 namespace TBS.Services.User
 {
@@ -21,9 +21,15 @@ namespace TBS.Services.User
             _context = databaseContext;
         }
 
-        public async Task<IEnumerable<CarrierPost>> GetAllPosts(GetAllUsersPostsRequest request)
+        public async Task<PaginatedPosts> GetAllPosts(GetAllUsersPostsRequest request)
         {
-            return await _context.CarrierPosts.Where(p => p.Carrier.Id == request.UserId && p.PostStatus == Data.Models.Post.PostStatus.Open).OrderBy(p => p.PostStatus).ToListAsync();
+            var allUserPosts = await _context.CarrierPosts.Where(p => p.Carrier.Id == request.UserId).ToListAsync();
+            var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
+            request.PaginationModel.Count = orderedPosts.Count();
+            var paginatedPosts = orderedPosts
+                .Skip((request.PaginationModel.CurrentPage - 1) * request.PaginationModel.PageSize)
+                .Take(request.PaginationModel.PageSize).ToList();
+            return new PaginatedPosts() { PaginationModel = request.PaginationModel, Posts = paginatedPosts };
         }
 
         public async Task<CarrierPost> GetPostById(int id)

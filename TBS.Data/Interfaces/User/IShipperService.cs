@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TBS.Data.Models.Post.Request;
+using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
 
 namespace TBS.Data.Interfaces.User
 {
     public interface IShipperService
     {
-        Task<IEnumerable<ShipperPost>> GetAllPosts(GetAllUsersPostsRequest request);
+        Task<PaginatedPosts> GetAllPosts(GetAllUsersPostsRequest request);
 
         Task<ShipperPost> GetPostById(int id);
 
