@@ -8,7 +8,7 @@ const posts = {
 
         },
         getMyPosts({ rootGetters,}, payload) {
-
+            
         },
         getPostById(payload) {
              

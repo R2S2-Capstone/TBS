@@ -6,7 +6,7 @@ using TBS.Data.Models.Post.Request;
 using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
 
-namespace TBS.API.Controllers.v1.Shipper
+namespace TBS.API.Controllers.v1
 {
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]

@@ -5,10 +5,10 @@ using TBS.Data.Models;
 using TBS.Data.Models.Post.Carrier;
 using TBS.Data.Models.Post.Response;
 
-namespace TBS.API.Controllers.v1.Posts
+namespace TBS.API.Controllers.v1
 {
     [ApiVersion("1")]
-    [Route("api/v{version:apiVersion}/Carrier/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class PostsController : ControllerBase
