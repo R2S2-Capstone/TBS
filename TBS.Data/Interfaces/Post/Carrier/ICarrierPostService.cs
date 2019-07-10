@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TBS.Data.Models;
 using TBS.Data.Models.Post.Carrier;
+using TBS.Data.Models.Post.Response;
 
 namespace TBS.Data.Interfaces.Post.Carrier
 {
     public interface ICarrierPostService
     {
-        Task<IEnumerable<CarrierPost>> GetAllActivePosts(PaginationModel model);
+        Task<PaginatedPosts> GetAllActivePosts(PaginationModel paginationModel);
 
         Task<CarrierPost> GetPostByIdAsync(int id);
     }
