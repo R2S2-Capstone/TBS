@@ -23,13 +23,19 @@ namespace TBS.Services.User
 
         public async Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request)
         {
-            var allUserPosts = await _context.CarrierPosts.Where(p => p.Carrier.Id == request.UserId).ToListAsync();
+            var allUserPosts = await _context.CarrierPosts.Where(p => p.Carrier.UserFirebaseId == request.UserFirebaseId).ToListAsync();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
             request.PaginationModel.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
                 .Skip((request.PaginationModel.CurrentPage - 1) * request.PaginationModel.PageSize)
                 .Take(request.PaginationModel.PageSize).ToList();
             return new PaginatedPosts() { PaginationModel = request.PaginationModel, Posts = paginatedPosts };
+        }
+
+        public async Task<CarrierPost> GetPostById(GetPostByIdRequest request)
+        {
+            // do other validation
+            return await GetPostById(request.PostId);
         }
 
         public async Task<CarrierPost> GetPostById(int id)

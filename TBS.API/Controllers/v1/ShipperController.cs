@@ -29,6 +29,6 @@ namespace TBS.API.Controllers.v1
         //var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
         // GET: api/v1/Shipper/{id}/Posts/{PostId}
         [HttpGet("{id}/Posts/{postId}")]
-        public async Task<ShipperPost> GetShipperPost(int id, int postId) => await _service.GetPostById(postId);
+        public async Task<ShipperPost> GetShipperPost(GetPostByIdRequest request) => await _service.GetPostById(request);
     }
 }

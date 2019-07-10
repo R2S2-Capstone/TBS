@@ -9,7 +9,7 @@ namespace TBS.Data.Interfaces.User
     {
         Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request);
 
-        Task<ShipperPost> GetPostById(int id);
+        Task<ShipperPost> GetPostById(GetPostByIdRequest request);
 
         Task<bool> CreateShipperPostAsync(ShipperPost post);
 
