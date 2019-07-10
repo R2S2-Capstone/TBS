@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TBS.Data.Interfaces.Post;
 using TBS.Data.Models;
-using TBS.Data.Models.Post.Carrier;
 using TBS.Data.Models.Post.Response;
 
 namespace TBS.API.Controllers.v1
@@ -12,19 +12,19 @@ namespace TBS.API.Controllers.v1
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly ICarrierPostService _service;
+        private readonly IPostService _service;
 
-        public PostsController(ICarrierPostService service)
+        public PostsController(IPostService service)
         {
             _service = service;
         }
 
         // GET: api/v1/Posts/Carrier/
         [HttpGet("Carrier")]
-        public async Task<PaginatedPosts> GetCarrierPosts(PaginationModel model) => await _service.GetAllActivePosts(model);
+        public async Task<PaginatedPosts> GetCarrierPosts(PaginationModel model) => await _service.GetAllActiveCarrierPosts(model);
 
         // GET: api/v1/Posts/Shipper
         [HttpGet("Shipper")]
-        public async Task<CarrierPost> GetCarrierPost(int id) => await _service.GetPostByIdAsync(id);
+        public async Task<PaginatedPosts> GetShipperPosts(PaginationModel model) => await _service.GetAllActiveShipperPosts(model);
     }
 }
