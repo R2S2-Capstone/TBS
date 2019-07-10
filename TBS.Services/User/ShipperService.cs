@@ -21,7 +21,7 @@ namespace TBS.Services.User
             _context = databaseContext;
         }
 
-        public async Task<PaginatedPosts> GetAllPosts(GetAllUsersPostsRequest request)
+        public async Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request)
         {
             var allUserPosts = await _context.ShipperPosts.Where(p => p.Shipper.Id == request.UserId).ToListAsync();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);

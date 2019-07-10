@@ -7,7 +7,7 @@ namespace TBS.Data.Interfaces.User
 {
     public interface IShipperService
     {
-        Task<PaginatedPosts> GetAllPosts(GetAllUsersPostsRequest request);
+        Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request);
 
         Task<ShipperPost> GetPostById(int id);
 

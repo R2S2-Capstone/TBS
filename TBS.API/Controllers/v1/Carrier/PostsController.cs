@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TBS.Data.Interfaces.Post.Carrier;
 using TBS.Data.Models;
 using TBS.Data.Models.Post.Carrier;
+using TBS.Data.Models.Post.Response;
 
 namespace TBS.API.Controllers.v1.Posts
 {
@@ -22,7 +22,7 @@ namespace TBS.API.Controllers.v1.Posts
 
         // GET: api/v1/Carrier/Posts/
         [HttpGet]
-        public async Task<IEnumerable<CarrierPost>> GetCarrierPosts(PaginationModel model) => await _service.GetAllActivePosts(model);
+        public async Task<PaginatedPosts> GetCarrierPosts(PaginationModel model) => await _service.GetAllActivePosts(model);
 
         // GET: api/v1/Carrier/Posts/{id}
         [HttpGet("{id}")]

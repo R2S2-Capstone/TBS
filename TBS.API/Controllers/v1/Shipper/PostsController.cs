@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.Post.Shipper;
 using TBS.Data.Models;
+using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
 
 namespace TBS.API.Controllers.v1.Shipper
@@ -19,10 +20,19 @@ namespace TBS.API.Controllers.v1.Shipper
         {
             _service = service;
         }
+        //Task<PaginatedPosts> GetAllPosts(GetAllUsersPostsRequest request);
+
+        //Task<ShipperPost> GetPostById(int id);
+
+        //Task<bool> CreateShipperPostAsync(ShipperPost post);
+
+        //Task<bool> UpdateShipperPostAsync(int id, ShipperPost post);
+
+        //Task<bool> RemoveShipperPostAsync(int id);
 
         // GET: api/v1/Shipper/Posts
         [HttpGet]
-        public async Task<IEnumerable<ShipperPost>> GetShipperPosts(PaginationModel model) => await _service.GetAllActivePosts(model);
+        public async Task<PaginatedPosts> GetShipperPosts(PaginationModel model) => await _service.GetAllActivePosts(model);
 
         // GET: api/v1/Shipper/Posts/{id}
         [HttpGet("{id}")]
