@@ -28,7 +28,7 @@ const posts = {
                 })
             })
         },
-        getPostById({ rootGetters }, payload) {
+        getPostById({ commit, rootGetters }, payload) {
             commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
@@ -48,8 +48,25 @@ const posts = {
                 })
             })
         },
-        createPost() {
-
+        createPost({ commit, rootGetters}, payload) {
+            commit('global/setLoading', true, { root: true })
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'put',
+                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts`,
+                    data: {  },
+                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    commit('global/setLoading', false, { root: true })
+                })
+            })
         },
         updatePost() {
 

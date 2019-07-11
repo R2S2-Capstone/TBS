@@ -30,8 +30,21 @@ namespace TBS.API.Controllers.v1
             return await _service.GetAllUsersPosts(id, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count });
         }
 
+
         // GET: api/v1/Shipper/Posts/{PostId}
         [HttpGet("Posts/{postId}")]
         public async Task<ShipperPost> GetShipperPost(int postId) => await _service.GetPostById(postId);
+
+        // POST: api/v1/Shipper/Posts
+        [HttpPost]
+        public async Task<bool> CreateShipperPost(ShipperPost post) => await _service.CreatePostAsync(post);
+
+        // PUT: api/v1/Shipper/Posts
+        [HttpPut]
+        public async Task<bool> UpdateShipperPost(int postId, ShipperPost post) => await _service.UpdatePostAsync(postId, post);
+
+        // DELETE: api/v1/Shipper/Posts
+        [HttpDelete]
+        public async Task<bool> DeleteShipperPost(int postId) => await _service.DeletePostAsync(postId);
     }
 }

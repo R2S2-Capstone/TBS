@@ -44,14 +44,14 @@ namespace TBS.Services.User
             return carrierPost;
         }
 
-        public async Task<bool> CreateCarrierPostAsync(CarrierPost post)
+        public async Task<bool> CreatePostAsync(CarrierPost post)
         {
             await _context.CarrierPosts.AddAsync(post);
             await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> RemoveCarrierPostAsync(int id)
+        public async Task<bool> DeletePostAsync(int id)
         {
             var carrierPost = await GetPostById(id);
 
@@ -65,7 +65,7 @@ namespace TBS.Services.User
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateCarrierPostAsync(int id, CarrierPost post)
+        public async Task<bool> UpdatePostAsync(int id, CarrierPost post)
         {
             if (id != post.Id)
             {

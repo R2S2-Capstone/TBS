@@ -32,6 +32,18 @@ namespace TBS.API.Controllers.v1
 
         // GET: api/v1/Carrier/Posts/{PostId}
         [HttpGet("Posts/{postId}")]
-        public async Task<CarrierPost> GetShipperPost(int postId) => await _service.GetPostById(postId);
+        public async Task<CarrierPost> GetCarrierPost(int postId) => await _service.GetPostById(postId);
+
+        // POST: api/v1/Carrier/Posts
+        [HttpPost]
+        public async Task<bool> CreateCarrierPost(CarrierPost post) => await _service.CreatePostAsync(post);
+
+        // PUT: api/v1/Carrier/Posts
+        [HttpPut]
+        public async Task<bool> UpdateCarrierPost(int postId, CarrierPost post) => await _service.UpdatePostAsync(postId, post);
+
+        // DELETE: api/v1/Carrier/Posts
+        [HttpDelete]
+        public async Task<bool> DeleteCarrierPost(int postId) => await _service.DeletePostAsync(postId);
     }
 }

@@ -143,7 +143,7 @@ export default {
     setPostPage(number) {
       if (number <= 0 || number > this.postPageCount) return
       this.postPage = number
-      fetchPosts()
+      this.fetchPosts()
     },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
@@ -154,14 +154,12 @@ export default {
       this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
     },
     fetchPosts() {
-      console.log('fetching posts')
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
         .then((response) => {
           this.posts = response.data.posts
         })
         .catch(() => {
           this.postsError = true
-          // TODO: error
         })
     }
   },

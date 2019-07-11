@@ -11,10 +11,10 @@ namespace TBS.Data.Interfaces.User
 
         Task<ShipperPost> GetPostById(int id);
 
-        Task<bool> CreateShipperPostAsync(ShipperPost post);
+        Task<bool> CreatePostAsync(ShipperPost post);
 
-        Task<bool> UpdateShipperPostAsync(int id, ShipperPost post);
+        Task<bool> UpdatePostAsync(int id, ShipperPost post);
 
-        Task<bool> RemoveShipperPostAsync(int id);
+        Task<bool> DeletePostAsync(int id);
     }
 }
