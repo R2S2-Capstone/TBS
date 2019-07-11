@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using TBS.API.Filters;
 using TBS.Data.Database;
 using TBS.Data.Interfaces.Post;
 using TBS.Data.Interfaces.User;
@@ -65,7 +66,11 @@ namespace TBS.API
                 c.SwaggerDoc("v1", new Info { Title = "Transportation Bidding System", Version = "v1" });
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(CustomExceptionFilterAttribute));
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
