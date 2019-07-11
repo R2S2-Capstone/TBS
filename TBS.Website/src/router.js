@@ -123,61 +123,68 @@ export default new Router({
     {
       path: '/Shipper',
       component: ShipperIndex,
-      ...LoggedIn,
       ...ShipperOnly,
       children: [
         {
           path: '',
           name: 'shipperHome',
-          component: ShipperHome
+          component: ShipperHome,
+          ...LoggedIn
         },
         {
           path: 'CreatePost',
           name: 'shipperCreatePost',
-          component: ShipperModifyPost
+          component: ShipperModifyPost,
+          ...LoggedIn
         },
         {
           path: 'EditPost/:id?',
           name: 'shipperEditPost',
-          component: ShipperModifyPost
+          component: ShipperModifyPost,
+          ...LoggedIn
         },
         {
           path: 'ManageBids/:id?',
           name: 'shipperManageBids',
-          component: ShipperManageBids
+          component: ShipperManageBids,
+          ...LoggedIn
         },
       ]
     },
     {
       path: '/Carrier',
       component: CarrierIndex,
-      ...LoggedIn,
       ...CarrierOnly,
       children: [
         {
           path: '',
           name: 'carrierHome',
-          component: CarrierHome
+          component: CarrierHome,
+          ...LoggedIn
         },
         {
           path: 'CreatePost',
           name: 'carrierCreatePost',
-          component: CarrierModifyPost
+          component: CarrierModifyPost,
+          ...LoggedIn
         },
         {
           path: 'EditPost/:id?',
           name: 'carrierEditPost',
-          component: CarrierModifyPost
+          component: CarrierModifyPost,
+          ...LoggedIn
         },
         {
           path: 'ManageBids/:id?',
           name: 'carrierManageBids',
-          component: CarrierManageBids
+          component: CarrierManageBids,
+          ...LoggedIn
         },
         {
           path: 'ViewBid/:id?',
           name: 'carrierViewBidDetails',
-          component: CarrierViewBidDetails
+          component: CarrierViewBidDetails,
+          ...LoggedIn
         },
       ]
     },

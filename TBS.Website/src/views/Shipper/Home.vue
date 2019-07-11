@@ -141,7 +141,7 @@ export default {
     setPostPage(number) {
       if (number <= 0 || number > this.postPageCount) return
       this.postPage = number
-      // TODO: filter based on these results
+      fetchPosts()
     },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
@@ -150,6 +150,15 @@ export default {
     },
     cancelBid(bidId) {
       this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
+    },
+    fetchPosts() {
+      this.$store.dispatch('posts/getMyPosts', { page: this.postPage, pageCount: this.postPageCount })
+        .then((response) => {
+          this.posts = response.data.posts
+        })
+        .catch(() => {
+          // TODO: error
+        })
     }
   },
   computed: {
@@ -159,6 +168,9 @@ export default {
     currentBidPage() {
       return this.bidPage
     }
+  },
+  created() {
+    this.fetchPosts()
   }
 }
 </script>

@@ -9,7 +9,22 @@ const posts = {
         getPosts() {
 
         },
-        getMyPosts({ rootGetters,}, payload) {
+        getMyPosts({ rootGetters}, payload) {
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'get',
+                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/all`,
+                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+            })
+        },
+        getPostById({ rootGetters }, payload) {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -24,9 +39,6 @@ const posts = {
                     reject(error)
                 })
             })
-        },
-        getPostById(payload) {
-             
         },
         createPost() {
 
