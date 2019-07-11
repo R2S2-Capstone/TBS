@@ -9,11 +9,12 @@ const posts = {
         getPosts() {
 
         },
-        getMyPosts({ rootGetters}, payload) {
+        getMyPosts({ commit, rootGetters }, payload) {
             return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',
-                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/all`,
+                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/all/${payload.currentPage}/${payload.count}`,
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
                 })
                 .then((response) => {
@@ -22,9 +23,13 @@ const posts = {
                 .catch((error) => {
                     reject(error)
                 })
+                .finally(() => {
+                    commit('global/setLoading', false, { root: true })
+                })
             })
         },
         getPostById({ rootGetters }, payload) {
+            commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'get',
@@ -37,6 +42,9 @@ const posts = {
                 })
                 .catch((error) => {
                     reject(error)
+                })
+                .finally(() => {
+                    commit('global/setLoading', false, { root: true })
                 })
             })
         },

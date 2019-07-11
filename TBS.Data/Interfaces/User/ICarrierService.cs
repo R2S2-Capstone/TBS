@@ -1,15 +1,15 @@
 ﻿using System.Threading.Tasks;
+using TBS.Data.Models;
 using TBS.Data.Models.Post.Carrier;
-using TBS.Data.Models.Post.Request;
 using TBS.Data.Models.Post.Response;
 
 namespace TBS.Data.Interfaces.User
 {
     public interface ICarrierService
     {
-        Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request);
+        Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
 
-        Task<CarrierPost> GetPostById(GetPostByIdRequest request);
+        Task<CarrierPost> GetPostById(int postId);
 
         Task<bool> CreateCarrierPostAsync(CarrierPost post);
 

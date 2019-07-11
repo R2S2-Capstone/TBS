@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.User;
-using TBS.Data.Models.Post.Request;
 using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
 
@@ -10,6 +11,7 @@ namespace TBS.API.Controllers.v1
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
+    [Authorize]
     [ApiController]
     public class ShipperController : ControllerBase
     {
@@ -21,12 +23,13 @@ namespace TBS.API.Controllers.v1
         }
 
         // GET: api/v1/Shipper/Posts/All
-        [HttpGet("Posts/All")]
-        public async Task<PaginatedPosts> GetShippersPosts(GetAllUsersPostsRequest model) => await _service.GetAllUsersPosts(model);
+        [HttpGet("Posts/All/{currentPage}/{count}")]
+        public async Task<PaginatedPosts> GetShippersPosts(int currentPage, int count)
+        {
+            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
+            return await _service.GetAllUsersPosts(id, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count });
+        }
 
-
-        // TODO: Use HTTP Context ID (Firebase ID) and match it with the user associated with the post (Given the post ID we can get the post which has an association with a user which will contain the firebase ID
-        //var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
         // GET: api/v1/Shipper/Posts/{PostId}
         [HttpGet("Posts/{postId}")]
         public async Task<ShipperPost> GetShipperPost(int postId) => await _service.GetPostById(postId);

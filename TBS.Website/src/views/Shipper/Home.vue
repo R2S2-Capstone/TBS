@@ -5,6 +5,7 @@
         <div class="row pb-3">
           <div class="col-12 text-center">
             <h2>Manage My Posts</h2>
+            <h5 class="text-danger" v-if="postError">Unable to load posts</h5>
           </div>
         </div>
         <div class="row">
@@ -109,6 +110,7 @@ export default {
     return {
       postPage: 1,
       postPageCount: 1,
+      postError: false,
       bidPage: 1,
       bidPageCount: 1,
       posts: [],
@@ -152,11 +154,13 @@ export default {
       this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { page: this.postPage, pageCount: this.postPageCount })
+      console.log('fetching posts')
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
         .then((response) => {
           this.posts = response.data.posts
         })
         .catch(() => {
+          this.postsError = true
           // TODO: error
         })
     }

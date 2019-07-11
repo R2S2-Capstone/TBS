@@ -6,8 +6,8 @@ using TBS.Data.Database;
 using TBS.Data.Exceptions.Posts;
 using TBS.Data.Exceptions.Posts.Carrier;
 using TBS.Data.Interfaces.User;
+using TBS.Data.Models;
 using TBS.Data.Models.Post.Carrier;
-using TBS.Data.Models.Post.Request;
 using TBS.Data.Models.Post.Response;
 
 namespace TBS.Services.User
@@ -21,21 +21,15 @@ namespace TBS.Services.User
             _context = databaseContext;
         }
 
-        public async Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request)
+        public async Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
         {
-            var allUserPosts = await _context.CarrierPosts.Where(p => p.Carrier.UserFirebaseId == request.UserFirebaseId).ToListAsync();
+            var allUserPosts = await _context.CarrierPosts.Where(p => p.Carrier.UserFirebaseId == userFirebaseId).ToListAsync();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
-            request.PaginationModel.Count = orderedPosts.Count();
+            model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
-                .Skip((request.PaginationModel.CurrentPage - 1) * request.PaginationModel.PageSize)
-                .Take(request.PaginationModel.PageSize).ToList();
-            return new PaginatedPosts() { PaginationModel = request.PaginationModel, Posts = paginatedPosts };
-        }
-
-        public async Task<CarrierPost> GetPostById(GetPostByIdRequest request)
-        {
-            // do other validation
-            return await GetPostById(request.PostId);
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize).ToList();
+            return new PaginatedPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
         public async Task<CarrierPost> GetPostById(int id)

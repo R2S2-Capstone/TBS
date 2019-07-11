@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TBS.Data.Models.Post.Request;
+using TBS.Data.Models;
 using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
 
@@ -7,7 +7,7 @@ namespace TBS.Data.Interfaces.User
 {
     public interface IShipperService
     {
-        Task<PaginatedPosts> GetAllUsersPosts(GetAllUsersPostsRequest request);
+        Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
 
         Task<ShipperPost> GetPostById(int id);
 
