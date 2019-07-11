@@ -6,8 +6,22 @@ const posts = {
     getters: {},
     mutations: {},
     actions: {
-        getPosts() {
-
+        getPosts({ commit }, payload) {            return new Promise((resolve, reject) => {
+                commit('global/setLoading', true, { root: true })
+                axios({
+                    method: 'get',
+                    url: `posts/${payload.postType}`,
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    commit('global/setLoading', false, { root: true })
+                })
+            })
         },
         getMyPosts({ commit, rootGetters }, payload) {
             return new Promise((resolve, reject) => {
@@ -52,9 +66,9 @@ const posts = {
             commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
-                    method: 'put',
+                    method: 'post',
                     url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts`,
-                    data: {  },
+                    data: { post: payload.post },
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
                 })
                 .then((response) => {
@@ -68,11 +82,45 @@ const posts = {
                 })
             })
         },
-        updatePost() {
-
+        updatePost({ commit, rootGetters }, payload) {
+            commit('global/setLoading', true, { root: true })
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'put',
+                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts`,
+                    data: { postId: payload.postId, post: payload.post },
+                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    commit('global/setLoading', false, { root: true })
+                })
+            })
         },
-        deletePost() {
-
+        deletePost({ commit, rootGetters }, payload) {
+            commit('global/setLoading', true, { root: true })
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'delete',
+                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts`,
+                    data: { postId: payload.postId },
+                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    commit('global/setLoading', false, { root: true })
+                })
+            })
         }
     }
 }
