@@ -6,14 +6,14 @@ const global = {
     state: {
         email: '',
         token: '',
-        refreshing: false,
         accountType: '',
+        refreshing: false,
     },
     getters: {
         getToken: state => state.token,
         isAuthenticated: state => state.token,
-        isRefreshing: state => state.refreshing,
         getAccountType: state => state.accountType,
+        isRefreshing: state => state.refreshing,
     },
     mutations: {
         authenticate(state, data) {
@@ -86,6 +86,7 @@ const global = {
                         reject(error)
                     })
                     .finally(() => {
+                        commit('global/setLoading', false, { root: true })
                         commit('authentication/refresh', false, { root: true })
                     })
             })
@@ -145,6 +146,7 @@ const global = {
                         }
                     }
                     else {
+                        commit('global/setLoading', false, { root: true })
                         commit('authentication/refresh', false, { root: true })
                     }
                 })

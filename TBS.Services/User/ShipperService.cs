@@ -32,12 +32,6 @@ namespace TBS.Services.User
             return new PaginatedPosts() { PaginationModel = request.PaginationModel, Posts = paginatedPosts };
         }
 
-        public async Task<ShipperPost> GetPostById(GetPostByIdRequest request)
-        {
-            // do other validation
-            return await GetPostById(request.PostId);
-        }
-
         public async Task<ShipperPost> GetPostById(int id)
         {
             var shipperPost = await _context.ShipperPosts.FirstOrDefaultAsync(p => p.Id == id);

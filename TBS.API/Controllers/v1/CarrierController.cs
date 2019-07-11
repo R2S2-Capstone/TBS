@@ -21,14 +21,14 @@ namespace TBS.API.Controllers.v1
             _service = service;
         }
 
-        // GET: api/v1/Shipper/{id}/Posts/All
+        // GET: api/v1/Carrier/Posts/All
         [HttpGet("{id}/Posts/All")]
         [Authorize]
         public async Task<PaginatedPosts> GetCarriersPosts(GetAllUsersPostsRequest request) => await _service.GetAllUsersPosts(request);
 
         // TODO: Use HTTP Context ID (Firebase ID) and match it with the user associated with the post (Given the post ID we can get the post which has an association with a user which will contain the firebase ID)
-        // GET: api/v1/Shipper/{id}/Posts/{PostId}
-        [HttpGet("{id}/Posts/{postId}")]
+        // GET: api/v1/Carrier/Posts/{PostId}
+        [HttpGet("Posts/{postId}")]
         public async Task<CarrierPost> GetShipperPost(GetPostByIdRequest request) => await _service.GetPostById(request);
     }
 }

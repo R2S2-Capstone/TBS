@@ -7,12 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBS.API", "TBS.API\TBS.API.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9842978F-E32B-4BB3-A69A-BC13A8662EB0}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TBS.Data", "TBS.Data\TBS.Data.csproj", "{BEC709A6-D924-4F59-8E04-2EBF99D976F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBS.Data", "TBS.Data\TBS.Data.csproj", "{BEC709A6-D924-4F59-8E04-2EBF99D976F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TBS.Services", "TBS.Services\TBS.Services.csproj", "{7363A0AE-9EEC-4899-B047-59ABF2022F87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBS.Services", "TBS.Services\TBS.Services.csproj", "{7363A0AE-9EEC-4899-B047-59ABF2022F87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

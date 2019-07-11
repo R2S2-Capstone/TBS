@@ -1,3 +1,5 @@
+import axios from '@/axios.js'
+
 const posts = {
     namespaced: true,
     state: {},
@@ -8,19 +10,19 @@ const posts = {
 
         },
         getMyPosts({ rootGetters,}, payload) {
-            axios({
-                method: 'post',
-                url: `carrier/${rootGetters['authentication/firebaseId']}/Posts/${payload.id}`,
-                data: { userFirebaseId: user.uid },
-                headers: { Authorization: `Bearer ${user._lat}`}
-            })
-            .then((data) => {
-                commit("setAccountType", data)
-                resolve()
-            })
-            .catch((error) => {
-                commit('logout')
-                reject(error)
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'get',
+                    url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/${payload.postId}`,
+                    data: { postId: payload.postId },
+                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
             })
         },
         getPostById(payload) {
