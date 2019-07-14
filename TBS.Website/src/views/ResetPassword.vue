@@ -1,32 +1,32 @@
 <template>
   <div class="container pt-5">
-    <FormNarrowCard title="Reset Password" :submit="submit">
+    <NarrowFormCard title="Reset Password" :submit="submit">
       <div slot="card-information">
         <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
         <p v-if="error" class="text-danger text-center mb-3">An error has occured, please try again</p>
       </div>
       <div slot="card-content">
-        <FormEmail
+        <EmailInput
           v-model="email"
           :validator="$v.email"
         />
         <button class="btn btn-main btn-lg bg-blue fade-on-hover btn-block text-uppercase text-white" type="submit">Reset Password</button>
       </div>
-    </FormNarrowCard>
+    </NarrowFormCard>
   </div>
 </template>
 
 <script>
-import FormNarrowCard from '@/components/Form/Card/FormNarrowCard.vue'
-import FormEmail from '@/components/Form/Input/FormEmail.vue'
+import NarrowFormCard from '@/components/Form/Card/NarrowFormCard.vue'
+import EmailInput from '@/components/Form/Input/EmailInput.vue'
 
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'resetPassword',
   components: {
-    FormNarrowCard,
-    FormEmail,
+    NarrowFormCard,
+    EmailInput,
   },
   data() {
     return {

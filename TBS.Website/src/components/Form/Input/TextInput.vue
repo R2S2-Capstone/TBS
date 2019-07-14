@@ -5,7 +5,7 @@
       @blur="validator.$touch()"
       :class="{ 'is-invalid': validator.$error }"
       type="text" 
-      id="inputText" 
+      id="TextInput" 
       class="form-control"
       :placeholder="placeHolder" 
       autofocus

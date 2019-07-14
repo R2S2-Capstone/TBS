@@ -21,7 +21,7 @@
 <script>
 import WideCard from '@/components/Card/WideCard.vue'
 export default {
-  name: 'FormWideCard',
+  name: 'wideFormCard',
   components: {
     WideCard
   },
