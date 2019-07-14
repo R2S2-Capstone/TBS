@@ -6,7 +6,8 @@ const posts = {
     getters: {},
     mutations: {},
     actions: {
-        getPosts({ commit }, payload) {            return new Promise((resolve, reject) => {
+        getPosts({ commit }, payload) {            
+            return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 axios({
                     method: 'get',

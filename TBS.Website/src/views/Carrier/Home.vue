@@ -5,6 +5,7 @@
         <div class="row pb-3">
           <div class="col-12 text-center">
             <h2>Manage My Posts</h2>
+            <h5 class="text-danger" v-if="postError">Unable to load posts</h5>
           </div>
         </div>
         <div class="row">
@@ -109,6 +110,7 @@ export default {
     return {
       postPage: 1,
       postPageCount: 1,
+      postError: false,
       bidPage: 1,
       bidPageCount: 1,
       posts: [],
@@ -141,7 +143,7 @@ export default {
     setPostPage(number) {
       if (number <= 0 || number > this.postPageCount) return
       this.postPage = number
-      // TODO: filter based on these results
+      this.fetchPosts()
     },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
@@ -150,6 +152,15 @@ export default {
     },
     cancelBid(bidId) {
       this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
+    },
+    fetchPosts() {
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
+        .then((response) => {
+          this.posts = response.data.posts
+        })
+        .catch(() => {
+          this.postsError = true
+        })
     }
   },
   computed: {
@@ -159,6 +170,9 @@ export default {
     currentBidPage() {
       return this.bidPage
     }
+  },
+  created() {
+    this.fetchPosts()
   }
 }
 </script>
