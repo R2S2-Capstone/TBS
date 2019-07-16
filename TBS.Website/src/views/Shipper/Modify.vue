@@ -2,6 +2,9 @@
   <div class="container pt-5">
     <Back/>
     <WideFormCard :title="type + ' Post'">
+      <div slot="card-information" class="text-center">
+        <h4 v-if="error" class="text-danger pb-4">Failed to {{ type.toLowerCase()}} post</h4>
+      </div>
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
           <div class="row">
@@ -12,19 +15,19 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="vehicle.make" placeHolder="Make" errorMessage="Please enter a vehicle make" :validator="$v.vehicle.make"/>
+                  <TextInput v-model="post.vehicle.make" placeHolder="Make" errorMessage="Please enter a vehicle make" :validator="$v.post.vehicle.make"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="vehicle.model" placeHolder="Make" errorMessage="Please enter a vehicle model" :validator="$v.vehicle.model"/>
+                  <TextInput v-model="post.vehicle.model" placeHolder="Model" errorMessage="Please enter a vehicle model" :validator="$v.post.vehicle.model"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
                   <label>Year</label>
-                  <YearInput v-model="vehicle.year" />
+                  <YearInput v-model="post.vehicle.year" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <ConditionInput v-model="vehicle.condition"/>
+                  <ConditionInput v-model="post.vehicle.condition"/>
                 </div>
                   <!-- TODO: Add more vehicle information? -->
               </div>
@@ -38,23 +41,23 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-12">
-                  <TextInput v-model="pickupLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.pickupLocation.addressLine"/>
+                  <TextInput v-model="post.pickupLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.pickupLocation.addressLine"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.pickupLocation.city"/>
+                  <TextInput v-model="post.pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.pickupLocation.city"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <ProvinceInput v-model="pickupLocation.province" />
+                  <ProvinceInput v-model="post.pickupLocation.province" />
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <CountryInput v-model="pickupLocation.country" />
+                  <CountryInput v-model="post.pickupLocation.country" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.pickupLocation.postalCode"/>
+                  <TextInput v-model="post.pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.pickupLocation.postalCode"/>
                 </div>
               </div>
             </div>
@@ -62,11 +65,11 @@
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Date</label>
-                  <DateInput v-model="pickupDateValue" />
+                  <DateInput v-model="post.pickupDateValue" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Time</label>
-                  <TimeInput v-model="pickupTime" />
+                  <TimeInput v-model="post.pickupTime" />
                 </div>
               </div>
               <div class="col-12">
@@ -75,15 +78,15 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="pickupContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.pickupContact.name"/>
+                  <TextInput v-model="post.pickupContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.post.pickupContact.name"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">                  
-                  <TextInput v-model="pickupContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.pickupContact.phone"/>
+                  <TextInput v-model="post.pickupContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.post.pickupContact.phone"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <EmailInput v-model="pickupContact.email" placeHolder="Email" errorMessage="Please enter a valid email" :validator="$v.pickupContact.email"/>
+                  <EmailInput v-model="post.pickupContact.email" placeHolder="Email" errorMessage="Please enter a valid email" :validator="$v.post.pickupContact.email"/>
                 </div>
               </div>
             </div>
@@ -96,33 +99,33 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-12">
-                  <TextInput v-model="dropoffLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.dropoffLocation.addressLine"/>
+                  <TextInput v-model="post.dropoffLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.dropoffLocation.addressLine"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="dropoffLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.dropoffLocation.city"/>
+                  <TextInput v-model="post.dropoffLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.dropoffLocation.city"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
-                  <ProvinceInput v-model="dropoffLocation.province" />
+                  <ProvinceInput v-model="post.dropoffLocation.province" />
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <CountryInput v-model="dropoffLocation.country" />
+                  <CountryInput v-model="post.dropoffLocation.country" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.dropoffLocation.postalCode"/>
+                  <TextInput v-model="post.dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.dropoffLocation.postalCode"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Date</label>
-                  <DateInput v-model="dropoffDateValue" />
+                  <DateInput v-model="post.dropoffDateValue" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Time</label>
-                  <TimeInput v-model="dropoffTime" />
+                  <TimeInput v-model="post.dropoffTime" />
                 </div>
               </div>
               <div class="col-12">
@@ -131,15 +134,15 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="dropoffContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.dropoffContact.name"/>
+                  <TextInput v-model="post.dropoffContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.post.dropoffContact.name"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="dropoffContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.dropoffContact.phone"/>
+                  <TextInput v-model="post.dropoffContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.post.dropoffContact.phone"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <EmailInput v-model="dropoffContact.email" placeHolder="Email" errorMessage="Please enter a valid email" :validator="$v.dropoffContact.email"/>
+                  <EmailInput v-model="post.dropoffContact.email" placeHolder="Email" errorMessage="Please enter a valid email" :validator="$v.post.dropoffContact.email"/>
                 </div>
               </div>
             </div>
@@ -150,7 +153,7 @@
               <hr>
             </div>
             <div class="col-12">
-              <TextInput v-model="startingBid" placeHolder="Starting bid" errorMessage="Please enter a valid starting bid" :validator="$v.startingBid"/>
+              <TextInput v-model="post.startingBid" placeHolder="Starting bid" errorMessage="Please enter a valid starting bid" :validator="$v.post.startingBid"/>
             </div>
           </div>
         </form>
@@ -160,7 +163,7 @@
           <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
         </div>
         <div class="col-12">
-          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
+          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="submit">{{ type }}</button>
         </div>
       </div>
     </WideFormCard>
@@ -201,118 +204,143 @@ export default {
   },
   data() {
     return {
-      date: new Date(),
-      vehicle: {
-        year: '2019',
-        make: '',
-        model: '',
-        VIN: '',
-        condition: 'New',
-      },
-      pickupLocation: {
-        addressLine: '',
-        city: '',
-        province: 'Ontario',
-        country: 'Canada',
-        postalCode: '',
-      },
-      pickupDateValue: '',
-      pickupTime: '',
-      pickupDate: '', // This is the one passed to the API and will be a combination of the two fields above
-      pickupContact: {
-        name: '',
-        email: '',
-        phone: '',
-      },
-      dropoffLocation: {
-        addressLine: '',
-        city: '',
-        province: 'Ontario',
-        country: 'Canada',
-        postalCode: '',
-      },
-      dropoffDateValue: '',
-      dropoffTime: '',
-      dropoff: '', // This is the one passed to the API and will be a combination of the two fields above
-      dropoffContact: {
-        name: '',
-        email: '',
-        phone: '',
-      },
-      startingBid: ''
+      error: false,
+      post: {
+        vehicle: {
+          year: '2019',
+          make: '',
+          model: '',
+          VIN: '',
+          condition: 'New',
+        },
+        pickupLocation: {
+          addressLine: '',
+          city: '',
+          province: 'Ontario',
+          country: 'Canada',
+          postalCode: '',
+        },
+        pickupDateValue: '',
+        pickupTime: '',
+        pickupDate: '', // This is the one passed to the API and will be a combination of the two fields above
+        pickupContact: {
+          name: '',
+          email: '',
+          phone: '',
+        },
+        dropoffLocation: {
+          addressLine: '',
+          city: '',
+          province: 'Ontario',
+          country: 'Canada',
+          postalCode: '',
+        },
+        dropoffDateValue: '',
+        dropoffTime: '',
+        dropoffDate: '', // This is the one passed to the API and will be a combination of the two fields above
+        dropoffContact: {
+          name: '',
+          email: '',
+          phone: '',
+        },
+        startingBid: ''
+      }
     }
   },
   validations: {
-    vehicle: {
-      make: {
-        required
+    post: {
+      vehicle: {
+        make: {
+          required
+        },
+        model: {
+          required
+        },
+        vin: {
+          required
+        },
       },
-      model: {
-        required
+      pickupLocation: {
+        addressLine: {
+          required
+        },
+        city: {
+          required
+        },
+        postalCode: {
+          required,
+          postalCodeRegex
+        },
       },
-      vin: {
-        required
+      pickupContact: {
+        name: {
+          required
+        },
+        email: {
+          required,
+          email
+        },
+        phone: {
+          required,
+          phoneNumberRegex,
+        }
       },
-    },
-    pickupLocation: {
-      addressLine: {
-        required
+      dropoffLocation: {
+        addressLine: {
+          required
+        },
+        city: {
+          required
+        },
+        postalCode: {
+          required,
+          phoneNumberRegex,
+        },
       },
-      city: {
-        required
+      dropoffContact: {
+        name: {
+          required
+        },
+        email: {
+          required,
+          email
+        },
+        phone: {
+          required,
+          phoneNumberRegex,
+        }
       },
-      postalCode: {
+      startingBid: {
         required,
-        postalCodeRegex
-      },
-    },
-    pickupContact: {
-      name: {
-        required
-      },
-      email: {
-        required,
-        email
-      },
-      phone: {
-        required,
-        phoneNumberRegex,
+        bidRegex
       }
-    },
-    dropoffLocation: {
-      addressLine: {
-        required
-      },
-      city: {
-        required
-      },
-      postalCode: {
-        required,
-        phoneNumberRegex,
-      },
-    },
-    dropoffContact: {
-      name: {
-        required
-      },
-      email: {
-        required,
-        email
-      },
-      phone: {
-        required,
-        phoneNumberRegex,
-      }
-    },
-    startingBid: {
-      required,
-      bidRegex
     }
   },
   methods: {
     submit() {
-      // TODO: Submit
-      this.$router.push({ name: 'shipperHome' })
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+				return;
+      }
+      // Will either be 'posts/createPost' or 'posts/updatePost'
+      this.post.pickupDate = this.combineDateAndTime(this.pickupDateValue, this.pickupTime)
+      this.post.dropOffDate = this.combineDateAndTime(this.dropoffDateValue, this.dropoffTime)
+      this.$store.dispatch(`posts/${type.toLowerCase()}Post`, { post: this.post })
+				.then(() => {
+          // TODO: Go to posted page
+				})
+				.catch(() => {
+					this.error = true
+				})
+    },
+    combineDateAndTime: (date, time) => {
+      timeString = time.getHours() + ':' + time.getMinutes() + ':00';
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1; // Jan is 0, dec is 11
+      var day = date.getDate();
+      var dateString = '' + year + '-' + month + '-' + day;
+      var combined = new Date(dateString + ' ' + timeString);
+      return combined;
     },
     deletePost() {
       this.$router.push({ name: 'shipperHome' })
@@ -321,14 +349,14 @@ export default {
   computed: {
     type() {
       if (this.$route.params.id != null) {
-        return 'Edit'
+        return 'Update'
       } else {
         return 'Create'
       }
     }
   },
   created() {
-    if (this.type == 'Edit') {
+    if (this.type == 'Update') {
       // Load post here
     }
   }
