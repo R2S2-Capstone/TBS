@@ -325,7 +325,7 @@ export default {
       // Will either be 'posts/createPost' or 'posts/updatePost'
       this.post.pickupDate = this.combineDateAndTime(this.pickupDateValue, this.pickupTime)
       this.post.dropOffDate = this.combineDateAndTime(this.dropoffDateValue, this.dropoffTime)
-      this.$store.dispatch(`posts/${type.toLowerCase()}Post`, { post: this.post })
+      this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, { post: this.post })
 				.then(() => {
           // TODO: Go to posted page
 				})
@@ -334,7 +334,7 @@ export default {
 				})
     },
     combineDateAndTime: (date, time) => {
-      timeString = time.getHours() + ':' + time.getMinutes() + ':00';
+      var timeString = time.getHours() + ':' + time.getMinutes() + ':00';
       var year = date.getFullYear();
       var month = date.getMonth() + 1; // Jan is 0, dec is 11
       var day = date.getDate();
