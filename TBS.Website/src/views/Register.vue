@@ -55,10 +55,7 @@
         </div>
         <div class="row">
           <div class="col-lg-6 col-md-6 col-sm-12">
-            <select v-model="company.address.country" class="form-control text-center">
-              <option value="Canada">Canada</option>
-              <option value="USA">USA</option>
-            </select>
+            <CountryInput v-model="company.address.country" />
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12">
             <TextInput v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.company.address.postalCode"/>
@@ -96,6 +93,7 @@ import EmailInput from '@/components/Form/Input/EmailInput.vue'
 import PasswordInput from '@/components/Form/Input/PasswordInput.vue'
 import TextInput from '@/components/Form/Input/TextInput.vue'
 import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
+import CountryInput from '@/components/Form/Input/CountryInput.vue'
 
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
@@ -109,7 +107,8 @@ export default {
     EmailInput,
     PasswordInput,
     TextInput,
-    ProvinceInput
+    ProvinceInput,
+    CountryInput,
   },
   data() {
     return {

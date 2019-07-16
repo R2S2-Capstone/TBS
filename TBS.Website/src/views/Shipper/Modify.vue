@@ -21,19 +21,10 @@
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
                   <label>Year</label>
-                  <select v-model="vehicle.year" class="form-control text-center">
-                    <option v-for="(value, index) in years()" :key="index" :value="value" selected>
-                      {{ value }}
-                    </option>
-                  </select>
+                  <YearInput v-model="vehicle.year" />
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Condition</label>
-                  <select v-model="vehicle.condition" class="form-control text-center">
-                    <option v-for="(value, index) in ['New', 'Used']" :key="index" :value="value" selected>
-                      {{ value }}
-                    </option>
-                  </select>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <ConditionInput v-model="vehicle.condition"/>
                 </div>
                   <!-- TODO: Add more vehicle information? -->
               </div>
@@ -54,16 +45,13 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.pickupLocation.city"/>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <ProvinceInput v-model="pickupLocation.province" />
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <select v-model="pickupLocation.country" class="form-control text-center">
-                    <option value="Canada">Canada</option>
-                    <option value="USA">USA</option>
-                  </select>
+                  <CountryInput v-model="pickupLocation.country" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.pickupLocation.postalCode"/>
@@ -72,13 +60,13 @@
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Date</label>
-                  <input type="text" class="form-control" :placeholder="date.toLocaleDateString()">
+                  <DateInput v-model="pickupDateValue" />
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Time</label>
-                  <input type="text" class="form-control" placeholder="08:00AM">
+                  <TimeInput v-model="pickupTime" />
                 </div>
               </div>
               <div class="col-12">
@@ -86,10 +74,10 @@
                 <hr>
               </div>
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="pickupContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.pickupContact.name"/>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">                  
+                <div class="col-lg-6 col-md-6 col-sm-12">                  
                   <TextInput v-model="pickupContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.pickupContact.phone"/>
                 </div>
               </div>
@@ -121,25 +109,20 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <select v-model="dropoffLocation.country" class="form-control text-center">
-                    <option value="Canada">Canada</option>
-                    <option value="USA">USA</option>
-                  </select>
+                  <CountryInput v-model="dropoffLocation.country" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.dropoffLocation.postalCode"/>
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <!-- TODO: Replace with a date picker -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Date</label>
-                  <input type="text" class="form-control" :placeholder="date.toLocaleDateString()">
+                  <DateInput v-model="dropoffDateValue" />
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <!-- TODO: Replace with time picker -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Time</label>
-                  <input type="text" class="form-control" placeholder="12:00PM">
+                  <TimeInput v-model="dropoffTime" />
                 </div>
               </div>
               <div class="col-12">
@@ -147,10 +130,10 @@
                 <hr>
               </div>
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="dropoffContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.dropoffContact.name"/>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="dropoffContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.dropoffContact.phone"/>
                 </div>
               </div>
@@ -167,12 +150,7 @@
               <hr>
             </div>
             <div class="col-12">
-              <div class="row">
-                <div class="col-12 form-group">
-                  <label>Starting Bid</label>
-                  <input type="text" class="form-control" placeholder="1500">
-                </div>
-              </div>
+              <TextInput v-model="startingBid" placeHolder="Starting bid" errorMessage="Please enter a valid starting bid" :validator="$v.startingBid"/>
             </div>
           </div>
         </form>
@@ -196,6 +174,11 @@ import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 import TextInput from '@/components/Form/Input/TextInput.vue'
 import EmailInput from '@/components/Form/Input/EmailInput.vue'
 import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
+import DateInput from '@/components/Form/Input/DateInput.vue'
+import TimeInput from '@/components/Form/Input/TimeInput.vue'
+import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
+import CountryInput from '@/components/Form/Input/CountryInput.vue'
+import YearInput from '@/components/Form/Input/YearInput.vue'
 
 import { required, helpers, email } from 'vuelidate/lib/validators'
 const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
@@ -210,12 +193,17 @@ export default {
     TextInput,
     EmailInput,
     ProvinceInput,
+    DateInput,
+    TimeInput,
+    ConditionInput,
+    CountryInput,
+    YearInput,
   },
   data() {
     return {
       date: new Date(),
       vehicle: {
-        year: 2019,
+        year: '2019',
         make: '',
         model: '',
         VIN: '',
@@ -251,6 +239,7 @@ export default {
         email: '',
         phone: '',
       },
+      startingBid: ''
     }
   },
   validations: {
@@ -321,13 +310,6 @@ export default {
     }
   },
   methods: {
-    years() {
-      let items = [];
-      for(let year = 1908; year <= this.date.getFullYear(); year++) {
-        items.push(year);
-      }
-      return items;
-    },
     submit() {
       // TODO: Submit
       this.$router.push({ name: 'shipperHome' })
