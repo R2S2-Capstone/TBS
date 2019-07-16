@@ -74,6 +74,12 @@
           </div>
         </div>
 
+        <div class="row">
+          <div class="col-12">
+            <EmailInput v-model="company.contact.email" :validator="$v.company.contact.email"/>
+          </div>
+        </div>
+
         <div class="mb-3">
           <router-link :to="{ name: 'login' }">Already have an account? Login here</router-link>
         </div>
@@ -126,7 +132,8 @@ export default {
         },
         contact: {
           name: '',
-          phoneNumber: ''
+          phoneNumber: '',
+          email: '',
         }
       },
       dealerNumber: '',
@@ -174,6 +181,10 @@ export default {
         phoneNumber: {
           required,
           phoneNumberRegex
+        },
+        email: {
+          required,
+          email,
         }
       }
     },
