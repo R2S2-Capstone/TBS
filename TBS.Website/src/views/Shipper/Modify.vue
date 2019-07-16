@@ -11,17 +11,26 @@
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="vehicle.make" placeHolder="Make" errorMessage="Please enter a vehicle make" :validator="$v.vehicle.make"/>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                   <TextInput v-model="vehicle.model" placeHolder="Make" errorMessage="Please enter a vehicle model" :validator="$v.vehicle.model"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                  <label>Year</label>
                   <select v-model="vehicle.year" class="form-control text-center">
                     <option v-for="(value, index) in years()" :key="index" :value="value" selected>
+                      {{ value }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                  <label>Condition</label>
+                  <select v-model="vehicle.condition" class="form-control text-center">
+                    <option v-for="(value, index) in ['New', 'Used']" :key="index" :value="value" selected>
                       {{ value }}
                     </option>
                   </select>
