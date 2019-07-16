@@ -58,7 +58,6 @@
             <select v-model="company.address.country" class="form-control text-center">
               <option value="Canada">Canada</option>
               <option value="USA">USA</option>
-              <option value="Mexico">Mexico</option>
             </select>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12">

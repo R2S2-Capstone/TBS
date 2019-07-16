@@ -12,41 +12,56 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Make</label>
-                  <input type="text" class="form-control" placeholder="Ford">
+                  <TextInput v-model="vehicle.make" placeHolder="Make" errorMessage="Please enter a vehicle make" :validator="$v.vehicle.make"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Model</label>
-                  <input type="text" class="form-control" placeholder="Escape">
+                  <TextInput v-model="vehicle.model" placeHolder="Make" errorMessage="Please enter a vehicle model" :validator="$v.vehicle.model"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Year</label>
-                  <select class="form-control text-center">
+                  <select v-model="vehicle.year" class="form-control text-center">
                     <option v-for="(value, index) in years()" :key="index" :value="value" selected>
                       {{ value }}
                     </option>
                   </select>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
                   <!-- TODO: Add more vehicle information? -->
-                </div>
               </div>
             </div>
           </div>
-          <div class="row pt-5">
+          <div class="row pt-3">
             <div class="col-12">
               <h5>Pickup</h5>
               <hr>
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-12 form-group">
-                  <label>Address</label>
-                  <input type="text" class="form-control" placeholder="1430 Trafalgar Rd, Oakville, ON L6H 2L1">
+                <div class="col-12">
+                  <TextInput v-model="pickup.location.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.pickup.location.addressLine"/>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <TextInput v-model="pickup.location.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.pickup.location.city"/>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
+                  <ProvinceInput v-model="pickup.location.province" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <select v-model="pickup.location.country" class="form-control text-center">
+                    <option value="Canada">Canada</option>
+                    <option value="USA">USA</option>
+                  </select>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <TextInput v-model="pickup.location.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.pickup.location.postalCode"/>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
                   <label>Date</label>
@@ -63,34 +78,52 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Name</label>
-                  <input type="text" class="form-control" placeholder="Jane Doe">
+                  <TextInput v-model="pickup.contact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.pickup.contact.name"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Email</label>
-                  <input type="text" class="form-control" placeholder="jane.doe@gmail.com">
+                  <EmailInput v-model="pickup.contact.email" placeHolder="Email" errorMessage="Please enter a valid email" :validator="$v.pickup.contact.email"/>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row pt-5">
+          <div class="row pt-3">
             <div class="col-12">
               <h5>Delivery</h5>
               <hr>
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-12 form-group">
-                  <label>Address</label>
-                  <input type="text" class="form-control" placeholder="7899 McLaughlin Rd, Brampton, ON L6Y 5H9">
+                <div class="col-12">
+                  <TextInput v-model="dropoff.location.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.dropoff.location.addressLine"/>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <TextInput v-model="dropoff.location.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.dropoff.location.city"/>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
+                  <ProvinceInput v-model="dropoff.location.province" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <select v-model="dropoff.location.country" class="form-control text-center">
+                    <option value="Canada">Canada</option>
+                    <option value="USA">USA</option>
+                  </select>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <TextInput v-model="dropoff.location.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.dropoff.location.postalCode"/>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                  <!-- TODO: Replace with a date picker -->
                   <label>Date</label>
                   <input type="text" class="form-control" :placeholder="date.toLocaleDateString()">
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
+                  <!-- TODO: Replace with time picker -->
                   <label>Time</label>
                   <input type="text" class="form-control" placeholder="12:00PM">
                 </div>
@@ -101,17 +134,15 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Name</label>
-                  <input type="text" class="form-control" placeholder="John Doe">
+                  <TextInput v-model="dropoff.contact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.dropoff.contact.name"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Email</label>
-                  <input type="text" class="form-control" placeholder="john.doe@gmail.com">
+                  <EmailInput v-model="dropoff.contact.email" placeHolder="Email" errorMessage="Please enter a valid email" :validator="$v.dropoff.contact.email"/>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row pt-5">
+          <div class="row pt-3">
             <div class="col-12">
               <h5>Other Details</h5>
               <hr>
@@ -142,11 +173,14 @@
 <script>
 import Back from '@/components/Back.vue'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
-import TextInput from '@/components/Form/Input/TextInput.vue'
 
-import { required, helpers } from 'vuelidate/lib/validators'
+import TextInput from '@/components/Form/Input/TextInput.vue'
+import EmailInput from '@/components/Form/Input/EmailInput.vue'
+import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
+
+import { required, helpers, email } from 'vuelidate/lib/validators'
 const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
-const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/)
+const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
 export default {
   name: 'shipperCreatePost',
@@ -154,6 +188,8 @@ export default {
     Back,
     WideFormCard,
     TextInput,
+    EmailInput,
+    ProvinceInput,
   },
   data() {
     return {
@@ -165,23 +201,36 @@ export default {
         VIN: '',
         condition: 'New',
       },
-      pickupLocation: {
-        addressLine: '',
-        city: '',
-        province: 'Ontario',
-        country: 'Canada',
-        postalCode: '',
+      pickup: {
+        location: {
+          addressLine: '',
+          city: '',
+          province: 'Ontario',
+          country: 'Canada',
+          postalCode: '',
+        },
+        date: '',
+        time: '',
+        contact: {
+          email: '',
+          phone: '',
+        },
       },
-      pickupDate: '',
-      dropoffLocation: {
-        addressLine: '',
-        city: '',
-        province: 'Ontario',
-        country: 'Canada',
-        postalCode: '',
+      dropoff: {
+        location: {
+          addressLine: '',
+          city: '',
+          province: 'Ontario',
+          country: 'Canada',
+          postalCode: '',
+        },
+        date: '',
+        time: '',
+        contact: {
+          email: '',
+          phone: '',
+        },
       },
-      dropoffDate: '',
-      startingBid: '',
     }
   },
   validations: {
@@ -195,7 +244,9 @@ export default {
       vin: {
         required
       },
-      pickupLocation: {
+    },
+    pickup: {
+      location: {
         addressLine: {
           required
         },
@@ -207,7 +258,18 @@ export default {
           postalCodeRegex
         },
       },
-      dropoffLocation: {
+      contact: {
+        name: {
+          required
+        },
+        email: {
+          required,
+          email
+        }
+      },
+    },
+    dropoff: {
+      location: {
         addressLine: {
           required
         },
@@ -219,10 +281,19 @@ export default {
           postalCodeRegex
         },
       },
-      startingBid: {
-        required,
-        bidRegex
-      }
+      contact: {
+        name: {
+          required
+        },
+        email: {
+          required,
+          email
+        }
+      },
+    },
+    startingBid: {
+      required,
+      bidRegex
     }
   },
   methods: {

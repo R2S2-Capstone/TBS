@@ -36,11 +36,11 @@ namespace TBS.API.Controllers.v1
 
         // POST: api/v1/Carrier/Posts
         [HttpPost]
-        public async Task<bool> CreateCarrierPost(CarrierPost post) => await _service.CreatePostAsync(post);
+        public async Task<bool> PostCarrierPost(CarrierPost post) => await _service.CreatePostAsync(post);
 
         // PUT: api/v1/Carrier/Posts
         [HttpPut]
-        public async Task<bool> UpdateCarrierPost(int postId, CarrierPost post) => await _service.UpdatePostAsync(postId, post);
+        public async Task<bool> PutCarrierPost(int postId, CarrierPost post) => await _service.UpdatePostAsync(postId, post);
 
         // DELETE: api/v1/Carrier/Posts
         [HttpDelete]

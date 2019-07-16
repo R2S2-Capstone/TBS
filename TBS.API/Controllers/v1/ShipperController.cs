@@ -37,11 +37,11 @@ namespace TBS.API.Controllers.v1
 
         // POST: api/v1/Shipper/Posts
         [HttpPost]
-        public async Task<bool> CreateShipperPost(ShipperPost post) => await _service.CreatePostAsync(post);
+        public async Task<bool> PostShipperPost(ShipperPost post) => await _service.CreatePostAsync(post);
 
         // PUT: api/v1/Shipper/Posts
         [HttpPut]
-        public async Task<bool> UpdateShipperPost(int postId, ShipperPost post) => await _service.UpdatePostAsync(postId, post);
+        public async Task<bool> PutShipperPost(int postId, ShipperPost post) => await _service.UpdatePostAsync(postId, post);
 
         // DELETE: api/v1/Shipper/Posts
         [HttpDelete]
