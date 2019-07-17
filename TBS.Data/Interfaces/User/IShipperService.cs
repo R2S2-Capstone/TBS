@@ -11,7 +11,7 @@ namespace TBS.Data.Interfaces.User
 
         Task<ShipperPost> GetPostById(int id);
 
-        Task<bool> CreatePostAsync(ShipperPost post);
+        Task<bool> CreatePostAsync(string userFirebaseId, ShipperPost post);
 
         Task<bool> UpdatePostAsync(int id, ShipperPost post);
 

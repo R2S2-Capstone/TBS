@@ -78,8 +78,6 @@ namespace TBS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("Cost");
-
                     b.Property<int>("DropoffContactId");
 
                     b.Property<DateTime>("DropoffDate");
@@ -95,6 +93,8 @@ namespace TBS.Data.Migrations
                     b.Property<int>("PostStatus");
 
                     b.Property<int?>("ShipperId");
+
+                    b.Property<decimal>("StartingBid");
 
                     b.Property<int>("VehicleId");
 

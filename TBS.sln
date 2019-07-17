@@ -17,6 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBS.Data", "TBS.Data\TBS.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TBS.Services", "TBS.Services\TBS.Services.csproj", "{7363A0AE-9EEC-4899-B047-59ABF2022F87}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{BDFAC17E-3B39-42DB-9636-5F08563D1E2A}"
+	ProjectSection(SolutionItems) = preProject
+		SQL\__EFMigrationHistory.sql = SQL\__EFMigrationHistory.sql
+		SQL\Copy DEV into PROD.sql = SQL\Copy DEV into PROD.sql
+		SQL\Copy PROD into DEV.sql = SQL\Copy PROD into DEV.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

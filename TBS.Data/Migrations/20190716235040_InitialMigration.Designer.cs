@@ -9,8 +9,8 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190707002440_AddedPosts")]
-    partial class AddedPosts
+    [Migration("20190716235040_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,10 +43,12 @@ namespace TBS.Data.Migrations
                     b.ToTable("Address");
                 });
 
-            modelBuilder.Entity("TBS.Data.Models.Post.CarrierPost", b =>
+            modelBuilder.Entity("TBS.Data.Models.Post.Carrier.CarrierPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CarrierId");
 
                     b.Property<decimal>("Cost");
 
@@ -68,19 +70,23 @@ namespace TBS.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CarrierId");
+
                     b.ToTable("CarrierPosts");
                 });
 
-            modelBuilder.Entity("TBS.Data.Models.Post.ShipperPost", b =>
+            modelBuilder.Entity("TBS.Data.Models.Post.Shipper.ShipperPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<decimal>("Cost");
+                    b.Property<int>("DropoffContactId");
 
                     b.Property<DateTime>("DropoffDate");
 
                     b.Property<int>("DropoffLocationId");
+
+                    b.Property<int>("PickupContactId");
 
                     b.Property<DateTime>("PickupDate");
 
@@ -88,13 +94,23 @@ namespace TBS.Data.Migrations
 
                     b.Property<int>("PostStatus");
 
+                    b.Property<int?>("ShipperId");
+
+                    b.Property<decimal>("StartingBid");
+
                     b.Property<int>("VehicleId");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DropoffContactId");
+
                     b.HasIndex("DropoffLocationId");
 
+                    b.HasIndex("PickupContactId");
+
                     b.HasIndex("PickupLocationId");
+
+                    b.HasIndex("ShipperId");
 
                     b.HasIndex("VehicleId");
 
@@ -120,9 +136,13 @@ namespace TBS.Data.Migrations
                     b.Property<string>("UserFirebaseId")
                         .IsRequired();
 
+                    b.Property<int?>("VehicleId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("Carriers");
                 });
@@ -153,10 +173,14 @@ namespace TBS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Email")
+                        .IsRequired();
+
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -192,10 +216,35 @@ namespace TBS.Data.Migrations
                     b.ToTable("Shippers");
                 });
 
+            modelBuilder.Entity("TBS.Data.Models.Vehicle.Carrier.CarrierVehicle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Make")
+                        .IsRequired();
+
+                    b.Property<string>("Model")
+                        .IsRequired();
+
+                    b.Property<int>("TrailerType");
+
+                    b.Property<string>("VIN")
+                        .IsRequired();
+
+                    b.Property<int>("Year");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CarrierVehicle");
+                });
+
             modelBuilder.Entity("TBS.Data.Models.Vehicle.PostedVehicle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Condition");
 
                     b.Property<string>("Make")
                         .IsRequired();
@@ -213,17 +262,38 @@ namespace TBS.Data.Migrations
                     b.ToTable("PostedVehicle");
                 });
 
-            modelBuilder.Entity("TBS.Data.Models.Post.ShipperPost", b =>
+            modelBuilder.Entity("TBS.Data.Models.Post.Carrier.CarrierPost", b =>
                 {
+                    b.HasOne("TBS.Data.Models.User.Carrier", "Carrier")
+                        .WithMany("Posts")
+                        .HasForeignKey("CarrierId");
+                });
+
+            modelBuilder.Entity("TBS.Data.Models.Post.Shipper.ShipperPost", b =>
+                {
+                    b.HasOne("TBS.Data.Models.User.Information.Contact", "DropoffContact")
+                        .WithMany()
+                        .HasForeignKey("DropoffContactId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("TBS.Data.Models.General.Address", "DropoffLocation")
                         .WithMany()
                         .HasForeignKey("DropoffLocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TBS.Data.Models.User.Information.Contact", "PickupContact")
+                        .WithMany()
+                        .HasForeignKey("PickupContactId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TBS.Data.Models.General.Address", "PickupLocation")
                         .WithMany()
                         .HasForeignKey("PickupLocationId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TBS.Data.Models.User.Shipper", "Shipper")
+                        .WithMany("Posts")
+                        .HasForeignKey("ShipperId");
 
                     b.HasOne("TBS.Data.Models.Vehicle.PostedVehicle", "Vehicle")
                         .WithMany()
@@ -237,6 +307,10 @@ namespace TBS.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TBS.Data.Models.Vehicle.Carrier.CarrierVehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.User.Information.Company", b =>

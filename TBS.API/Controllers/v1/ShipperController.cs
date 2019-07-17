@@ -36,15 +36,19 @@ namespace TBS.API.Controllers.v1
         public async Task<ShipperPost> GetShipperPost(int postId) => await _service.GetPostById(postId);
 
         // POST: api/v1/Shipper/Posts
-        [HttpPost]
-        public async Task<bool> PostShipperPost(ShipperPost post) => await _service.CreatePostAsync(post);
+        [HttpPost("Posts")]
+        public async Task<bool> PostShipperPost(ShipperPost post)
+        {
+            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
+            return await _service.CreatePostAsync(id, post);
+        }
 
         // PUT: api/v1/Shipper/Posts
-        [HttpPut]
+        [HttpPut("Posts")]
         public async Task<bool> PutShipperPost(int postId, ShipperPost post) => await _service.UpdatePostAsync(postId, post);
 
         // DELETE: api/v1/Shipper/Posts
-        [HttpDelete]
+        [HttpDelete("Posts")]
         public async Task<bool> DeleteShipperPost(int postId) => await _service.DeletePostAsync(postId);
     }
 }

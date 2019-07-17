@@ -44,8 +44,9 @@ namespace TBS.Services.User
             return shipperPost;
         }
 
-        public async Task<bool> CreatePostAsync(ShipperPost post)
+        public async Task<bool> CreatePostAsync(string userFirebaseId, ShipperPost post)
         {
+            post.Shipper = _context.Shippers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
             await _context.ShipperPosts.AddAsync(post);
             await _context.SaveChangesAsync();
             return await Task.FromResult(true);

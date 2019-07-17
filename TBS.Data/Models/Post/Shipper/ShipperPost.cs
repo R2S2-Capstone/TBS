@@ -34,11 +34,10 @@ namespace TBS.Data.Models.Post.Shipper
         [Required(ErrorMessage = "Dropoff contact required")]
         public Contact DropoffContact { get; set; }
 
-        [Required(ErrorMessage = "Cost required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Must be a valid cost")]
-        public decimal Cost { get; set; }
+        [Required(ErrorMessage = "Starting bid required")]
+        [Range(0, double.MaxValue, ErrorMessage = "Must be a valid starting bid")]
+        public decimal StartingBid { get; set; }
 
-        [Required(ErrorMessage = "Post status required")]
-        public PostStatus PostStatus { get; set; }
+        public PostStatus PostStatus { get; set; } = PostStatus.Open;
     }
 }
