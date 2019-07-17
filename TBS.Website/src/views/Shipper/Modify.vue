@@ -227,10 +227,11 @@ export default {
         dropoffLocation: {
           addressLine: '',
           city: '',
-          province: '',
-          country: '',
+          province: 'Ontario',
+          country: 'Canada',
           postalCode: '',
         },
+        // TODO: Set the minimum for this date to be the same date as pickup
         dropoffDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
         dropoffContact: {
           name: '',
@@ -319,8 +320,8 @@ export default {
       // Will either be 'posts/createPost' or 'posts/updatePost'
       this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, this.post)
 				.then(() => {
-          this.$router.push({name: 'shipperHome' })
           // TODO: Go to posted page
+          this.$router.push({name: 'shipperHome' })
 				})
 				.catch(() => {
 					this.error = true
@@ -329,8 +330,8 @@ export default {
     deletePost() {
         this.$store.dispatch('posts/deletePost', this.post.id)
           .then(() => {
-            this.$router.push({name: 'shipperHome' })
             // TODO: Go to delete confirmation page
+            this.$router.push({name: 'shipperHome' })
           })
           .catch(() => {
             this.deleteError = true

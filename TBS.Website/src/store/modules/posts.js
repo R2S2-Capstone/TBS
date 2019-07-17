@@ -10,7 +10,7 @@ const posts = {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 axios({
-                    method: 'get',
+                    method: 'GET',
                     url: `posts/${payload.postType}`,
                 })
                 .then((response) => {
@@ -28,7 +28,7 @@ const posts = {
             return new Promise((resolve, reject) => {
                 commit('global/setLoading', true, { root: true })
                 axios({
-                    method: 'get',
+                    method: 'GET',
                     url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/all/${payload.currentPage}/${payload.count}`,
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
                 })
@@ -36,6 +36,7 @@ const posts = {
                     resolve(response)
                 })
                 .catch((error) => {
+                    console.log(JSON.stringify(error))
                     reject(error)
                 })
                 .finally(() => {
@@ -47,7 +48,7 @@ const posts = {
             commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
-                    method: 'get',
+                    method: 'GET',
                     url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/${payload.postId}`,
                     data: { postId: payload.postId },
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
@@ -87,7 +88,7 @@ const posts = {
             commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
-                    method: 'put',
+                    method: 'PUT',
                     url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts`,
                     data: { postId: payload.postId, post: payload.post },
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
@@ -107,7 +108,7 @@ const posts = {
             commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
-                    method: 'delete',
+                    method: 'DELETE',
                     url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts`,
                     data: payload,
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}

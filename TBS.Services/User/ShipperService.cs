@@ -23,12 +23,17 @@ namespace TBS.Services.User
 
         public async Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
         {
-            var allUserPosts = await _context.ShipperPosts.Where(p => p.Shipper.UserFirebaseId == userFirebaseId).ToListAsync();
+            var shipper = await _context.Shippers
+                .Include(s => s.Posts)
+                .ThenInclude(p => p.PickupLocation)
+                .FirstOrDefaultAsync(p => p.UserFirebaseId == userFirebaseId);
+            var allUserPosts = shipper.Posts.ToList();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
             model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
+            var temp = new PaginatedPosts() { PaginationModel = model, Posts = paginatedPosts };
             return new PaginatedPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
