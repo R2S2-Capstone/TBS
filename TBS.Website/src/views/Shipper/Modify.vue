@@ -4,6 +4,7 @@
     <WideFormCard :title="type + ' Post'">
       <div slot="card-information" class="text-center">
         <h4 v-if="error" class="text-danger pb-4">Failed to {{ type.toLowerCase()}} post</h4>
+        <h4 v-if="deleteError" class="text-danger pb-4">Failed to delete post</h4>
       </div>
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
@@ -29,8 +30,13 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <ConditionInput v-model="post.vehicle.condition"/>
                 </div>
-                  <!-- TODO: Add more vehicle information? -->
               </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <TextInput v-model="post.vehicle.vin" placeHolder="VIN" errorMessage="Please enter a valid vin" :validator="$v.post.vehicle.vin"/>
+                </div>
+              </div>
+                  <!-- TODO: Add more vehicle information? -->
             </div>
           </div>
           <div class="row pt-3">
@@ -63,13 +69,9 @@
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="col-12">
                   <label>Date</label>
-                  <DateInput v-model="post.pickupDateValue" />
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label>Time</label>
-                  <TimeInput v-model="post.pickupTime" />
+                  <DateInput v-model="post.pickupDate" />
                 </div>
               </div>
               <div class="col-12">
@@ -81,7 +83,7 @@
                   <TextInput v-model="post.pickupContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.post.pickupContact.name"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">                  
-                  <TextInput v-model="post.pickupContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.post.pickupContact.phone"/>
+                  <TextInput v-model="post.pickupContact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.post.pickupContact.phoneNumber"/>
                 </div>
               </div>
               <div class="row">
@@ -119,13 +121,9 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="col-12">
                   <label>Date</label>
-                  <DateInput v-model="post.dropoffDateValue" />
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label>Time</label>
-                  <TimeInput v-model="post.dropoffTime" />
+                  <DateInput v-model="post.dropoffDate" />
                 </div>
               </div>
               <div class="col-12">
@@ -137,7 +135,7 @@
                   <TextInput v-model="post.dropoffContact.name" placeHolder="Name" errorMessage="Please enter a contact name" :validator="$v.post.dropoffContact.name"/>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="post.dropoffContact.phone" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.post.dropoffContact.phone"/>
+                  <TextInput v-model="post.dropoffContact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.post.dropoffContact.phoneNumber"/>
                 </div>
               </div>
               <div class="row">
@@ -163,7 +161,7 @@
           <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
         </div>
         <div class="col-12">
-          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="submit">{{ type }}</button>
+          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="submit" type="submit">{{ type }}</button>
         </div>
       </div>
     </WideFormCard>
@@ -178,7 +176,6 @@ import TextInput from '@/components/Form/Input/TextInput.vue'
 import EmailInput from '@/components/Form/Input/EmailInput.vue'
 import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
 import DateInput from '@/components/Form/Input/DateInput.vue'
-import TimeInput from '@/components/Form/Input/TimeInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
 import CountryInput from '@/components/Form/Input/CountryInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
@@ -197,7 +194,6 @@ export default {
     EmailInput,
     ProvinceInput,
     DateInput,
-    TimeInput,
     ConditionInput,
     CountryInput,
     YearInput,
@@ -205,9 +201,11 @@ export default {
   data() {
     return {
       error: false,
+      deleteError: false,
       post: {
+        id: '',
         vehicle: {
-          year: '2019',
+          year: new Date().getUTCFullYear().toString(),
           make: '',
           model: '',
           VIN: '',
@@ -220,28 +218,24 @@ export default {
           country: 'Canada',
           postalCode: '',
         },
-        pickupDateValue: '',
-        pickupTime: '',
-        pickupDate: '', // This is the one passed to the API and will be a combination of the two fields above
+        pickupDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
         pickupContact: {
           name: '',
           email: '',
-          phone: '',
+          phoneNumber: '',
         },
         dropoffLocation: {
           addressLine: '',
           city: '',
-          province: 'Ontario',
-          country: 'Canada',
+          province: '',
+          country: '',
           postalCode: '',
         },
-        dropoffDateValue: '',
-        dropoffTime: '',
-        dropoffDate: '', // This is the one passed to the API and will be a combination of the two fields above
+        dropoffDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
         dropoffContact: {
           name: '',
           email: '',
-          phone: '',
+          phoneNumber: '',
         },
         startingBid: ''
       }
@@ -257,7 +251,7 @@ export default {
           required
         },
         vin: {
-          required
+          // required
         },
       },
       pickupLocation: {
@@ -280,7 +274,7 @@ export default {
           required,
           email
         },
-        phone: {
+        phoneNumber: {
           required,
           phoneNumberRegex,
         }
@@ -294,7 +288,7 @@ export default {
         },
         postalCode: {
           required,
-          phoneNumberRegex,
+          postalCodeRegex,
         },
       },
       dropoffContact: {
@@ -305,7 +299,7 @@ export default {
           required,
           email
         },
-        phone: {
+        phoneNumber: {
           required,
           phoneNumberRegex,
         }
@@ -323,27 +317,24 @@ export default {
 				return;
       }
       // Will either be 'posts/createPost' or 'posts/updatePost'
-      this.post.pickupDate = this.combineDateAndTime(this.pickupDateValue, this.pickupTime)
-      this.post.dropOffDate = this.combineDateAndTime(this.dropoffDateValue, this.dropoffTime)
-      this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, { post: this.post })
+      this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, this.post)
 				.then(() => {
+          this.$router.push({name: 'shipperHome' })
           // TODO: Go to posted page
 				})
 				.catch(() => {
 					this.error = true
 				})
     },
-    combineDateAndTime: (date, time) => {
-      var timeString = time.getHours() + ':' + time.getMinutes() + ':00';
-      var year = date.getFullYear();
-      var month = date.getMonth() + 1; // Jan is 0, dec is 11
-      var day = date.getDate();
-      var dateString = '' + year + '-' + month + '-' + day;
-      var combined = new Date(dateString + ' ' + timeString);
-      return combined;
-    },
     deletePost() {
-      this.$router.push({ name: 'shipperHome' })
+        this.$store.dispatch('posts/deletePost', this.post.id)
+          .then(() => {
+            this.$router.push({name: 'shipperHome' })
+            // TODO: Go to delete confirmation page
+          })
+          .catch(() => {
+            this.deleteError = true
+          })
     }
   },
   computed: {

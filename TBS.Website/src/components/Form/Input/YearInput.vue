@@ -30,10 +30,10 @@ export default {
   computed: {
     input: {
       get() {
-        return this.value
+        return this.value.toString()
       },
       set(value) {
-        this.$emit("input", value)
+        this.$emit("input", value.toString())
       }
     }
   }
