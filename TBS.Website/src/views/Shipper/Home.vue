@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import utilities from '@/utils/shipperUtilities.js'
+import utilities from '@/utils/postUtilities.js'
 
 export default {
   name: 'shipperHome',
@@ -161,7 +161,6 @@ export default {
     fetchPosts() {
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
         .then((response) => {
-          console.log(JSON.stringify(response))
           this.postPageCount = response.data.result.paginationModel.count
           this.posts = response.data.result.posts
         })
