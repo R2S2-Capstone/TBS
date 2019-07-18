@@ -21,20 +21,20 @@ namespace TBS.Services.User
             _context = databaseContext;
         }
 
-        public async Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
+        public async Task<PaginatedShipperPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
         {
-            var shipper = await _context.Shippers
-                .Include(s => s.Posts)
-                .ThenInclude(p => p.PickupLocation)
-                .FirstOrDefaultAsync(p => p.UserFirebaseId == userFirebaseId);
-            var allUserPosts = shipper.Posts.ToList();
+            var allUserPosts = await _context.ShipperPosts
+                .Include(p => p.Vehicle)
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
+                .Where(p => p.Shipper.UserFirebaseId == userFirebaseId)
+                .ToListAsync();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
             model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
-                .Take(model.PageSize).ToList();
-            var temp = new PaginatedPosts() { PaginationModel = model, Posts = paginatedPosts };
-            return new PaginatedPosts() { PaginationModel = model, Posts = paginatedPosts };
+                .Take(model.PageSize).ToArray();
+            return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
         public async Task<ShipperPost> GetPostById(int id)

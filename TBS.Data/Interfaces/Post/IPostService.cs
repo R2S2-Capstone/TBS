@@ -6,8 +6,8 @@ namespace TBS.Data.Interfaces.Post
 {
     public interface IPostService
     {
-        Task<PaginatedPosts> GetAllActiveCarrierPosts(PaginationModel paginationModel);
+        Task<PaginatedCarrierPosts> GetAllActiveCarrierPosts(PaginationModel paginationModel);
 
-        Task<PaginatedPosts> GetAllActiveShipperPosts(PaginationModel paginationModel);
+        Task<PaginatedShipperPosts> GetAllActiveShipperPosts(PaginationModel paginationModel);
     }
 }

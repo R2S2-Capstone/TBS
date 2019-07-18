@@ -28,7 +28,5 @@ namespace TBS.Data.Models.User
         public string DriversLicense { get; set; }
 
         public CarrierVehicle Vehicle { get; set; }
-
-        public virtual IEnumerable<CarrierPost> Posts { get; set; }
     }
 }

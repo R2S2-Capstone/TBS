@@ -7,7 +7,7 @@ namespace TBS.Data.Interfaces.User
 {
     public interface IShipperService
     {
-        Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
+        Task<PaginatedShipperPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
 
         Task<ShipperPost> GetPostById(int id);
 

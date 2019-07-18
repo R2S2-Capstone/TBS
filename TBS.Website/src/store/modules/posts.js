@@ -30,13 +30,12 @@ const posts = {
                 axios({
                     method: 'GET',
                     url: `${rootGetters['authentication/getAccountType'].toLowerCase()}/posts/all/${payload.currentPage}/${payload.count}`,
-                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+                    headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
                 })
                 .then((response) => {
                     resolve(response)
                 })
                 .catch((error) => {
-                    console.log(JSON.stringify(error))
                     reject(error)
                 })
                 .finally(() => {

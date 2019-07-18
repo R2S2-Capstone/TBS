@@ -11,21 +11,24 @@
         <div class="row">
           <table class="table table-bordered table-hover text-center">
             <thead>
-              <th>Address</th>
+              <th>Details</th>
               <th>Status</th>
               <th>Bids</th>
               <th>Management</th>
             </thead>
             <tbody>
               <tr v-for="post in posts" :key="post.id">
-                <td>{{ post.address }}</td>
-                <td>{{ post.status }}</td>
                 <td>
-                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'shipperManageBids', params: { id: post.id } }">Manage Bids</router-link>
+                  {{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}<br>
+                  {{ `${post.pickupLocation.addressLine} -> ${post.dropoffLocation.addressLine}` }}
+                </td>
+                <td>{{ parsePostStatus(post.postStatus) }}</td>
+                <td>
+                  <router-link v-if="parsePostStatus(post.postStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'shipperManageBids', params: { id: post.id } }">Manage Bids</router-link>
                   <router-link v-else class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'shipperManageBids', params: { id: post.id } }">View Bids</router-link>
                 </td>
                 <td>
-                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'shipperEditPost', params: { id: post.id } }">Edit</router-link>
+                  <router-link v-if="parsePostStatus(post.postStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'shipperEditPost', params: { id: post.id } }">Edit</router-link>
                 </td>
               </tr>
             </tbody>
@@ -102,6 +105,8 @@
 </template>
 
 <script>
+import utilities from '@/utils/shipperUtilities.js'
+
 export default {
   name: 'shipperHome',
   components: {
@@ -156,12 +161,16 @@ export default {
     fetchPosts() {
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
         .then((response) => {
-          this.postPageCount = response.data.paginationModel.count
-          this.posts = response.data.posts
+          console.log(JSON.stringify(response))
+          this.postPageCount = response.data.result.paginationModel.count
+          this.posts = response.data.result.posts
         })
         .catch(() => {
           this.postsError = true
         })
+    },
+    parsePostStatus(status) {
+      return utilities.parsePostStatus(status)
     }
   },
   computed: {

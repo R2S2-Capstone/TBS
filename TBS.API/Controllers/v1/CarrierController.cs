@@ -24,7 +24,7 @@ namespace TBS.API.Controllers.v1
 
         // GET: api/v1/Carrier/Posts/All
         [HttpGet("{id}/Posts/All/{currentPage}/{count}")]
-        public async Task<PaginatedPosts> GetCarriersPosts(int currentPage, int count)
+        public async Task<PaginatedCarrierPosts> GetCarriersPosts(int currentPage, int count)
         {
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
             return await _service.GetAllUsersPosts(id, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count });

@@ -21,7 +21,7 @@ namespace TBS.Services.User
             _context = databaseContext;
         }
 
-        public async Task<PaginatedPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
+        public async Task<PaginatedCarrierPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
         {
             var allUserPosts = await _context.CarrierPosts.Where(p => p.Carrier.UserFirebaseId == userFirebaseId).ToListAsync();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
@@ -29,7 +29,7 @@ namespace TBS.Services.User
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
-            return new PaginatedPosts() { PaginationModel = model, Posts = paginatedPosts };
+            return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
         public async Task<CarrierPost> GetPostById(int id)

@@ -18,7 +18,7 @@ namespace TBS.Services.Posts.Carrier
             _context = databaseContext;
         }
 
-        public async Task<PaginatedPosts> GetAllActiveCarrierPosts(PaginationModel paginationModel)
+        public async Task<PaginatedCarrierPosts> GetAllActiveCarrierPosts(PaginationModel paginationModel)
         {
             var allPosts = await _context.CarrierPosts.Where(p => p.PostStatus == PostStatus.Open).ToListAsync();
             var orderedPosts = allPosts.OrderBy(p => p.PostStatus);
@@ -26,10 +26,10 @@ namespace TBS.Services.Posts.Carrier
             var paginatedPosts = orderedPosts
                 .Skip((paginationModel.CurrentPage - 1) * paginationModel.PageSize)
                 .Take(paginationModel.PageSize).ToList();
-            return new PaginatedPosts() { PaginationModel = paginationModel, Posts = paginatedPosts };
+            return new PaginatedCarrierPosts() { PaginationModel = paginationModel, Posts = paginatedPosts };
         }
 
-        public async Task<PaginatedPosts> GetAllActiveShipperPosts(PaginationModel paginationModel)
+        public async Task<PaginatedShipperPosts> GetAllActiveShipperPosts(PaginationModel paginationModel)
         {
             var allPosts = await _context.ShipperPosts.Where(p => p.PostStatus == PostStatus.Open).ToListAsync();
             var orderedPosts = allPosts.OrderBy(p => p.PostStatus);
@@ -37,7 +37,7 @@ namespace TBS.Services.Posts.Carrier
             var paginatedPosts = orderedPosts
                 .Skip((paginationModel.CurrentPage - 1) * paginationModel.PageSize)
                 .Take(paginationModel.PageSize).ToList();
-            return new PaginatedPosts() { PaginationModel = paginationModel, Posts = paginatedPosts };
+            return new PaginatedShipperPosts() { PaginationModel = paginationModel, Posts = paginatedPosts };
         }
     }
 }

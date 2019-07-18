@@ -28,7 +28,5 @@ namespace TBS.Data.Models.User
 
         [Required(ErrorMessage = "Dealer number required")]
         public string DealerNumber { get; set; }
-
-        public virtual IEnumerable<ShipperPost> Posts { get; set; }
     }
 }

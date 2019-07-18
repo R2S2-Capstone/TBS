@@ -21,10 +21,10 @@ namespace TBS.API.Controllers.v1
 
         // GET: api/v1/Posts/Carrier/
         [HttpGet("Carrier")]
-        public async Task<PaginatedPosts> GetCarrierPosts(PaginationModel model) => await _service.GetAllActiveCarrierPosts(model);
+        public async Task<PaginatedCarrierPosts> GetCarrierPosts(PaginationModel model) => await _service.GetAllActiveCarrierPosts(model);
 
         // GET: api/v1/Posts/Shipper
         [HttpGet("Shipper")]
-        public async Task<PaginatedPosts> GetShipperPosts(PaginationModel model) => await _service.GetAllActiveShipperPosts(model);
+        public async Task<PaginatedShipperPosts> GetShipperPosts(PaginationModel model) => await _service.GetAllActiveShipperPosts(model);
     }
 }
