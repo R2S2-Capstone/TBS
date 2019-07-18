@@ -3,9 +3,9 @@ using TBS.Data.Models;
 using TBS.Data.Models.Post.Response;
 using TBS.Data.Models.Post.Shipper;
 
-namespace TBS.Data.Interfaces.User
+namespace TBS.Data.Interfaces.Post
 {
-    public interface IShipperService
+    public interface IShipperPostService
     {
         Task<PaginatedShipperPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
 

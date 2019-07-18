@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using TBS.Data.Models.Post.Carrier;
+﻿using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.User.Information;
 using TBS.Data.Models.Vehicle.Carrier;
 

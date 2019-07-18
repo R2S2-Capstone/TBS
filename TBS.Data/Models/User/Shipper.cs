@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using TBS.Data.Models.Post.Shipper;
+﻿using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.User.Information;
 
 namespace TBS.Data.Models.User

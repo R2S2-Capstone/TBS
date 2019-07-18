@@ -11,10 +11,8 @@ using System;
 using TBS.API.Filters;
 using TBS.Data.Database;
 using TBS.Data.Interfaces.Post;
-using TBS.Data.Interfaces.User;
 using TBS.Data.Interfaces.User.Authentication;
-using TBS.Services.Posts.Carrier;
-using TBS.Services.User;
+using TBS.Services.Posts;
 using TBS.Services.User.Authentication;
 
 namespace TBS.API
@@ -42,9 +40,8 @@ namespace TBS.API
             services.AddSingleton(Configuration);
             services.AddScoped<DatabaseContext, DatabaseContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<ICarrierService, CarrierService>();
-            services.AddScoped<IShipperService, ShipperService>();
-            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ICarrierPostService, CarrierPostService>();
+            services.AddScoped<IShipperPostService, ShipperPostService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 

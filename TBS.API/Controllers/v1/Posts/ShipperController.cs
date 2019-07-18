@@ -2,53 +2,54 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using TBS.Data.Interfaces.User;
-using TBS.Data.Models.Post.Response;
+using TBS.Data.Interfaces.Post;
 using TBS.Data.Models.Post.Shipper;
 
-namespace TBS.API.Controllers.v1
+namespace TBS.API.Controllers.v1.Posts
 {
     [ApiVersion("1")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/Posts/[controller]")]
     [Produces("application/json")]
-    [Authorize]
     [ApiController]
     public class ShipperController : ControllerBase
     {
-        private readonly IShipperService _service;
+        private readonly IShipperPostService _service;
 
-        public ShipperController(IShipperService service)
+        public ShipperController(IShipperPostService service)
         {
             _service = service;
         }
 
-        // GET: api/v1/Shipper/Posts/All
-        [HttpGet("Posts/All/{currentPage}/{count}")]
+        // GET: api/v1/Posts/Shipper/All/{currentPage}/{count}
+        [HttpGet("{currentPage}/{count}")]
+        [Authorize]
         public async Task<IActionResult> GetShippersPosts(int currentPage, int count)
         {
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
-            return Ok(new { result = await _service.GetAllUsersPosts(id, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count } )});
+            return Ok(new { result = await _service.GetAllUsersPosts(id, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
         }
 
-
-        // GET: api/v1/Shipper/Posts/{PostId}
-        [HttpGet("Posts/{postId}")]
+        // GET: api/v1/Posts/Shipper/{PostId}
+        [HttpGet("{postId}")]
         public async Task<IActionResult> GetShipperPost(int postId) => Ok(new { result = await _service.GetPostById(postId) });
 
-        // POST: api/v1/Shipper/Posts
-        [HttpPost("Posts")]
+        // POST: api/v1/Posts/Shipper
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostShipperPost(ShipperPost post)
         {
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
         }
 
-        // PUT: api/v1/Shipper/Posts
-        [HttpPut("Posts")]
+        // PUT: api/v1/Posts/Shipper
+        [HttpPut]
+        [Authorize]
         public async Task<IActionResult> PutShipperPost(int postId, ShipperPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 
-        // DELETE: api/v1/Shipper/Posts
-        [HttpDelete("Posts")]
+        // DELETE: api/v1/Posts/Shipper
+        [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> DeleteShipperPost(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
     }
 }

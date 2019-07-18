@@ -203,7 +203,6 @@ export default {
       error: false,
       deleteError: false,
       post: {
-        id: '',
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
           make: '',

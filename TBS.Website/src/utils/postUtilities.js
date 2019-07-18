@@ -1,7 +1,7 @@
-const shipperUtilities = {
+const postUtilities = {
   parsePostStatus: (status) => {
     if (status === 0) {
-      return 'Open'
+      return 'Open' 
     } else if (status === 1) {
       return 'Closed'
     } else if (status === 2) {
@@ -13,4 +13,4 @@ const shipperUtilities = {
     }
   },
 }
-export default shipperUtilities
+export default postUtilities
