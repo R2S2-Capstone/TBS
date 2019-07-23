@@ -9,7 +9,7 @@ const postUtilities = {
     } else if (status === 3) {
       return 'Pending Delivery Approval'
     } else {
-      return 'Unknonw'
+      return 'Unknown'
     }
   },
   parseTrailerType: (type) => {
@@ -22,7 +22,16 @@ const postUtilities = {
     } else if (type === 3) {
       return 'Other'
     } else {
-      return 'Unknonw'
+      return 'Unknown'
+    }
+  },
+  parseVehicleCondition(condition) {
+    if (condition === 0) {
+      return 'New' 
+    } else if (condition === 1) {
+      return 'Used'
+    } else {
+      return 'Unknown'
     }
   }
 }

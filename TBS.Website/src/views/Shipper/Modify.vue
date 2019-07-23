@@ -5,6 +5,7 @@
       <div slot="card-information" class="text-center">
         <h4 v-if="error" class="text-danger pb-4">Failed to {{ type.toLowerCase()}} post</h4>
         <h4 v-if="deleteError" class="text-danger pb-4">Failed to delete post</h4>
+        <h4 v-if="failedToLoadError" class="text-danger pb-4">Failed to load post</h4>
       </div>
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
@@ -157,11 +158,11 @@
         </form>
       </div>
       <div slot="below-form" class="text-center">
-        <div class="col-12 pt-2" v-if="type == 'Edit'">
-          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
-        </div>
         <div class="col-12">
           <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="submit" type="submit">{{ type }}</button>
+        </div>
+        <div class="col-12 pt-2" v-if="type == 'Update'">
+          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
         </div>
       </div>
     </WideFormCard>
@@ -185,6 +186,8 @@ const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
+import utilities from '@/utils/postUtilities.js'
+
 export default {
   name: 'shipperCreatePost',
   components: {
@@ -202,6 +205,7 @@ export default {
     return {
       error: false,
       deleteError: false,
+      failedToLoadError: false,
       post: {
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
@@ -348,6 +352,21 @@ export default {
   },
   created() {
     if (this.type == 'Update') {
+          if (this.type == 'Update') {
+      this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
+				.then((response) => {
+          this.post = response.data.result
+          this.post.vehicle.year = this.post.vehicle.year.toString() 
+          this.post.vehicle.condition = utilities.parseVehicleCondition(this.post.vehicle.condition)
+          this.post.startingBid = this.post.startingBid.toString()
+          this.post.pickupDate = this.post.pickupDate.split('T')[0]
+          this.post.dropoffDate = this.post.dropoffDate.split('T')[0]
+          this.failedToLoadError = false
+				})
+				.catch(() => {
+					this.failedToLoadError = true
+				})
+    }
       // Load post here
     }
   }

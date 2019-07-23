@@ -39,7 +39,13 @@ namespace TBS.Services.Posts
 
         public async Task<ShipperPost> GetPostById(int id)
         {
-            var shipperPost = await _context.ShipperPosts.FirstOrDefaultAsync(p => p.Id == id);
+            var shipperPost = await _context.ShipperPosts
+                .Include(p => p.Vehicle)
+                .Include(p => p.PickupLocation)
+                .Include(p => p.PickupContact)
+                .Include(p => p.DropoffLocation)
+                .Include(p => p.DropoffContact)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (shipperPost == null)
             {
