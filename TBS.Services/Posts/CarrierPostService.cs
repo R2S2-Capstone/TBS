@@ -38,7 +38,10 @@ namespace TBS.Services.Posts
 
         public async Task<CarrierPost> GetPostById(int id)
         {
-            var carrierPost = await _context.CarrierPosts.FirstOrDefaultAsync(p => p.Id == id);
+            var carrierPost = await _context.CarrierPosts
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (carrierPost == null)
             {

@@ -1,10 +1,10 @@
 <template>
   <div class="form-label-group text-center">
-    <input 
+    <input
       v-model="input"
       type="time" 
       id="DateInput" 
-      class="form-control test"
+      class="form-control"
     >
   </div>
 </template>
@@ -12,15 +12,17 @@
 <script>
 export default {
   name: 'timeInput',
-  data() {
-    return {
-      time: new Date().getHours() + ":" + new Date().getMinutes()
+  props: {
+    value: {
+      type: String,
+      required: false,
+      default: (new Date().getHours() + ":" + new Date().getMinutes()).toString()
     }
   },
   computed: {
     input: {
       get() {
-        return this.time
+        return this.value
       },
       set(value) {
         this.$emit("input", value)

@@ -12,5 +12,18 @@ const postUtilities = {
       return 'Unknonw'
     }
   },
+  parseTrailerType: (type) => {
+    if (type === 0) {
+      return 'Enclosed' 
+    } else if (type === 1) {
+      return 'Flat Bed'
+    } else if (type === 2) {
+      return 'Car Carrier'
+    } else if (type === 3) {
+      return 'Other'
+    } else {
+      return 'Unknonw'
+    }
+  }
 }
 export default postUtilities

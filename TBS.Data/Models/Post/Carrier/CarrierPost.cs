@@ -30,7 +30,7 @@ namespace TBS.Data.Models.Post.Carrier
         public CarrierTrailerType TrailerType { get; set; }
 
         [Required(ErrorMessage = "Spaces available required")]
-        public int SpacesAvailable { get; set; }
+        public int SpacesAvailable  { get; set; }
 
         [Required(ErrorMessage = "Cost required")]
         [Range(0, double.MaxValue, ErrorMessage = "Must be a valid cost")]

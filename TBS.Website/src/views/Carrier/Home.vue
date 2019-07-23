@@ -21,7 +21,6 @@
                 <td>
                   {{ `${post.pickupLocation.addressLine} -> ${post.dropoffLocation.addressLine}` }} <br>
                   {{ `Total Spaces Available: ${post.spacesAvailable}` }}
-                
                 </td>
                 <td>{{ parsePostStatus(post.postStatus) }}</td>
                 <td>

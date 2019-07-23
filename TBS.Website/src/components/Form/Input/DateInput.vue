@@ -5,7 +5,7 @@
       type="date" 
       id="DateInput" 
       class="form-control text-center"
-      :min="date"
+      :min="value"
     >
   </div>
 </template>
@@ -13,15 +13,17 @@
 <script>
 export default {
   name: 'dateInput',
-  data() {
-    return {
-      date: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0]
+  props: {
+    value: {
+      type: String,
+      required: false,
+      default: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0]
     }
   },
   computed: {
     input: {
       get() {
-        return this.date
+        return this.value
       },
       set(value) {
         this.$emit("input", value)

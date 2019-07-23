@@ -49,7 +49,6 @@ const posts = {
                 axios({
                     method: 'GET',
                     url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.postId}`,
-                    data: { postId: payload.postId },
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
                 })
                 .then((response) => {

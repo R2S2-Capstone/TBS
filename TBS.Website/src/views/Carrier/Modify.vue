@@ -5,6 +5,7 @@
       <div slot="card-information" class="text-center">
         <h4 v-if="error" class="text-danger pb-4">Failed to {{ type.toLowerCase()}} post</h4>
         <h4 v-if="deleteError" class="text-danger pb-4">Failed to delete post</h4>
+        <h4 v-if="failedToLoadError" class="text-danger pb-4">Failed to load post</h4>
       </div>
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
@@ -88,6 +89,7 @@
                   </div>
                   <div class="col-lg-6 col-md-6 col-sm-12">
                     <label>Time</label>
+                    {{ this.post.dropoffTime }}
                     <TimeInput v-model="post.dropoffTime" />
                   </div>
                 </div>
@@ -143,6 +145,8 @@ import { required, helpers } from 'vuelidate/lib/validators'
 const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
+import utilities from '@/utils/postUtilities.js'
+
 export default {
   name: 'carrierCreatePost',
   components: {
@@ -160,6 +164,7 @@ export default {
     return {
       error: false,
       deleteError: false,
+      failedToLoadError: false,
       post: {
         pickupLocation: {
           addressLine: '',
@@ -248,11 +253,24 @@ export default {
       } else {
         return 'Create'
       }
-    }
+    },
   },
   created() {
     if (this.type == 'Edit') {
-      // Load post here
+      this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
+				.then((response) => {
+          this.post = response.data.result
+          this.post.startingBid = this.post.startingBid.toString()
+          this.post.trailerType = utilities.parseTrailerType(this.post.trailerType)
+          this.post.pickupDateValue = this.post.pickupDate.split('T')[0]
+          this.post.pickupTime = this.post.pickupDate.split('T')[1].substring(0, 5)
+          this.post.dropoffDateValue = this.post.dropoffDate.split('T')[0]
+          this.post.dropoffTime = this.post.dropoffDate.split('T')[1].substring(0, 5)
+          this.failedToLoadError = false
+				})
+				.catch(() => {
+					this.failedToLoadError = true
+				})
     }
   }
 }
