@@ -43,8 +43,8 @@ namespace TBS.API.Controllers.v1.Posts
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
         }
 
-        // PUT: api/v1/Posts/Carrier
-        [HttpPut]
+        // PUT: api/v1/Posts/Carrier/{postId}
+        [HttpPut("{postId}")]
         [Authorize]
         public async Task<IActionResult> PutCarrierPost(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 

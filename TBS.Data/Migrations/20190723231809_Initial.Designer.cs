@@ -9,7 +9,7 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190723014800_Initial")]
+    [Migration("20190723231809_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,11 +54,13 @@ namespace TBS.Data.Migrations
 
                     b.Property<DateTime>("DropoffDate");
 
-                    b.Property<int>("DropoffLocationId");
+                    b.Property<string>("DropoffLocation")
+                        .IsRequired();
 
                     b.Property<DateTime>("PickupDate");
 
-                    b.Property<int>("PickupLocationId");
+                    b.Property<string>("PickupLocation")
+                        .IsRequired();
 
                     b.Property<int>("PostStatus");
 
@@ -71,10 +73,6 @@ namespace TBS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarrierId");
-
-                    b.HasIndex("DropoffLocationId");
-
-                    b.HasIndex("PickupLocationId");
 
                     b.ToTable("CarrierPosts");
                 });
@@ -273,16 +271,6 @@ namespace TBS.Data.Migrations
                     b.HasOne("TBS.Data.Models.User.Carrier", "Carrier")
                         .WithMany()
                         .HasForeignKey("CarrierId");
-
-                    b.HasOne("TBS.Data.Models.General.Address", "DropoffLocation")
-                        .WithMany()
-                        .HasForeignKey("DropoffLocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TBS.Data.Models.General.Address", "PickupLocation")
-                        .WithMany()
-                        .HasForeignKey("PickupLocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Post.Shipper.ShipperPost", b =>

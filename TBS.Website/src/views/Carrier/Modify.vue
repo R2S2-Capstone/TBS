@@ -14,40 +14,20 @@
               <h5>Pickup Information</h5>
               <hr>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12">
-                    <TextInput v-model="post.pickupLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.pickupLocation.addressLine"/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <TextInput v-model="post.pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.pickupLocation.city"/>
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <ProvinceInput v-model="post.pickupLocation.province" />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <CountryInput v-model="post.pickupLocation.country" />
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <TextInput v-model="post.pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.pickupLocation.postalCode"/>
-                  </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-12">
+                  <TextInput v-model="post.pickupLocation" placeHolder="Pickup city" errorMessage="Please enter a pickup city" :validator="$v.post.pickupLocation"/>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <label>Date</label>
-                    <DateInput v-model="post.pickupDateValue" />
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <label>Time</label>
-                    <TimeInput v-model="post.pickupTime" />
-                  </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <label>Date</label>
+                  <DateInput v-model="post.pickupDateValue" />
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <label>Time</label>
+                  <TimeInput v-model="post.pickupTime" />
                 </div>
               </div>
             </div>
@@ -57,41 +37,21 @@
               <h5>Delivery Information</h5>
               <hr>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12">
-                    <TextInput v-model="post.dropoffLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.dropoffLocation.addressLine"/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <TextInput v-model="post.dropoffLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.dropoffLocation.city"/>
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <ProvinceInput v-model="post.dropoffLocation.province" />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <CountryInput v-model="post.dropoffLocation.country" />
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <TextInput v-model="post.dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.dropoffLocation.postalCode"/>
-                  </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-12">
+                  <TextInput v-model="post.dropoffLocation" placeHolder="Dropoff City" errorMessage="Please enter a dropoff city" :validator="$v.post.dropoffLocation"/>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <label>Date</label>
-                    <DateInput v-model="post.dropoffDateValue" />
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12">
-                    <label>Time</label>
-                    {{ this.post.dropoffTime }}
-                    <TimeInput v-model="post.dropoffTime" />
-                  </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <label>Date</label>
+                  <DateInput v-model="post.dropoffDateValue" />
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <label>Time</label>
+                  {{ this.post.dropoffTime }}
+                  <TimeInput v-model="post.dropoffTime" />
                 </div>
               </div>
             </div>
@@ -118,7 +78,7 @@
               <div class="col-12">
                 <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
               </div>
-              <div class="col-12 pt-2" v-if="type == 'Edit'">
+              <div class="col-12 pt-2" v-if="type == 'Update'">
                 <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
               </div>
             </div>
@@ -134,15 +94,12 @@ import Back from '@/components/Back.vue'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
-import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
-import CountryInput from '@/components/Form/Input/CountryInput.vue'
 import DateInput from '@/components/Form/Input/DateInput.vue'
 import TimeInput from '@/components/Form/Input/TimeInput.vue'
 import CapacityInput from '@/components/Form/Input/CapacityInput.vue'
 import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
 
 import { required, helpers } from 'vuelidate/lib/validators'
-const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
 import utilities from '@/utils/postUtilities.js'
@@ -153,8 +110,6 @@ export default {
     Back,
     WideFormCard,
     TextInput,
-    ProvinceInput,
-    CountryInput,
     DateInput,
     TimeInput,
     CapacityInput,
@@ -166,23 +121,11 @@ export default {
       deleteError: false,
       failedToLoadError: false,
       post: {
-        pickupLocation: {
-          addressLine: '',
-          city: '',
-          province: 'Ontario',
-          country: 'Canada',
-          postalCode: '',
-        },
+        pickupLocation: '',
         pickupDate: '', 
         pickupDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
         pickupTime: new Date().getHours() + ":" + new Date().getMinutes(),
-        dropoffLocation: {
-          addressLine: '',
-          city: '',
-          province: 'Ontario',
-          country: 'Canada',
-          postalCode: '',
-        },
+        dropoffLocation: '',
         dropoffDate: '',
         dropoffDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
         dropoffTime: new Date().getHours() + ":" + new Date().getMinutes(),
@@ -195,34 +138,16 @@ export default {
   validations: {
     post: {
       pickupLocation: {
-        addressLine: {
-          required
-        },
-        city: {
-          required
-        },
-        postalCode: {
-          required,
-          postalCodeRegex
-        },
+        required,
       },
       dropoffLocation: {
-        addressLine: {
-          required
-        },
-        city: {
-          required
-        },
-        postalCode: {
-          required,
-          postalCodeRegex,
-        },
+        required
       },
-      startingBid:{
+      startingBid: {
         required,
         bidRegex,
       },
-    },
+    }
   },
   methods: {
     submit() {
@@ -232,15 +157,25 @@ export default {
       }
       this.post.pickupDate = `${this.post.pickupDateValue} ${this.post.pickupTime}`
       this.post.dropoffDate = `${this.post.dropoffDateValue} ${this.post.dropoffTime}`
-      // Will either be 'posts/createPost' or 'posts/updatePost'
-      this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
-				.then(() => {
+      // Required as create post cannot have a postId
+      if (this.type == 'Update') {
+        this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
+        .then(() => {
+          this.$router.push({name: 'carrierHome' })
+        })
+        .catch(() => {
+          this.error = true
+        })
+      } else {
+        this.$store.dispatch('posts/createPost', { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
+        .then(() => {
           // TODO: Go to posted page
           this.$router.push({name: 'carrierHome' })
-				})
-				.catch(() => {
-					this.error = true
-				})
+        })
+        .catch(() => {
+          this.error = true
+        })
+      }
     },
     deletePost() {
       this.$router.push({ name: 'carrierHome' })
@@ -249,14 +184,14 @@ export default {
   computed: {
     type() {
       if (this.$route.params.id != null) {
-        return 'Edit'
+        return 'Update'
       } else {
         return 'Create'
       }
     },
   },
   created() {
-    if (this.type == 'Edit') {
+    if (this.type == 'Update') {
       this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
 				.then((response) => {
           this.post = response.data.result

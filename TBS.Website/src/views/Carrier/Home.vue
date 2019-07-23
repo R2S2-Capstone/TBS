@@ -19,7 +19,7 @@
             <tbody>
               <tr v-for="post in posts" :key="post.id">
                 <td>
-                  {{ `${post.pickupLocation.addressLine} -> ${post.dropoffLocation.addressLine}` }} <br>
+                  {{ `${post.pickupLocation} -> ${post.dropoffLocation}` }} <br>
                   {{ `Total Spaces Available: ${post.spacesAvailable}` }}
                 </td>
                 <td>{{ parsePostStatus(post.postStatus) }}</td>

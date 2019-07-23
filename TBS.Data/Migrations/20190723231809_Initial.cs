@@ -162,9 +162,9 @@ namespace TBS.Data.Migrations
                         .Annotation("MySQL:AutoIncrement", true),
                     CarrierId = table.Column<int>(nullable: true),
                     DatePosted = table.Column<DateTime>(nullable: false),
-                    PickupLocationId = table.Column<int>(nullable: false),
+                    PickupLocation = table.Column<string>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
-                    DropoffLocationId = table.Column<int>(nullable: false),
+                    DropoffLocation = table.Column<string>(nullable: false),
                     DropoffDate = table.Column<DateTime>(nullable: false),
                     TrailerType = table.Column<int>(nullable: false),
                     SpacesAvailable = table.Column<int>(nullable: false),
@@ -180,18 +180,6 @@ namespace TBS.Data.Migrations
                         principalTable: "Carriers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CarrierPosts_Address_DropoffLocationId",
-                        column: x => x.DropoffLocationId,
-                        principalTable: "Address",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CarrierPosts_Address_PickupLocationId",
-                        column: x => x.PickupLocationId,
-                        principalTable: "Address",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -257,16 +245,6 @@ namespace TBS.Data.Migrations
                 name: "IX_CarrierPosts_CarrierId",
                 table: "CarrierPosts",
                 column: "CarrierId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CarrierPosts_DropoffLocationId",
-                table: "CarrierPosts",
-                column: "DropoffLocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CarrierPosts_PickupLocationId",
-                table: "CarrierPosts",
-                column: "PickupLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carriers_CompanyId",

@@ -15,13 +15,13 @@ namespace TBS.Data.Models.Post.Carrier
         public DateTime DatePosted { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Pickup location required")]
-        public Address PickupLocation { get; set; }
+        public string PickupLocation { get; set; }
 
         [Required(ErrorMessage = "Pickup date required")]
         public DateTime PickupDate { get; set; }
 
         [Required(ErrorMessage = "Dropoff location required")]
-        public Address DropoffLocation { get; set; }
+        public string DropoffLocation { get; set; }
 
         [Required(ErrorMessage = "Dropoff date required")]
         public DateTime DropoffDate { get; set; }

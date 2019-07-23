@@ -87,14 +87,15 @@ const posts = {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'PUT',
-                    url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
-                    data: { postId: payload.postId, post: payload.post },
+                    url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.id}`,
+                    data: payload,
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
                 })
                 .then((response) => {
                     resolve(response)
                 })
                 .catch((error) => {
+                    console.log(JSON.stringify(error))
                     reject(error)
                 })
                 .finally(() => {
