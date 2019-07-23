@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'Email',
+  name: 'textInput',
   props: {
     value: {
       type: String,
@@ -35,7 +35,7 @@ export default {
     },
     validator: {
       type: Object,
-      required: true  
+      required: true
     }
   },
   computed: {

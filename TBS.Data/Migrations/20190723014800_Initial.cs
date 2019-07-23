@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TBS.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -161,13 +161,14 @@ namespace TBS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     CarrierId = table.Column<int>(nullable: true),
-                    PickupCity = table.Column<string>(nullable: false),
+                    DatePosted = table.Column<DateTime>(nullable: false),
+                    PickupLocationId = table.Column<int>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
-                    DropoffCity = table.Column<string>(nullable: false),
+                    DropoffLocationId = table.Column<int>(nullable: false),
                     DropoffDate = table.Column<DateTime>(nullable: false),
                     TrailerType = table.Column<int>(nullable: false),
                     SpacesAvailable = table.Column<int>(nullable: false),
-                    Cost = table.Column<decimal>(nullable: false),
+                    StartingBid = table.Column<decimal>(nullable: false),
                     PostStatus = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -179,6 +180,18 @@ namespace TBS.Data.Migrations
                         principalTable: "Carriers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarrierPosts_Address_DropoffLocationId",
+                        column: x => x.DropoffLocationId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CarrierPosts_Address_PickupLocationId",
+                        column: x => x.PickupLocationId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,6 +201,7 @@ namespace TBS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     ShipperId = table.Column<int>(nullable: true),
+                    DatePosted = table.Column<DateTime>(nullable: false),
                     VehicleId = table.Column<int>(nullable: false),
                     PickupLocationId = table.Column<int>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
@@ -243,6 +257,16 @@ namespace TBS.Data.Migrations
                 name: "IX_CarrierPosts_CarrierId",
                 table: "CarrierPosts",
                 column: "CarrierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierPosts_DropoffLocationId",
+                table: "CarrierPosts",
+                column: "DropoffLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierPosts_PickupLocationId",
+                table: "CarrierPosts",
+                column: "PickupLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carriers_CompanyId",

@@ -13,6 +13,8 @@ namespace TBS.Data.Models.Post.Shipper
 
         public TBS.Data.Models.User.Shipper Shipper { get; set; }
 
+        public DateTime DatePosted { get; set; } = DateTime.Now;
+
         [Required(ErrorMessage = "Vehicle required")]
         public PostedVehicle Vehicle { get; set; }
 

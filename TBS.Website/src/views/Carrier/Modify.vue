@@ -1,129 +1,241 @@
 <template>
   <div class="container pt-5">
     <Back/>
-    <WideCard :title="type + ' Availability Post'">
+    <WideFormCard :title="type + ' Availability Post'">
+      <div slot="card-information" class="text-center">
+        <h4 v-if="error" class="text-danger pb-4">Failed to {{ type.toLowerCase()}} post</h4>
+        <h4 v-if="deleteError" class="text-danger pb-4">Failed to delete post</h4>
+      </div>
       <div slot="card-content" class="text-center">
         <form @submit.prevent="submit">
           <div class="row">
             <div class="col-12">
-              <h5>Your Vehicle Information</h5>
+              <h5>Pickup Information</h5>
               <hr>
             </div>
-            <div class="col-12">
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Make</label>
-                  <input type="text" class="form-control" placeholder="Ford">
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-12">
+                    <TextInput v-model="post.pickupLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.pickupLocation.addressLine"/>
+                  </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Model</label>
-                  <input type="text" class="form-control" placeholder="F-250">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <TextInput v-model="post.pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.pickupLocation.city"/>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <ProvinceInput v-model="post.pickupLocation.province" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <CountryInput v-model="post.pickupLocation.country" />
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <TextInput v-model="post.pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.pickupLocation.postalCode"/>
+                  </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Available Vehicle Capacity</label>
-                  <input type="text" class="form-control" placeholder="2">
-                </div>
-                  <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Year</label>
-                  <select class="form-control">
-                    <option v-for="(value, index) in years()" :key="index" :value="value" selected>
-                      {{ value }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row pt-5">
-            <div class="col-12">
-              <h5>Pickup</h5>
-              <hr>
-            </div>
-            <div class="col-12">
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>City</label>
-                  <input type="text" class="form-control" placeholder="Oakville">
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Date</label>
-                  <input type="text" class="form-control" :placeholder="date.toLocaleDateString()">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label>Date</label>
+                    <DateInput v-model="post.pickupDateValue" />
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label>Time</label>
+                    <TimeInput v-model="post.pickupTime" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="row pt-5">
             <div class="col-12">
-              <h5>Delivery</h5>
+              <h5>Delivery Information</h5>
               <hr>
             </div>
-            <div class="col-12">
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>City</label>
-                  <input type="text" class="form-control" placeholder="Oakville">
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-12">
+                    <TextInput v-model="post.dropoffLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.dropoffLocation.addressLine"/>
+                  </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Date</label>
-                  <input type="text" class="form-control" :placeholder="date.toLocaleDateString()">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <TextInput v-model="post.dropoffLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.dropoffLocation.city"/>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <ProvinceInput v-model="post.dropoffLocation.province" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <CountryInput v-model="post.dropoffLocation.country" />
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <TextInput v-model="post.dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.dropoffLocation.postalCode"/>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label>Date</label>
+                    <DateInput v-model="post.dropoffDateValue" />
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label>Time</label>
+                    <TimeInput v-model="post.dropoffTime" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row pt-5">
-            <div class="col-12">
-              <h5>Other Details</h5>
-              <hr>
-            </div>
-            <div class="col-12">
-              <div class="row">
-                <div class="col-12 form-group">
-                  <label>Starting Bid</label>
-                  <input type="text" class="form-control" placeholder="2000">
+            <div class="row pt-5">
+              <div class="col-12">
+                <h5>Other Details</h5>
+                <hr>
+              </div>
+              <div class="col-12">
+                <TextInput v-model="post.startingBid" placeHolder="Starting Bid" errorMessage="Please enter a starting bid" :validator="this.$v.post.startingBid" />
+              </div>
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label>Trailer Type</label>
+                    <TrailerInput v-model="post.trailerType" />
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <label>Spaces Available</label>
+                    <CapacityInput v-model="post.spacesAvailable" />
+                  </div>
                 </div>
-                <div class="col-12">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
-                </div>
-                <div class="col-12 pt-2" v-if="type == 'Edit'">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
-                </div>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
+              </div>
+              <div class="col-12 pt-2" v-if="type == 'Edit'">
+                <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
               </div>
             </div>
           </div>
         </form>
       </div>
-    </WideCard>
+    </WideFormCard>
   </div>
 </template>
 
 <script>
 import Back from '@/components/Back.vue'
-import WideCard from '@/components/Card/WideCard.vue'
+import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
+
+import TextInput from '@/components/Form/Input/TextInput.vue'
+import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
+import CountryInput from '@/components/Form/Input/CountryInput.vue'
+import DateInput from '@/components/Form/Input/DateInput.vue'
+import TimeInput from '@/components/Form/Input/TimeInput.vue'
+import CapacityInput from '@/components/Form/Input/CapacityInput.vue'
+import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
+
+import { required, helpers } from 'vuelidate/lib/validators'
+const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
+const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
 export default {
   name: 'carrierCreatePost',
   components: {
     Back,
-    WideCard,
+    WideFormCard,
+    TextInput,
+    ProvinceInput,
+    CountryInput,
+    DateInput,
+    TimeInput,
+    CapacityInput,
+    TrailerInput,
   },
   data() {
     return {
-      date: new Date(),
+      error: false,
+      deleteError: false,
+      post: {
+        pickupLocation: {
+          addressLine: '',
+          city: '',
+          province: 'Ontario',
+          country: 'Canada',
+          postalCode: '',
+        },
+        pickupDate: '', 
+        pickupDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
+        pickupTime: new Date().getHours() + ":" + new Date().getMinutes(),
+        dropoffLocation: {
+          addressLine: '',
+          city: '',
+          province: 'Ontario',
+          country: 'Canada',
+          postalCode: '',
+        },
+        dropoffDate: '',
+        dropoffDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
+        dropoffTime: new Date().getHours() + ":" + new Date().getMinutes(),
+        trailerType: 'Car Carrier',
+        spacesAvailable: 1,
+        startingBid: '',
+      }
     }
   },
-  methods: {
-    years() {
-      let items = [];
-      for(let year = 1908; year <= this.date.getFullYear(); year++) {
-        items.push(year);
-      }
-      return items;
+  validations: {
+    post: {
+      pickupLocation: {
+        addressLine: {
+          required
+        },
+        city: {
+          required
+        },
+        postalCode: {
+          required,
+          postalCodeRegex
+        },
+      },
+      dropoffLocation: {
+        addressLine: {
+          required
+        },
+        city: {
+          required
+        },
+        postalCode: {
+          required,
+          postalCodeRegex,
+        },
+      },
+      startingBid:{
+        required,
+        bidRegex,
+      },
     },
+  },
+  methods: {
     submit() {
-      // TODO: Submit
-      this.$router.push({ name: 'carrierHome' })
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+				return
+      }
+      this.post.pickupDate = `${this.post.pickupDateValue} ${this.post.pickupTime}`
+      this.post.dropoffDate = `${this.post.dropoffDateValue} ${this.post.dropoffTime}`
+      // Will either be 'posts/createPost' or 'posts/updatePost'
+      this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
+				.then(() => {
+          // TODO: Go to posted page
+          this.$router.push({name: 'carrierHome' })
+				})
+				.catch(() => {
+					this.error = true
+				})
     },
     deletePost() {
       this.$router.push({ name: 'carrierHome' })

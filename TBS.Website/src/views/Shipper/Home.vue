@@ -161,7 +161,7 @@ export default {
     fetchPosts() {
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
         .then((response) => {
-          this.postPageCount = response.data.result.paginationModel.count
+          this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts
         })
         .catch(() => {

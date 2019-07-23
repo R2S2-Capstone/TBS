@@ -306,7 +306,7 @@ export default {
       },
       startingBid: {
         required,
-        bidRegex
+        bidRegex,
       }
     }
   },

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using TBS.Data.Models.General;
 using TBS.Data.Models.Vehicle.Carrier;
 
 namespace TBS.Data.Models.Post.Carrier
@@ -11,14 +12,16 @@ namespace TBS.Data.Models.Post.Carrier
 
         public TBS.Data.Models.User.Carrier Carrier { get; set; }
 
-        [Required(ErrorMessage = "Pickup city required")]
-        public string PickupCity { get; set; }
+        public DateTime DatePosted { get; set; } = DateTime.Now;
+
+        [Required(ErrorMessage = "Pickup location required")]
+        public Address PickupLocation { get; set; }
 
         [Required(ErrorMessage = "Pickup date required")]
         public DateTime PickupDate { get; set; }
 
-        [Required(ErrorMessage = "Dropoff city required")]
-        public string DropoffCity { get; set; }
+        [Required(ErrorMessage = "Dropoff location required")]
+        public Address DropoffLocation { get; set; }
 
         [Required(ErrorMessage = "Dropoff date required")]
         public DateTime DropoffDate { get; set; }
@@ -31,9 +34,8 @@ namespace TBS.Data.Models.Post.Carrier
 
         [Required(ErrorMessage = "Cost required")]
         [Range(0, double.MaxValue, ErrorMessage = "Must be a valid cost")]
-        public decimal Cost { get; set; }
+        public decimal StartingBid { get; set; }
 
-        [Required(ErrorMessage = "Post status required")]
-        public PostStatus PostStatus { get; set; }
+        public PostStatus PostStatus { get; set; } = PostStatus.Open;
     }
 }

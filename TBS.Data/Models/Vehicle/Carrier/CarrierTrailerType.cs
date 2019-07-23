@@ -2,7 +2,9 @@
 {
     public enum CarrierTrailerType
     {
-        Open,
-        Closed
+        Enclosed,
+        FlatBed,
+        CarCarrier,
+        Other
     }
 }

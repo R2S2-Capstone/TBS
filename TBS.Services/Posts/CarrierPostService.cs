@@ -24,6 +24,8 @@ namespace TBS.Services.Posts
         public async Task<PaginatedCarrierPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
         {
             var allUserPosts = await _context.CarrierPosts
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
                 .Where(p => p.Carrier.UserFirebaseId == userFirebaseId)
                 .ToListAsync();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
