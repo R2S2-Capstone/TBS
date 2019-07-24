@@ -162,7 +162,8 @@
           <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="submit" type="submit">{{ type }}</button>
         </div>
         <div class="col-12 pt-2" v-if="type == 'Update'">
-          <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="deletePost()">Delete</button>
+          <button type="button" class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
+          <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" />
         </div>
       </div>
     </WideFormCard>
@@ -180,6 +181,8 @@ import DateInput from '@/components/Form/Input/DateInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
 import CountryInput from '@/components/Form/Input/CountryInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
+
+import Modal from '@/components/Modal.vue'
 
 import { required, helpers, email } from 'vuelidate/lib/validators'
 const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
@@ -200,12 +203,14 @@ export default {
     ConditionInput,
     CountryInput,
     YearInput,
+    Modal,
   },
   data() {
     return {
       error: false,
       deleteError: false,
       failedToLoadError: false,
+      showModal: false,
       post: {
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
@@ -328,7 +333,7 @@ export default {
 				})
 				.catch(() => {
 					this.error = true
-				})
+				}) 
     },
     deletePost() {
       this.$store.dispatch('posts/deletePost',  { id: this.post.id })
@@ -352,22 +357,21 @@ export default {
   },
   created() {
     if (this.type == 'Update') {
-          if (this.type == 'Update') {
-      this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
-				.then((response) => {
-          this.post = response.data.result
-          this.post.vehicle.year = this.post.vehicle.year.toString() 
-          this.post.vehicle.condition = utilities.parseVehicleCondition(this.post.vehicle.condition)
-          this.post.startingBid = this.post.startingBid.toString()
-          this.post.pickupDate = this.post.pickupDate.split('T')[0]
-          this.post.dropoffDate = this.post.dropoffDate.split('T')[0]
-          this.failedToLoadError = false
-				})
-				.catch(() => {
-					this.failedToLoadError = true
-				})
-    }
-      // Load post here
+        if (this.type == 'Update') {
+          this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
+            .then((response) => {
+              this.post = response.data.result
+              this.post.vehicle.year = this.post.vehicle.year.toString() 
+              this.post.vehicle.condition = utilities.parseVehicleCondition(this.post.vehicle.condition)
+              this.post.startingBid = this.post.startingBid.toString()
+              this.post.pickupDate = this.post.pickupDate.split('T')[0]
+              this.post.dropoffDate = this.post.dropoffDate.split('T')[0]
+              this.failedToLoadError = false
+            })
+            .catch(() => {
+              this.failedToLoadError = true
+            })
+        }
     }
   }
 }
