@@ -50,7 +50,6 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label>Time</label>
-                  {{ this.post.dropoffTime }}
                   <TimeInput v-model="post.dropoffTime" />
                 </div>
               </div>
@@ -157,9 +156,11 @@ export default {
       }
       this.post.pickupDate = `${this.post.pickupDateValue} ${this.post.pickupTime}`
       this.post.dropoffDate = `${this.post.dropoffDateValue} ${this.post.dropoffTime}`
+      this.post.trailerType = this.post.trailerType.replace(' ', '')
       // Required as create post cannot have a postId
       if (this.type == 'Update') {
         this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
+        this.$store.dispatch('posts/updatePost', this.post)
         .then(() => {
           this.$router.push({name: 'carrierHome' })
         })
@@ -178,7 +179,14 @@ export default {
       }
     },
     deletePost() {
-      this.$router.push({ name: 'carrierHome' })
+      this.$store.dispatch('posts/deletePost', { id: this.post.id })
+        .then(() => {
+          // TODO: Open confirmation modal
+          this.$router.push({name: 'carrierHome' })
+        })
+        .catch(() => {
+          this.deleteError = true
+        })
     }
   },
   computed: {

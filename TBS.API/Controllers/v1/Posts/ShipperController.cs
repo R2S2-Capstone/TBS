@@ -42,13 +42,13 @@ namespace TBS.API.Controllers.v1.Posts
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
         }
 
-        // PUT: api/v1/Posts/Shipper
-        [HttpPut]
+        // PUT: api/v1/Posts/Shipper/{PostId}
+        [HttpPost("{postId}")]
         [Authorize]
         public async Task<IActionResult> PutShipperPost(int postId, ShipperPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 
-        // DELETE: api/v1/Posts/Shipper
-        [HttpDelete]
+        // DELETE: api/v1/Posts/Shipper/{PostId}
+        [HttpDelete("{postId}")]
         [Authorize]
         public async Task<IActionResult> DeleteShipperPost(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
     }

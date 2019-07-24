@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Posts;
-using TBS.Data.Exceptions.Posts.Carrier;
+using TBS.Data.Exceptions.Posts.Shipper;
 using TBS.Data.Interfaces.Post;
 using TBS.Data.Models;
 using TBS.Data.Models.Post.Response;
@@ -49,7 +49,7 @@ namespace TBS.Services.Posts
 
             if (shipperPost == null)
             {
-                throw new InvalidCarrierPostException();
+                throw new InvalidShipperPostException();
             }
 
             return shipperPost;
@@ -65,14 +65,14 @@ namespace TBS.Services.Posts
 
         public async Task<bool> DeletePostAsync(int id)
         {
-            var carrierPost = await GetPostById(id);
+            var shipperPost = await GetPostById(id);
 
-            if (carrierPost == null)
+            if (shipperPost == null)
             {
-                throw new InvalidCarrierPostException();
+                throw new InvalidShipperPostException();
             }
 
-            _context.ShipperPosts.Remove(await GetPostById(id));
+            _context.ShipperPosts.Remove(shipperPost);
             await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
@@ -81,10 +81,11 @@ namespace TBS.Services.Posts
         {
             if (id != post.Id)
             {
-                throw new InvalidCarrierPostException();
+                throw new InvalidShipperPostException();
             }
 
-            _context.Entry(post).State = EntityState.Modified;
+            post.UpdatedOn = DateTime.Now;
+            _context.ShipperPosts.Update(post);
 
             try
             {

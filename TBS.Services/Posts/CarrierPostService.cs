@@ -64,7 +64,7 @@ namespace TBS.Services.Posts
                 throw new InvalidCarrierPostException();
             }
 
-            _context.CarrierPosts.Remove(await GetPostById(id));
+            _context.CarrierPosts.Remove(carrierPost);
             await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
@@ -76,7 +76,8 @@ namespace TBS.Services.Posts
                 throw new InvalidCarrierPostException();
             }
 
-            _context.Entry(post).State = EntityState.Modified;
+            post.UpdatedOn = DateTime.Now;
+            _context.CarrierPosts.Update(post);
 
             try
             {

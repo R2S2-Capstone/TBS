@@ -331,14 +331,14 @@ export default {
 				})
     },
     deletePost() {
-        this.$store.dispatch('posts/deletePost', this.post.id)
-          .then(() => {
-            // TODO: Go to delete confirmation page
-            this.$router.push({name: 'shipperHome' })
-          })
-          .catch(() => {
-            this.deleteError = true
-          })
+      this.$store.dispatch('posts/deletePost',  { id: this.post.id })
+        .then(() => {
+          // TODO: Go to delete confirmation page
+          this.$router.push({name: 'shipperHome' })
+        })
+        .catch(() => {
+          this.deleteError = true
+        })
     }
   },
   computed: {

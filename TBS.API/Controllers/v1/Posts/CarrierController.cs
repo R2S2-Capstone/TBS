@@ -43,13 +43,13 @@ namespace TBS.API.Controllers.v1.Posts
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
         }
 
-        // PUT: api/v1/Posts/Carrier/{postId}
+        // PUT: api/v1/Posts/Carrier/{PostId}
         [HttpPut("{postId}")]
         [Authorize]
         public async Task<IActionResult> PutCarrierPost(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 
-        // DELETE: api/v1/Posts/Carrier
-        [HttpDelete]
+        // DELETE: api/v1/Posts/Carrier/{PostId}
+        [HttpDelete("{postId}")]
         [Authorize]
         public async Task<IActionResult> DeleteCarrierPost(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
     }

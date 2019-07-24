@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using TBS.Data.Models.General;
 using TBS.Data.Models.Vehicle.Carrier;
 
 namespace TBS.Data.Models.Post.Carrier
@@ -13,6 +12,8 @@ namespace TBS.Data.Models.Post.Carrier
         public TBS.Data.Models.User.Carrier Carrier { get; set; }
 
         public DateTime DatePosted { get; set; } = DateTime.Now;
+
+        public DateTime UpdatedOn { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Pickup location required")]
         public string PickupLocation { get; set; }

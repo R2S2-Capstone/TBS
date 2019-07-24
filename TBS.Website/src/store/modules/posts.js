@@ -86,7 +86,7 @@ const posts = {
             commit('global/setLoading', true, { root: true })
             return new Promise((resolve, reject) => {
                 axios({
-                    method: 'PUT',
+                    method: 'POST',
                     url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.id}`,
                     data: payload,
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
@@ -95,7 +95,6 @@ const posts = {
                     resolve(response)
                 })
                 .catch((error) => {
-                    console.log(JSON.stringify(error))
                     reject(error)
                 })
                 .finally(() => {
@@ -108,7 +107,7 @@ const posts = {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'DELETE',
-                    url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
+                    url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.id}`,
                     data: payload,
                     headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
                 })

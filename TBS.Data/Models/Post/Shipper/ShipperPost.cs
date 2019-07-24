@@ -15,6 +15,8 @@ namespace TBS.Data.Models.Post.Shipper
 
         public DateTime DatePosted { get; set; } = DateTime.Now;
 
+        public DateTime UpdatedOn { get; set; } = DateTime.Now;
+
         [Required(ErrorMessage = "Vehicle required")]
         public PostedVehicle Vehicle { get; set; }
 
