@@ -14,6 +14,7 @@ const global = {
     isAuthenticated: state => state.token,
     getAccountType: state => state.accountType,
     isRefreshing: state => state.refreshing,
+    getFirebaseUser() { return firebase.auth().currentUser } 
   },
   mutations: {
     authenticate(state, data) {

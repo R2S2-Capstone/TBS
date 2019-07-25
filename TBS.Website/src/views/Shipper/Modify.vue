@@ -328,8 +328,7 @@ export default {
       // Will either be 'posts/createPost' or 'posts/updatePost'
       this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, this.post)
 				.then(() => {
-          // TODO: Go to posted page
-          this.$router.push({name: 'shipperHome' })
+          this.$router.push({ name: 'shipperHome' })
 				})
 				.catch(() => {
 					this.error = true
@@ -338,7 +337,6 @@ export default {
     deletePost() {
       this.$store.dispatch('posts/deletePost',  { id: this.post.id })
         .then(() => {
-          // TODO: Go to delete confirmation page
           this.$router.push({name: 'shipperHome' })
         })
         .catch(() => {

@@ -175,8 +175,7 @@ export default {
       } else {
         this.$store.dispatch('posts/createPost', { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
-          // TODO: Go to posted page
-          this.$router.push({name: 'carrierHome' })
+          this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
           this.error = true
@@ -186,8 +185,7 @@ export default {
     deletePost() {
       this.$store.dispatch('posts/deletePost', { id: this.post.id })
         .then(() => {
-          // TODO: Open confirmation modal
-          this.$router.push({name: 'carrierHome' })
+          this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
           this.deleteError = true

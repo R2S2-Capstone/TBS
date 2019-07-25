@@ -21,6 +21,20 @@ namespace TBS.Services.Posts
             _context = databaseContext;
         }
 
+        public async Task<PaginatedShipperPosts> GetAllActivePosts(PaginationModel model)
+        {
+            var allPosts = await _context.ShipperPosts
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
+                .Where(p => p.PostStatus == Data.Models.Post.PostStatus.Open)
+                .ToListAsync();
+            model.Count = allPosts.Count();
+            var paginatedPosts = allPosts
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize).ToArray();
+            return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
+        }
+
         public async Task<PaginatedShipperPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
         {
             var allUserPosts = await _context.ShipperPosts

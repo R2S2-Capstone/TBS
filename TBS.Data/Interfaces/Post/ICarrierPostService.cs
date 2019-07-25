@@ -7,6 +7,8 @@ namespace TBS.Data.Interfaces.Post
 {
     public interface ICarrierPostService
     {
+        Task<PaginatedCarrierPosts> GetAllActivePosts(PaginationModel model);
+
         Task<PaginatedCarrierPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
 
         Task<CarrierPost> GetPostById(int postId);

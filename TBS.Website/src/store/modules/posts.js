@@ -6,12 +6,13 @@ const posts = {
   getters: {},
   mutations: {},
   actions: {
-    getPosts({ commit }, payload) {            
+    getPosts({ rootGetters, commit }, payload) {            
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
+        let oppositeAccountType = rootGetters['authentication/getAccountType'] == 'Carrier' ? 'shipper' : 'carrier';
         axios({
           method: 'GET',
-          url: `posts/${payload.postType}`,
+          url: `posts/${oppositeAccountType}/${payload.currentPage}/${payload.count}`,
         })
         .then((response) => {
           resolve(response)
@@ -29,7 +30,7 @@ const posts = {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.currentPage}/${payload.count}`,
+          url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.count}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {

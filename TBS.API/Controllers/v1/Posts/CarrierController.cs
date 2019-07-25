@@ -20,15 +20,14 @@ namespace TBS.API.Controllers.v1.Posts
             _service = service;
         }
 
+        // GET: api/v1/Posts/Carrier/{userFirebaseId}{currentPage}/{count}
+        [HttpGet("{userFirebaseId}/{currentPage}/{count}")]
+        [Authorize]
+        public async Task<IActionResult> GetCarriersPosts(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPosts(userFirebaseId, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
 
         // GET: api/v1/Posts/Carrier/{currentPage}/{count}
         [HttpGet("{currentPage}/{count}")]
-        [Authorize]
-        public async Task<IActionResult> GetCarriersPosts(int currentPage, int count)
-        {
-            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
-            return Ok(new { result = await _service.GetAllUsersPosts(id, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
-        }
+        public async Task<IActionResult> GetActiveCarriersPosts(int currentPage, int count) => Ok(new { result = await _service.GetAllActivePosts( new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
 
         // GET: api/v1/Posts/Carrier/{PostId}
         [HttpGet("{postId}")]
