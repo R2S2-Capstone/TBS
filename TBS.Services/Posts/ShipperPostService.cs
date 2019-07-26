@@ -24,6 +24,7 @@ namespace TBS.Services.Posts
         public async Task<PaginatedShipperPosts> GetAllActivePosts(PaginationModel model)
         {
             var allPosts = await _context.ShipperPosts
+                .Include(p => p.Vehicle)
                 .Include(p => p.PickupLocation)
                 .Include(p => p.DropoffLocation)
                 .Where(p => p.PostStatus == Data.Models.Post.PostStatus.Open)

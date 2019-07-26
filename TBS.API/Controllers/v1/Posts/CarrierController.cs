@@ -25,9 +25,9 @@ namespace TBS.API.Controllers.v1.Posts
         [Authorize]
         public async Task<IActionResult> GetCarriersPosts(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPosts(userFirebaseId, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
 
-        // GET: api/v1/Posts/Carrier/{currentPage}/{count}
-        [HttpGet("{currentPage}/{count}")]
-        public async Task<IActionResult> GetActiveCarriersPosts(int currentPage, int count) => Ok(new { result = await _service.GetAllActivePosts( new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
+        // GET: api/v1/Posts/Carrier/{currentPage}/{pageSize}
+        [HttpGet("{currentPage}/{pageSize}")]
+        public async Task<IActionResult> GetActiveCarriersPosts(int currentPage, int pageSize) => Ok(new { result = await _service.GetAllActivePosts( new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // GET: api/v1/Posts/Carrier/{PostId}
         [HttpGet("{postId}")]

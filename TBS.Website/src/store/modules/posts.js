@@ -9,20 +9,32 @@ const posts = {
     getPosts({ rootGetters, commit }, payload) {            
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
-        let oppositeAccountType = rootGetters['authentication/getAccountType'] == 'Carrier' ? 'shipper' : 'carrier';
-        axios({
-          method: 'GET',
-          url: `posts/${oppositeAccountType}/${payload.currentPage}/${payload.count}`,
-        })
-        .then((response) => {
-          resolve(response)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-        .finally(() => {
-          commit('global/setLoading', false, { root: true })
-        })
+        const apiCall = () => {
+          let oppositeAccountType = rootGetters['authentication/getAccountType'].toLowerCase() == 'carrier' ? 'shipper' : 'carrier';
+          axios({
+            method: 'GET',
+            url: `posts/${oppositeAccountType}/${payload.currentPage}/${payload.pageSize || 10}`,
+          })
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+          .finally(() => {
+            commit('global/setLoading', false, { root: true })
+          })
+        }
+
+        if (rootGetters['authentication/isRefreshing']) {
+          this.watch(() => rootGetters['authentication/isRefreshing'],
+            () => {
+              apiCall()
+            }
+          )
+        } else {
+          apiCall()
+        }
       })
     },
     getMyPosts({ commit, rootGetters }, payload) {
