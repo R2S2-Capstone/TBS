@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     showDetailedPost() {
-      console.log('Showing detailed post of ' + this.post.id)
+      this.$router.push({ name: 'viewDetailedCarrierPost', params: { id: this.post.id.toString() } })
     },
     trimDate(date) {
       return new Date(date).toISOString().split('T')[0]

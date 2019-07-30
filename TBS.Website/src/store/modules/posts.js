@@ -61,7 +61,7 @@ const posts = {
       return new Promise((resolve, reject) => {
         axios({
           method: 'GET',
-          url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.postId}`,
+          url: `posts/${payload.type || rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.postId}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {

@@ -10,9 +10,6 @@ const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
 const ResetPassword = () => import('@/views/ResetPassword.vue')
 
-// General
-const ViewPosts = () => import('@/views/ViewPosts.vue')
-
 // Shipper
 const ShipperIndex = () => import('@/views/Shipper/Index.vue')
 const ShipperHome = () => import('@/views/Shipper/Home.vue')
@@ -25,6 +22,16 @@ const CarrierHome = () => import('@/views/Carrier/Home.vue')
 const CarrierModifyPost = () => import('@/views/Carrier/Modify.vue')
 const CarrierManageBids = () => import('@/views/Carrier/Bids.vue')
 const CarrierViewBidDetails = () => import('@/views/Carrier/BidDetails.vue')
+
+// Posts
+const PostsIndex = () => import('@/views/Posts/Index.vue')
+const AllPosts = () => import('@/views/Posts/All.vue')
+// Shipper Posts
+const PostsShipperIndex = () => import('@/views/Posts/Shipper/Index.vue')
+const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
+// Carrier Posts
+const PostsCarrierIndex = () => import('@/views/Posts/Carrier/Index.vue')
+const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
 Vue.use(Router)
 
@@ -189,9 +196,38 @@ export default new Router({
       ]
     },
     {
-      path: '/ViewPosts',
-      name: 'viewPosts',
-      component: ViewPosts
+      path: '/Posts',
+      component: PostsIndex,
+      children: [
+        {
+          path: '',
+          name: 'viewAllPosts',
+          component: AllPosts,
+        },
+        {
+          path: 'Carrier',
+          component: PostsCarrierIndex,
+          children: [
+            {
+              path: 'Details/:id?',
+              name: 'viewDetailedCarrierPost',
+              component: DetailedCarrierPost,
+              props: true,
+            }
+          ]
+        },
+        {
+          path: 'Shipper',
+          component: PostsShipperIndex,
+          children: [
+            {
+              path: 'Details/:id',
+              name: 'viewDetailedShipperPost',
+              component: DetailedShipperPost
+            }
+          ]
+        },
+      ]
     },
     {
       path: '/401',

@@ -13,7 +13,7 @@
 					<router-link :to="{ name: 'home' }" class="btn font-blue-on-hover">Home</router-link>
 				</li>
 				<li class="nav-item">
-					<router-link :to="{ name: 'viewPosts' }" class="btn font-blue-on-hover">View Posts</router-link>
+					<router-link :to="{ name: 'viewAllPosts' }" class="btn font-blue-on-hover">View Posts</router-link>
 				</li>
 				<li class="nav-item" v-if="isAuthenticated  && accountType != ''">
 					<router-link :to="{ name: `${accountType}CreatePost` }" class="btn font-blue-on-hover">Create a Post</router-link>
