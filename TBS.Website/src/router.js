@@ -27,10 +27,8 @@ const CarrierViewBidDetails = () => import('@/views/Carrier/BidDetails.vue')
 const PostsIndex = () => import('@/views/Posts/Index.vue')
 const AllPosts = () => import('@/views/Posts/All.vue')
 // Shipper Posts
-const PostsShipperIndex = () => import('@/views/Posts/Shipper/Index.vue')
 const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
 // Carrier Posts
-const PostsCarrierIndex = () => import('@/views/Posts/Carrier/Index.vue')
 const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
 Vue.use(Router)
@@ -205,27 +203,16 @@ export default new Router({
           component: AllPosts,
         },
         {
-          path: 'Carrier',
-          component: PostsCarrierIndex,
-          children: [
-            {
-              path: 'Details/:id?',
-              name: 'viewDetailedCarrierPost',
-              component: DetailedCarrierPost,
-              props: true,
-            }
-          ]
+          path: 'Carrier/Details/:id?',
+          name: 'viewDetailedCarrierPost',
+          component: DetailedCarrierPost,
+          props: true,
         },
         {
-          path: 'Shipper',
-          component: PostsShipperIndex,
-          children: [
-            {
-              path: 'Details/:id',
-              name: 'viewDetailedShipperPost',
-              component: DetailedShipperPost
-            }
-          ]
+          path: 'Shipper/Details/:id?',
+          name: 'viewDetailedShipperPost',
+          component: DetailedShipperPost,
+          props: true,
         },
       ]
     },

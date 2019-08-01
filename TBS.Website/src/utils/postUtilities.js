@@ -33,6 +33,24 @@ const postUtilities = {
     } else {
       return 'Unknown'
     }
+  },
+  convertTime(value) {
+    var hour = value.substring ( 0,2 )
+    var minutes = value.substring ( 3,5 )
+    var identifier = 'AM'
+
+    if(hour == 12) {
+      identifier = 'PM'
+    } else if(hour == 0) {
+      hour = 12
+    } else if(hour > 12) {
+      hour = hour - 12
+      identifier = 'PM'
+    }
+    return hour + ':' + minutes + ' ' + identifier;
+  },
+  formatAddress(address) {
+    return `${address.addressLine}, ${address.city}, ${address.province}, ${address.country} ${address.postalCode}`
   }
 }
 export default postUtilities

@@ -49,6 +49,9 @@ namespace TBS.Services.Posts
         public async Task<CarrierPost> GetPostById(int id)
         {
             var carrierPost = await _context.CarrierPosts
+                .Include(p => p.Carrier)
+                .Include(p => p.Carrier.Company)
+                .Include(p => p.Carrier.Company.Contact)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (carrierPost == null)

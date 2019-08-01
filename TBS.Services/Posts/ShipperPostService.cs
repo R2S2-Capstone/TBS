@@ -55,6 +55,10 @@ namespace TBS.Services.Posts
         public async Task<ShipperPost> GetPostById(int id)
         {
             var shipperPost = await _context.ShipperPosts
+                .Include(p => p.Shipper)
+                .Include(p => p.Shipper.Company)
+                .Include(p => p.Shipper.Company.Address)
+                .Include(p => p.Shipper.Company.Contact)
                 .Include(p => p.Vehicle)
                 .Include(p => p.PickupLocation)
                 .Include(p => p.PickupContact)
