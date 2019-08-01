@@ -107,7 +107,7 @@ export default {
           this.error = false
           this.post = response.data.result
         })
-        .catch((error) => {
+        .catch(() => {
           this.error = true
         })
     },

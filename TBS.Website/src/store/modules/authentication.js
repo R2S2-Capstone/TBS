@@ -1,5 +1,6 @@
 import firebase from '@/firebase/Config.js'
 import axios from '@/axios.js'
+import router from '@/router.js'
 
 const global = {
   namespaced: true,
@@ -131,6 +132,7 @@ const global = {
                   })
                   .catch((error) => {
                     commit('logout')
+                    router.push({ name: 'login', params: { backendError: true } })
                     reject(error)
                   })
                   .finally(() => {

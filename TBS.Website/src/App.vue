@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Spinner v-if="loading"/>
-    <TheHeader />
-    <router-view />
-    <TheFooter />
+    <Spinner v-if="loading" />
+    <TheHeader v-if="!loading" />
+    <router-view v-if="!loading" />
+    <TheFooter v-if="!loading" />
   </div>
 </template>
 

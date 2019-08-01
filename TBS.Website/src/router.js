@@ -114,6 +114,7 @@ export default new Router({
       path: '/Login',
       name: 'login',
       component: Login,
+      props: true,
     },
     {
       path: '/Register',
