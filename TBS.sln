@@ -20,8 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{BDFAC17E-3B39-42DB-9636-5F08563D1E2A}"
 	ProjectSection(SolutionItems) = preProject
 		SQL\__EFMigrationHistory.sql = SQL\__EFMigrationHistory.sql
-		SQL\Copy DEV into PROD.sql = SQL\Copy DEV into PROD.sql
-		SQL\Copy PROD into DEV.sql = SQL\Copy PROD into DEV.sql
+		SQL\Copy DEV users into PROD.sql = SQL\Copy DEV users into PROD.sql
+		SQL\Copy PROD users into DEV.sql = SQL\Copy PROD users into DEV.sql
 	EndProjectSection
 EndProject
 Global

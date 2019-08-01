@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   top: 0;
-  z-index: 1;
+  z-index: 100;
 
   .spinner {
     display: flex;

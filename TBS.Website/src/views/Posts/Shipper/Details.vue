@@ -16,6 +16,7 @@
               <hr>
               <div class="row">
                 <div class="col-12">
+                  <p></p>
                   <p>Pickup Location: {{ formatAddress(this.post.pickupLocation) }}</p>
                   <p>Pickup Date: {{ this.post.pickupDate.split('T')[0] }}</p>
                   <p>Pickup Time: {{ convertTime(this.post.pickupDate.split('T')[1]) }}</p>
@@ -29,6 +30,7 @@
               <hr>
               <div class="row">
                 <div class="col-12">
+                  <p></p>
                   <p>Dropoff Location: {{ formatAddress(this.post.dropoffLocation) }}</p>
                   <p>Dropoff Date: {{ this.post.dropoffDate.split('T')[0] }}</p>
                   <p>Dropoff Time: {{ convertTime(this.post.dropoffDate.split('T')[1]) }}</p>
@@ -42,6 +44,7 @@
               <hr>
               <div class="row">
                 <div class="col-12">
+                  <p></p>
                   <p>Date Posted: {{ this.post.datePosted.split('T')[0] }}</p>
                   <p>Starting Bid: ${{ this.post.startingBid }}</p>
                   <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Bid Now!</button>
@@ -57,6 +60,7 @@
           <hr>
           <div class="row">
             <div class="col-12">
+              <p></p>
               <p>Company Name:<br>{{ this.post.shipper.company.name }}</p>
               <p>
                 Contact Name:<br>{{ this.post.shipper.company.contact.name }}<br>
@@ -71,6 +75,7 @@
           <hr>
           <div class="row">
             <div class="col-12">
+              <p></p>            
               <p>
                 Name:<br>{{ this.post.shipper.name }}<br>
                 Rating:<br>Coming Soon!<br>
