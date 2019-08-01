@@ -8,19 +8,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using TBS.API.Filters;
 using TBS.Data.Database;
+using TBS.Data.Interfaces.Post;
 using TBS.Data.Interfaces.User.Authentication;
+using TBS.Services.Posts;
 using TBS.Services.User.Authentication;
 
 namespace TBS.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _environment;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
-
+ 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -34,12 +40,18 @@ namespace TBS.API
             services.AddSingleton(Configuration);
             services.AddScoped<DatabaseContext, DatabaseContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<ICarrierPostService, CarrierPostService>();
+            services.AddScoped<IShipperPostService, ShipperPostService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 
             services.AddDbContext<DatabaseContext>(options =>
-              options.UseMySQL(Configuration["ConnectionStrings:MySQL"],
-                  optionsBuilder => { optionsBuilder.MigrationsAssembly("TBS.Data"); }));
+              options.UseMySQL(
+                  //Use dev database if in development or use the prod database if not
+                  _environment.IsDevelopment() == true ? Configuration["ConnectionStrings:DevMySQL"] : Configuration["ConnectionStrings:MySQL"],
+                  optionsBuilder => { optionsBuilder.MigrationsAssembly("TBS.Data"); }
+                  )
+              );
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -51,13 +63,17 @@ namespace TBS.API
                 c.SwaggerDoc("v1", new Info { Title = "Transportation Bidding System", Version = "v1" });
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(CustomExceptionFilterAttribute));
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
+        public void Configure(IApplicationBuilder app, ILoggerFactory logger)
         {
-            if (env.IsDevelopment())
+            if (_environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

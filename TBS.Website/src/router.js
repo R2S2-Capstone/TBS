@@ -3,13 +3,12 @@ import Router from 'vue-router'
 import store from '@/store/store.js'
 
 const Home = () => import('@/views/Home.vue')
+const Error401 = () => import('@/views/Error/401.vue')
+const Error404 = () => import('@/views/Error/404.vue')
 
 const Login = () => import('@/views/Login.vue')
 const Register = () => import('@/views/Register.vue')
 const ResetPassword = () => import('@/views/ResetPassword.vue')
-
-// General
-const ViewPosts = () => import('@/views/ViewPosts.vue')
 
 // Shipper
 const ShipperIndex = () => import('@/views/Shipper/Index.vue')
@@ -24,6 +23,14 @@ const CarrierModifyPost = () => import('@/views/Carrier/Modify.vue')
 const CarrierManageBids = () => import('@/views/Carrier/Bids.vue')
 const CarrierViewBidDetails = () => import('@/views/Carrier/BidDetails.vue')
 
+// Posts
+const PostsIndex = () => import('@/views/Posts/Index.vue')
+const AllPosts = () => import('@/views/Posts/All.vue')
+// Shipper Posts
+const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
+// Carrier Posts
+const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
+
 Vue.use(Router)
 
 const LoggedIn = {
@@ -34,6 +41,52 @@ const LoggedIn = {
         next()
       } else {
         next({ name: 'login',  params: { redirect: to.fullPath } })
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+const CarrierOnly = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const accountType = store.getters['authentication/getAccountType']
+      // We do this because we want all other account types (Carrier and administrator) to access it
+      if (accountType == "Shipper") {
+        next({ name: 'error401' })
+      } else {
+        next()
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+const ShipperOnly = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const accountType = store.getters['authentication/getAccountType']
+      // We do this because we want all other account types (Shipper and administrator) to access it
+      if (accountType == "Carrier") {
+        next({ name: 'error401' })
+      } else {
+        next()
       }
     }
     if (store.getters['authentication/isRefreshing']) {
@@ -61,6 +114,7 @@ export default new Router({
       path: '/Login',
       name: 'login',
       component: Login,
+      props: true,
     },
     {
       path: '/Register',
@@ -68,80 +122,110 @@ export default new Router({
       component: Register,
     },
     {
-      path: '/ResetPassword/:token?',
+      path: '/ResetPassword/',
       name: 'resetPassword',
       component: ResetPassword
     },
     {
       path: '/Shipper',
       component: ShipperIndex,
-      ...LoggedIn,
-      // TODO: Make sure user is a shipper
+      ...ShipperOnly,
       children: [
         {
           path: '',
           name: 'shipperHome',
-          component: ShipperHome
+          component: ShipperHome,
+          ...LoggedIn
         },
         {
           path: 'CreatePost',
           name: 'shipperCreatePost',
-          component: ShipperModifyPost
+          component: ShipperModifyPost,
+          ...LoggedIn
         },
         {
           path: 'EditPost/:id?',
           name: 'shipperEditPost',
-          component: ShipperModifyPost
+          component: ShipperModifyPost,
+          ...LoggedIn
         },
         {
           path: 'ManageBids/:id?',
           name: 'shipperManageBids',
-          component: ShipperManageBids
+          component: ShipperManageBids,
+          ...LoggedIn
         },
       ]
     },
     {
       path: '/Carrier',
       component: CarrierIndex,
-      ...LoggedIn,
-      // TODO: Make sure user is a carrier
+      ...CarrierOnly,
       children: [
         {
           path: '',
           name: 'carrierHome',
-          component: CarrierHome
+          component: CarrierHome,
+          ...LoggedIn
         },
         {
           path: 'CreatePost',
           name: 'carrierCreatePost',
-          component: CarrierModifyPost
+          component: CarrierModifyPost,
+          ...LoggedIn
         },
         {
           path: 'EditPost/:id?',
           name: 'carrierEditPost',
-          component: CarrierModifyPost
+          component: CarrierModifyPost,
+          ...LoggedIn
         },
         {
           path: 'ManageBids/:id?',
           name: 'carrierManageBids',
-          component: CarrierManageBids
+          component: CarrierManageBids,
+          ...LoggedIn
         },
         {
           path: 'ViewBid/:id?',
           name: 'carrierViewBidDetails',
-          component: CarrierViewBidDetails
+          component: CarrierViewBidDetails,
+          ...LoggedIn
         },
       ]
     },
     {
-      path: '/ViewPosts',
-      name: 'viewPosts',
-      component: ViewPosts
+      path: '/Posts',
+      component: PostsIndex,
+      children: [
+        {
+          path: '',
+          name: 'viewAllPosts',
+          component: AllPosts,
+        },
+        {
+          path: 'Carrier/Details/:id?',
+          name: 'viewDetailedCarrierPost',
+          component: DetailedCarrierPost,
+          props: true,
+        },
+        {
+          path: 'Shipper/Details/:id?',
+          name: 'viewDetailedShipperPost',
+          component: DetailedShipperPost,
+          props: true,
+        },
+      ]
+    },
+    {
+      path: '/401',
+      name: 'error401',
+      component: Error401
     },
     {
       // This will match all other routes (404)
       path: '*',
-      component: Home
+      component: Error404
     }
   ]
 })

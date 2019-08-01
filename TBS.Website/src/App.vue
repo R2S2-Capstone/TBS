@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Spinner v-if="loading"/>
+    <Spinner v-if="loading" />
     <TheHeader />
     <router-view />
     <TheFooter />

@@ -21,7 +21,7 @@
 <script>
 import NarrowCard from '@/components/Card/NarrowCard.vue'
 export default {
-  name: 'formNarrowCard',
+  name: 'narrowFormCard',
   components: {
     NarrowCard
   },

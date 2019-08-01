@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TBS.Data.Models.User.Information
+namespace TBS.Data.Models.General
 {
     public class Address
     {
