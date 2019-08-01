@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TBS.Data.Models.General;
 
 namespace TBS.Data.Models.User.Information
 {

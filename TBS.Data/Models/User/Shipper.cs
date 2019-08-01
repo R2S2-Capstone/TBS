@@ -3,6 +3,7 @@ using TBS.Data.Models.User.Information;
 
 namespace TBS.Data.Models.User
 {
+    // Dealer
     public class Shipper
     {
         public int Id { get; set; }
@@ -19,5 +20,11 @@ namespace TBS.Data.Models.User
 
         [Required(ErrorMessage = "Company information required")]
         public Company Company { get; set; }
+
+        [Required(ErrorMessage = "RIN required")]
+        public string RIN { get; set; }
+
+        [Required(ErrorMessage = "Dealer number required")]
+        public string DealerNumber { get; set; }
     }
 }

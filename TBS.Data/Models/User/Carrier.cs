@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.User.Information;
+using TBS.Data.Models.Vehicle.Carrier;
 
 namespace TBS.Data.Models.User
 {
+    // Transporter
     public class Carrier
     {
         public int Id { get; set; }
@@ -20,10 +22,9 @@ namespace TBS.Data.Models.User
         [Required(ErrorMessage = "Company information required")]
         public Company Company { get; set; }
 
-        public string RIN { get; set; }
+        [Required(ErrorMessage = "Drivers license required")]
+        public string DriversLicense { get; set; }
 
-        public string DealerNumber { get; set; }
-
-        // Payment information
+        public CarrierVehicle Vehicle { get; set; }
     }
 }

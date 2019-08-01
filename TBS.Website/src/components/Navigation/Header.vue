@@ -13,10 +13,10 @@
 					<router-link :to="{ name: 'home' }" class="btn font-blue-on-hover">Home</router-link>
 				</li>
 				<li class="nav-item">
-					<router-link :to="{ name: 'viewPosts' }" class="btn font-blue-on-hover">View Posts</router-link>
+					<router-link :to="{ name: 'viewAllPosts' }" class="btn font-blue-on-hover">View Posts</router-link>
 				</li>
-				<li class="nav-item" v-if="isAuthenticated">
-					<router-link :to="{ name: 'carrierCreatePost' }" class="btn font-blue-on-hover">Create a Post</router-link>
+				<li class="nav-item" v-if="isAuthenticated  && accountType != ''">
+					<router-link :to="{ name: `${accountType}CreatePost` }" class="btn font-blue-on-hover">Create a Post</router-link>
 				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
@@ -26,8 +26,8 @@
 				<li class="nav-item" v-if="!isAuthenticated">
 					<router-link :to="{ name: 'register' }" class="btn font-blue-on-hover"><i class="fas fa-sign-in-alt"></i> Register</router-link>
 				</li>
-				<li class="nav-item" v-if="isAuthenticated">
-					<router-link :to="{ name: 'carrierHome' }" class="btn font-blue-on-hover">Dashboard</router-link>
+				<li class="nav-item" v-if="isAuthenticated && accountType != ''">
+					<router-link :to="{ name: `${accountType}Home` }" class="btn font-blue-on-hover">Dashboard</router-link>
 				</li>
 				<li class="nav-item" v-if="isAuthenticated">
 					<span class="btn font-blue-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
@@ -49,6 +49,9 @@ export default {
 	computed: {
 		isAuthenticated() {
 			return this.$store.getters['authentication/isAuthenticated']
+		},
+		accountType() {
+			return this.$store.getters['authentication/getAccountType'].toLowerCase() || ''
 		}
 	}
 }
@@ -56,6 +59,8 @@ export default {
 
 <style lang="scss">
 nav {
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	// box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 8px 0 rgba(0, 0, 0, 0.19);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.19);
+	z-index: 2;
 }
 </style>

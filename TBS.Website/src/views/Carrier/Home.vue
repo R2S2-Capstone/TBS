@@ -5,26 +5,30 @@
         <div class="row pb-3">
           <div class="col-12 text-center">
             <h2>Manage My Posts</h2>
+            <h5 class="text-danger" v-if="postError">Unable to load posts</h5>
           </div>
         </div>
         <div class="row">
           <table class="table table-bordered table-hover text-center">
             <thead>
-              <th>Address</th>
+              <th>Details</th>
               <th>Status</th>
               <th>Bids</th>
               <th>Management</th>
             </thead>
             <tbody>
               <tr v-for="post in posts" :key="post.id">
-                <td>{{ post.address }}</td>
-                <td>{{ post.status }}</td>
                 <td>
-                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">Manage Bids</router-link>
+                  {{ `${post.pickupLocation} -> ${post.dropoffLocation}` }} <br>
+                  {{ `Total Spaces Available: ${post.spacesAvailable}` }}
+                </td>
+                <td>{{ parsePostStatus(post.postStatus) }}</td>
+                <td>
+                  <router-link v-if="parsePostStatus(post.postStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">Manage Bids</router-link>
                   <router-link v-else class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">View Bids</router-link>
                 </td>
                 <td>
-                  <router-link v-if="post.status == 'Pending Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierEditPost', params: { id: post.id } }">Edit</router-link>
+                  <router-link v-if="parsePostStatus(post.postStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierEditPost', params: { id: post.id } }">Edit</router-link>
                 </td>
               </tr>
             </tbody>
@@ -101,6 +105,8 @@
 </template>
 
 <script>
+import utilities from '@/utils/postUtilities.js'
+
 export default {
   name: 'shipperHome',
   components: {
@@ -109,25 +115,10 @@ export default {
     return {
       postPage: 1,
       postPageCount: 1,
+      postError: false,
       bidPage: 1,
       bidPageCount: 1,
-      posts: [
-        {
-          id: '1',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          status: 'In Transport'
-        },
-        {
-          id: '12',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          status: 'Pending Approval'
-        },
-        {
-          id: '123',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          status: 'Delivered'
-        }
-      ],
+      posts: [],
       bids: [
         {
           id: '1',
@@ -157,7 +148,7 @@ export default {
     setPostPage(number) {
       if (number <= 0 || number > this.postPageCount) return
       this.postPage = number
-      // TODO: filter based on these results
+      this.fetchPosts()
     },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
@@ -166,6 +157,19 @@ export default {
     },
     cancelBid(bidId) {
       this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
+    },
+    fetchPosts() {
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
+        .then((response) => {
+          this.postPageCount = response.data.result.paginationModel.totalPages
+          this.posts = response.data.result.posts
+        })
+        .catch(() => {
+          this.postsError = true
+        })
+    },
+    parsePostStatus(status) {
+      return utilities.parsePostStatus(status)
     }
   },
   computed: {
@@ -175,6 +179,9 @@ export default {
     currentBidPage() {
       return this.bidPage
     }
+  },
+  created() {
+    this.fetchPosts()
   }
 }
 </script>

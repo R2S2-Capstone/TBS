@@ -1,0 +1,5 @@
+INSERT INTO `reeceros_tbs-dev`.`Address`(`Id`, `AddressLine`, `City`, `Province`, `Country`, `PostalCode`) SELECT `Id`, `AddressLine`, `City`, `Province`, `Country`, `PostalCode` FROM `reeceros_tbs`.`Address`;
+INSERT INTO `reeceros_tbs-dev`.`Carriers`(`Id`, `UserFirebaseId`, `Name`, `Email`, `CompanyId`, `DriversLicense`, `VehicleId`) SELECT `Id`, `UserFirebaseId`, `Name`, `Email`, `CompanyId`, `DriversLicense`, `VehicleId` FROM `reeceros_tbs`.`Carriers`;
+INSERT INTO `reeceros_tbs-dev`.`Company`(`Id`, `Name`, `AddressId`, `ContactId`) SELECT `Id`, `Name`, `AddressId`, `ContactId` FROM `reeceros_tbs`.`Company`;
+INSERT INTO `reeceros_tbs-dev`.`Contact`(`Id`, `Name`, `PhoneNumber`, `Email`) SELECT `Id`, `Name`, `PhoneNumber`, `Email` FROM `reeceros_tbs`.`Contact`;
+INSERT INTO `reeceros_tbs-dev`.`Shippers`(`Id`, `Name`, `UserFirebaseId`, `Email`, `CompanyId`, `RIN`, `DealerNumber`) SELECT `Id`, `Name`, `UserFirebaseId`, `Email`, `CompanyId`, `RIN`, `DealerNumber` FROM `reeceros_tbs`.`Shippers`;
