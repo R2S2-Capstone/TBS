@@ -7,11 +7,11 @@ namespace TBS.Data.Interfaces.Posts
 {
     public interface IShipperPostService
     {
-        Task<PaginatedShipperPosts> GetAllActivePosts(PaginationModel model);
+        Task<PaginatedShipperPosts> GetAllActivePostsAsync(PaginationModel model);
 
-        Task<PaginatedShipperPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
+        Task<PaginatedShipperPosts> GetAllUsersPostsAsync(string userFirebaseId, PaginationModel model);
 
-        Task<ShipperPost> GetPostById(int id);
+        Task<ShipperPost> GetPostByIdAsync(int id);
 
         Task<bool> CreatePostAsync(string userFirebaseId, ShipperPost post);
 

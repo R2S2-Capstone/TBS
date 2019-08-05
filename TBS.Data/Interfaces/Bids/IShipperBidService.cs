@@ -7,11 +7,11 @@ namespace TBS.Data.Interfaces.Bids
 {
     public interface IShipperBidService
     {
-        Task<PaginatedShipperBids> GetAllBidsByPostId(string userFirebaseId, int postId, PaginationModel model);
+        Task<ShipperBid> GetBidByIdAsync(int bidId);
 
-        Task<PaginatedShipperBids> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
+        Task<PaginatedShipperBids> GetAllBidsByPostIdAsync(string userFirebaseId, int postId, PaginationModel model);
 
-        Task<ShipperBid> GetBidById(int bidId);
+        Task<PaginatedShipperBids> GetAllUsersBidsAsync(string userFirebaseId, PaginationModel model);
 
         Task<bool> CreateBidAsync(string userFirebaseId, ShipperBid bid);
 

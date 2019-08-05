@@ -22,7 +22,7 @@ namespace TBS.Services.Posts
             _context = databaseContext;
         }
 
-        public async Task<PaginatedCarrierPosts> GetAllActivePosts(PaginationModel model)
+        public async Task<PaginatedCarrierPosts> GetAllActivePostsAsync(PaginationModel model)
         {
             var allPosts = await _context.CarrierPosts
                 .Where(p => p.PostStatus == PostStatus.Open)
@@ -34,7 +34,7 @@ namespace TBS.Services.Posts
             return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
-        public async Task<PaginatedCarrierPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
+        public async Task<PaginatedCarrierPosts> GetAllUsersPostsAsync(string userFirebaseId, PaginationModel model)
         {
             var allUserPosts = await _context.CarrierPosts
                 .Where(p => p.Carrier.UserFirebaseId == userFirebaseId)
@@ -47,7 +47,7 @@ namespace TBS.Services.Posts
             return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
-        public async Task<CarrierPost> GetPostById(int id)
+        public async Task<CarrierPost> GetPostByIdAsync(int id)
         {
             var carrierPost = await _context.CarrierPosts
                 .Include(p => p.Carrier)
@@ -73,7 +73,7 @@ namespace TBS.Services.Posts
 
         public async Task<bool> DeletePostAsync(int id)
         {
-            var carrierPost = await GetPostById(id);
+            var carrierPost = await GetPostByIdAsync(id);
 
             if (carrierPost == null)
             {

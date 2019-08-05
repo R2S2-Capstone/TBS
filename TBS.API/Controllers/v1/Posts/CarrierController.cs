@@ -23,20 +23,20 @@ namespace TBS.API.Controllers.v1.Posts
         // GET: api/v1/Posts/Carrier/{userFirebaseId}/{currentPage}/{count}
         [HttpGet("{userFirebaseId}/{currentPage}/{count}")]
         [Authorize]
-        public async Task<IActionResult> GetCarriersPosts(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPosts(userFirebaseId, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
+        public async Task<IActionResult> GetCarriersPostsAsync(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPostsAsync(userFirebaseId, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
 
         // GET: api/v1/Posts/Carrier/{currentPage}/{pageSize}
         [HttpGet("{currentPage}/{pageSize}")]
-        public async Task<IActionResult> GetActiveCarriersPosts(int currentPage, int pageSize) => Ok(new { result = await _service.GetAllActivePosts( new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
+        public async Task<IActionResult> GetActiveCarriersPostsAsync(int currentPage, int pageSize) => Ok(new { result = await _service.GetAllActivePostsAsync(new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // GET: api/v1/Posts/Carrier/{PostId}
         [HttpGet("{postId}")]
-        public async Task<IActionResult> GetCarrierPost(int postId) => Ok(new { result = await _service.GetPostById(postId) });
+        public async Task<IActionResult> GetCarrierPostAsync(int postId) => Ok(new { result = await _service.GetPostByIdAsync(postId) });
 
         // POST: api/v1/Posts/Carrier
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostCarrierPost(CarrierPost post)
+        public async Task<IActionResult> PostCarrierPostAsync(CarrierPost post)
         {
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
@@ -45,11 +45,11 @@ namespace TBS.API.Controllers.v1.Posts
         // POST: api/v1/Posts/Carrier/{PostId}
         [HttpPost("{postId}")]
         [Authorize]
-        public async Task<IActionResult> PutCarrierPost(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
+        public async Task<IActionResult> PutCarrierPostAsync(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 
         // DELETE: api/v1/Posts/Carrier/{PostId}
         [HttpDelete("{postId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteCarrierPost(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
+        public async Task<IActionResult> DeleteCarrierPostAsync(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
     }
 }
