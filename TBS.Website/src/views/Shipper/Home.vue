@@ -118,8 +118,8 @@ export default {
       postError: false,
       bidPage: 1,
       bidPageCount: 1,
-      posts: null,
-      bids: null,
+      posts: [],
+      bids: [],
     }
   },
   methods: {      

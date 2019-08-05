@@ -74,8 +74,8 @@ export default {
     return {
       bidPage: 1,
       bidPageCount: 1,
-      post: null,
-      bids: null,
+      post: {},
+      bids: [],
     }
   },
   methods: {

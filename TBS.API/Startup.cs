@@ -10,8 +10,10 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TBS.API.Filters;
 using TBS.Data.Database;
+using TBS.Data.Interfaces.Bids;
 using TBS.Data.Interfaces.Posts;
 using TBS.Data.Interfaces.Users.Authentication;
+using TBS.Services.Bids;
 using TBS.Services.Post;
 using TBS.Services.Posts;
 using TBS.Services.Users.Authentication;
@@ -42,7 +44,9 @@ namespace TBS.API
             services.AddScoped<DatabaseContext, DatabaseContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICarrierPostService, CarrierPostService>();
+            services.AddScoped<ICarrierBidService, CarrierBidService>();
             services.AddScoped<IShipperPostService, ShipperPostService>();
+            services.AddScoped<IShipperBidService, ShipperBidService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 

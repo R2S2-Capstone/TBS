@@ -72,8 +72,9 @@ export default {
     return {
       bidPage: 1,
       bidPageCount: 1,
-      post: null,
-      bids: null,
+      error: false,
+      post: {},
+      bids: [],
     }
   },
   methods: {
@@ -87,16 +88,23 @@ export default {
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     },
-    setPostPage(number) {
-      if (number <= 0 || number > this.postPageCount) return
-      this.postPage = number
-      // TODO: filter based on these results
-    },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      // TODO: filter based on these results
+      this.fetchPosts()
     },
+    fetchPosts() {
+      this.$store.dispatch('bids/getBidsByPostId', { type: 'shipper', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
+        .then((response) => {
+          this.bids = response.data.result.bids
+          this.bidPageCount = response.data.result.paginationModel.totalPages
+          console.log(JSON.stringify(response))
+        })
+        .catch((error) => {
+          console.log(JSON.stringify(error))
+          this.error = true
+        })
+    }
   },
   computed: {
     currentPostPage() {
@@ -105,6 +113,9 @@ export default {
     currentBidPage() {
       return this.bidPage
     }
+  },
+  created() {
+    this.fetchPosts()
   }
 }
 </script>
