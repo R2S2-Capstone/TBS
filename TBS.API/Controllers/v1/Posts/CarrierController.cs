@@ -20,7 +20,7 @@ namespace TBS.API.Controllers.v1.Posts
             _service = service;
         }
 
-        // GET: api/v1/Posts/Carrier/{userFirebaseId}{currentPage}/{count}
+        // GET: api/v1/Posts/Carrier/{userFirebaseId}/{currentPage}/{count}
         [HttpGet("{userFirebaseId}/{currentPage}/{count}")]
         [Authorize]
         public async Task<IActionResult> GetCarriersPosts(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPosts(userFirebaseId, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });

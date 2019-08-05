@@ -2,54 +2,51 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using TBS.Data.Interfaces.Posts;
-using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Interfaces.Bids;
+using TBS.Data.Models.Bids.Shipper;
 
 namespace TBS.API.Controllers.v1.Posts
 {
     [ApiVersion("1")]
-    [Route("api/v{version:apiVersion}/Posts/[controller]")]
+    [Route("api/v{version:apiVersion}/Bids/[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class ShipperController : ControllerBase
     {
-        private readonly IShipperPostService _service;
+        private readonly IShipperBidService _service;
 
-        public ShipperController(IShipperPostService service)
+        public ShipperController(IShipperBidService service)
         {
             _service = service;
         }
 
-        // GET: api/v1/Posts/Shipper/{currentPage}/{count}
-        [HttpGet("{userFirebaseId}/{currentPage}/{count}")]
+        // GET: api/v1/Bids/Shipper/{bidId}
+        [HttpGet("{bidId}")]
         [Authorize]
-        public async Task<IActionResult> GetShippersPosts(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPosts(userFirebaseId, new Data.Models.PaginationModel() { CurrentPage = currentPage, Count = count }) });
+        public async Task<IActionResult> GetBidById(int bidId) => Ok(new { result = await _service.GetBidById(bidId) });
 
-        // GET: api/v1/Posts/Shipper/{currentPage}/{pageSize}
-        [HttpGet("{currentPage}/{pageSize}")]
-        public async Task<IActionResult> GetActiveShippersPosts(int currentPage, int pageSize) => Ok(new { result = await _service.GetAllActivePosts(new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
+        // GET: api/v1/Bids/Shipper/{userFirebaseId}/{bidId}/{currentPage}/{pageSize}
+        [HttpGet("{userFirebaseId}/{postId}/{currentPage}/{pageSize}")]
+        [Authorize]
+        public async Task<IActionResult> GetAllBidsByPostId(string userFirebaseId, int bidId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllBidsByPostId(userFirebaseId, bidId, new PaginationModel { CurrentPage = currentPage, PageSize = pageSize }) });
 
-        // GET: api/v1/Posts/Shipper/{PostId}
-        [HttpGet("{postId}")]
-        public async Task<IActionResult> GetShipperPost(int postId) => Ok(new { result = await _service.GetPostById(postId) });
+        // GET: api/v1/Bids/Shipper/{userFirebaseId}/{currentPage}/{pageSize}
+        [HttpGet("{userFirebaseId}/{currentPage}/{pageSize}")]
+        [Authorize]
+        public async Task<IActionResult> GetAllUsersBids(string userFirebaseId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllUsersBids(userFirebaseId, new PaginationModel { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // POST: api/v1/Posts/Shipper
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostShipperPost(ShipperPost post)
+        public async Task<IActionResult> PostShipperBid(ShipperBid bid)
         {
-            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
-            return Ok(new { result = await _service.CreatePostAsync(id, post) });
+            var userFirebaseId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
+            return Ok(new { result = await _service.CreateBidAsync(userFirebaseId, bid) });
         }
 
-        // POST: api/v1/Posts/Shipper/{PostId}
-        [HttpPost("{postId}")]
-        [Authorize]
-        public async Task<IActionResult> PutShipperPost(int postId, ShipperPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
-
-        // DELETE: api/v1/Posts/Shipper/{PostId}
+        // DELETE: api/v1/Posts/Shipper/{bidId}
         [HttpDelete("{postId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteShipperPost(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
+        public async Task<IActionResult> DeleteShipperBid(int bidId) => Ok(new { result = await _service.DeleteBidAsync(bidId) });
     }
 }

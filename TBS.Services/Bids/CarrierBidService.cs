@@ -8,12 +8,17 @@ namespace TBS.Services.Bids
 {
     public class CarrierBidService : ICarrierBidService
     {
-        public Task<PaginatedCarrierBids> GetAllBidsByPostId(string userFirebaseId, int postId, PaginationModel model)
+        public Task<CarrierBid> GetBidById(int bidId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<PaginatedCarrierBids> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
+        public Task<PaginatedCarrierBids> GetAllUsersBids(string userFirebaseId, PaginationModel model)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<PaginatedCarrierBids> GetAllBidsByPostId(string userFirebaseId, int postId, PaginationModel model)
         {
             throw new System.NotImplementedException();
         }
@@ -24,11 +29,6 @@ namespace TBS.Services.Bids
         }
 
         public Task<bool> DeleteBidAsync(int bidId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<CarrierBid> GetBidById(int bidId)
         {
             throw new System.NotImplementedException();
         }

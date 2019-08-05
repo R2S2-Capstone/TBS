@@ -9,7 +9,7 @@ namespace TBS.Data.Interfaces.Bids
     {
         Task<PaginatedCarrierBids> GetAllBidsByPostId(string userFirebaseId, int postId, PaginationModel model);
 
-        Task<PaginatedCarrierBids> GetAllUsersPosts(string userFirebaseId, PaginationModel model);
+        Task<PaginatedCarrierBids> GetAllUsersBids(string userFirebaseId, PaginationModel model);
 
         Task<CarrierBid> GetBidById(int bidId);
 
