@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TBS.Data.Models.Bids.Shipper;
 using TBS.Data.Models.General;
 using TBS.Data.Models.Users.Information;
 using TBS.Data.Models.Vehicle;
@@ -45,7 +43,5 @@ namespace TBS.Data.Models.Posts.Shipper
         public decimal StartingBid { get; set; }
 
         public PostStatus PostStatus { get; set; } = PostStatus.Open;
-
-        public IEnumerable<ShipperBid> Bids { get; set; }
     }
 }

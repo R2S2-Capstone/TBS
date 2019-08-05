@@ -48,7 +48,9 @@
                   <p>Starting Bid: ${{ this.post.startingBid }}</p>
                   <p>Current highest bid: Coming soon...</p>
                   <p>Current lowest bid: Coming soon...</p>
-                  <div v-if="showModal" class ="pt-2 pb-2 col-6 offset-3 border">
+                  <p v-if="bidError" class="text-danger">Failed to bid on post</p>
+                  <p v-if="bidSuccess" class="text-success">Successfully bid on post</p>
+                  <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
                     <div slot="description">
                       Please enter your bid amount
                       <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
@@ -71,6 +73,7 @@
           <hr>
           <div class="row">
             <div class="col-12">
+              <p></p>
               <p>Company Name:<br>{{ this.post.carrier.company.name }}</p>
               <p>
                 Contact Name:<br>{{ this.post.carrier.company.contact.name }}<br>
@@ -85,6 +88,7 @@
           <hr>
           <div class="row">
             <div class="col-12">
+              <p></p>
               <p>
                 Name:<br>{{ this.post.carrier.name }}<br>
                 Rating:<br>Coming Soon!<br>
@@ -118,6 +122,8 @@ export default {
       post: null,
       bidAmount: '',
       error: false,
+      bidError: false,
+      bidSuccess: false,
       showModal: false,
     }
   },
@@ -134,7 +140,15 @@ export default {
         })
     },
     submitBid() {
-      console.log('asd')
+      this.$store.dispatch('bids/createBid', { type: 'carrier', postId: this.post.id, bid: { bidAmount: this.bidAmount }})
+        .then((response) => {
+          this.bidError = false
+          this.bidSuccess = true
+        })
+        .catch(() => {
+          this.bidError = false
+          this.bidSuccess = false
+        })
     },
     convertTime(value) {
       return utilities.convertTime(value)

@@ -75,10 +75,10 @@
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ bid.address }}</td>
-                <td>{{ format(bid.amount) }}</td>
-                <td>{{ bid.bidStatus }}</td>
-                <td><button v-if="bid.bidStatus == 'Pending'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button></td>
+                <td>{{ bid.post.pickupLocation }} <i class="fas fa-arrow-right"></i> {{ bid.post.dropoffLocation }}</td>
+                <td>{{ format(bid.bidAmount) }}</td>
+                <td>{{ parseBidStatus(bid.bidStatus) }}</td>
+                <td><button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button></td>
               </tr>
             </tbody>
           </table>
@@ -106,7 +106,8 @@
 </template>
 
 <script>
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
+import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
   name: 'shipperHome',
@@ -139,8 +140,10 @@ export default {
       this.fetchBids()
     },
     cancelBid(bidId) {
-      this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
-      //TODO: cancel bid
+      this.$store.dispatch('bids/cancelBid', { type: 'carrier', bidId: bidId })
+        .then((response) => {
+          this.bids.find(b => b.id == bidId).bidStatus = 3
+        })
     },
     fetchPosts() {
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
@@ -153,7 +156,7 @@ export default {
         })
     },
     fetchBids() {
-      this.$store.dispatch('bids/getMyBids', { currentPage: this.bidPage, count: this.bidPageCount })
+      this.$store.dispatch('bids/getMyBids', { type: 'carrier', currentPage: this.bidPage, count: this.bidPageCount })
         .then((response) => {
           this.bidPageCount = response.data.result.paginationModel.totalPages
           this.bids = response.data.result.bids
@@ -163,7 +166,10 @@ export default {
         })
     },
     parsePostStatus(status) {
-      return utilities.parsePostStatus(status)
+      return postUtilities.parsePostStatus(status)
+    },
+    parseBidStatus(status) {
+      return bidUtilities.parseBidStatus(status)
     }
   },
   computed: {

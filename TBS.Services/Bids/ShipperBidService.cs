@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
+using TBS.Data.Exceptions.Bids;
 using TBS.Data.Exceptions.Bids.Shipper;
 using TBS.Data.Interfaces.Bids;
 using TBS.Data.Models;
+using TBS.Data.Models.Bids.Request;
 using TBS.Data.Models.Bids.Response;
 using TBS.Data.Models.Bids.Shipper;
 
@@ -44,11 +47,16 @@ namespace TBS.Services.Bids
         }
 
         // Get all of your personal bids, used on personal dashboard
+        // Note: this will get all bids for a carrier
         public async Task<PaginatedShipperBids> GetAllUsersBidsAsync(string userFirebaseId, PaginationModel model)
         {
             var allBids = await _context.ShipperBids
                 .Include(b => b.Carrier)
+                .Include(b => b.Post)
+                .Include(b => b.Post.PickupLocation)
+                .Include(b => b.Post.DropoffLocation)
                 .Where(b => b.Carrier.UserFirebaseId == userFirebaseId)
+                .OrderBy(p => p.BidStatus)
                 .ToListAsync();
             model.Count = allBids.Count();
             var paginatedBids = allBids
@@ -58,11 +66,32 @@ namespace TBS.Services.Bids
         }
 
         // Create a shipper bid
-        public async Task<bool> CreateBidAsync(string userFirebaseId, ShipperBid bid)
+        public async Task<bool> CreateBidAsync(string userFirebaseId, ShipperCreateBidRequest request)
         {
-            bid.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
-            await _context.ShipperBids.AddAsync(bid);
+            request.Bid.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
+            request.Bid.Post = _context.ShipperPosts.FirstOrDefault(p => p.Id == request.PostId);
+            await _context.ShipperBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
+            return await Task.FromResult(true);
+        }
+
+        // Cancel a carrier bid
+        public async Task<bool> CancelBidAsync(int bidId)
+        {
+            var bid = _context.ShipperBids.First(p => p.Id == bidId);
+            if (bid.BidStatus != Data.Models.Bids.BidStatus.Open) throw new FailedToUpdateBidException();
+            bid.BidStatus = Data.Models.Bids.BidStatus.Cancelled;
+            _context.ShipperBids.Update(bid);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new FailedToUpdateBidException();
+            }
+
             return await Task.FromResult(true);
         }
 

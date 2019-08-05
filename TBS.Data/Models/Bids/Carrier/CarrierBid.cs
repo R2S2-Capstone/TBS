@@ -17,7 +17,7 @@ namespace TBS.Data.Models.Bids.Carrier
         [Range(0, double.MaxValue)]
         public double BidAmount { get; set; }
 
-        public DateTime DateBidPlaced { get; set; }
+        public DateTime DateBidPlaced { get; set; } = DateTime.Now;
 
         public BidStatus BidStatus { get; set; } = BidStatus.Open;
     }

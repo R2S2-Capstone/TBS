@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.Bids;
 using TBS.Data.Models;
-using TBS.Data.Models.Bids.Carrier;
+using TBS.Data.Models.Bids.Request;
 
 namespace TBS.API.Controllers.v1.Bids
 {
@@ -39,11 +39,16 @@ namespace TBS.API.Controllers.v1.Bids
         // POST: api/v1/Posts/Carrier
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostCarrierBidAsync(CarrierBid bid)
+        public async Task<IActionResult> PostCarrierBidAsync(CarrierCreateBidRequest request)
         {
             var userFirebaseId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
-            return Ok(new { result = await _service.CreateBidAsync(userFirebaseId, bid) });
+            return Ok(new { result = await _service.CreateBidAsync(userFirebaseId, request) });
         }
+
+        // POST: api/v1/Bids/Carrier/{BidID}
+        [HttpPost("{bidId}")]
+        [Authorize]
+        public async Task<IActionResult> PostCancelCarrierBidAsync(int bidId) => Ok(new { result = await _service.CancelBidAsync(bidId) });
 
         // DELETE: api/v1/Posts/Carrier/{bidId}
         [HttpDelete("{postId}")]

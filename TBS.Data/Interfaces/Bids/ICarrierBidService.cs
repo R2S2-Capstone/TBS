@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TBS.Data.Models;
 using TBS.Data.Models.Bids.Carrier;
+using TBS.Data.Models.Bids.Request;
 using TBS.Data.Models.Bids.Response;
 
 namespace TBS.Data.Interfaces.Bids
@@ -13,7 +14,9 @@ namespace TBS.Data.Interfaces.Bids
 
         Task<PaginatedCarrierBids> GetAllUsersBidsAsync(string userFirebaseId, PaginationModel model);
 
-        Task<bool> CreateBidAsync(string userFirebaseId, CarrierBid bid);
+        Task<bool> CancelBidAsync(int bidId);
+
+        Task<bool> CreateBidAsync(string userFirebaseId, CarrierCreateBidRequest request);
 
         Task<bool> DeleteBidAsync(int bidId);
     }

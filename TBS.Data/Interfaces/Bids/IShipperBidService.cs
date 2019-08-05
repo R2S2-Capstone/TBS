@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TBS.Data.Models;
+using TBS.Data.Models.Bids.Request;
 using TBS.Data.Models.Bids.Response;
 using TBS.Data.Models.Bids.Shipper;
 
@@ -13,7 +14,9 @@ namespace TBS.Data.Interfaces.Bids
 
         Task<ShipperBid> GetBidByIdAsync(int bidId);
 
-        Task<bool> CreateBidAsync(string userFirebaseId, ShipperBid bid);
+        Task<bool> CancelBidAsync(int bidId);
+
+        Task<bool> CreateBidAsync(string userFirebaseId, ShipperCreateBidRequest request);
 
         Task<bool> DeleteBidAsync(int bidId);
     }

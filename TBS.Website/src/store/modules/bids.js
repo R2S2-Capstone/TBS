@@ -42,7 +42,7 @@ const bids = {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `bids/${rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.count}`,
+          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.count}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {
@@ -61,7 +61,7 @@ const bids = {
       return new Promise((resolve, reject) => {
         axios({
           method: 'GET',
-          url: `bids/${payload.type || rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.postId}/${payload.currentPage}/${payload.pageSize}`,
+          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.postId}/${payload.currentPage}/${payload.pageSize}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {
@@ -80,8 +80,28 @@ const bids = {
       return new Promise((resolve, reject) => {
         axios({
           method: 'POST',
-          url: `bids/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
-          data: payload,
+          url: `bids/${payload.type}`,
+          data: { postId: payload.postId, bid: payload.bid },
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
+    cancelBid({ commit, rootGetters}, payload) {
+      commit('global/setLoading', true, { root: true })
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'POST',
+          url: `bids/${payload.type}/${payload.bidId}`,
+          data: payload.bidId,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {
