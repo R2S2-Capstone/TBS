@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TBS.Data.Models.Post.Bid.Carrier;
 using TBS.Data.Models.Vehicle.Carrier;
 
 namespace TBS.Data.Models.Post.Carrier
@@ -9,7 +11,8 @@ namespace TBS.Data.Models.Post.Carrier
     {
         public int Id { get; set; }
 
-        public TBS.Data.Models.User.Carrier Carrier { get; set; }
+        public int CarrierId { get; set; }
+        public User.Carrier Carrier { get; set; }
 
         public DateTime DatePosted { get; set; } = DateTime.Now;
 
@@ -38,5 +41,7 @@ namespace TBS.Data.Models.Post.Carrier
         public decimal StartingBid { get; set; }
 
         public PostStatus PostStatus { get; set; } = PostStatus.Open;
+
+        public IEnumerable<CarrierBid> Bids { get; set; }
     }
 }

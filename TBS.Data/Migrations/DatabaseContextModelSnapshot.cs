@@ -41,12 +41,60 @@ namespace TBS.Data.Migrations
                     b.ToTable("Address");
                 });
 
+            modelBuilder.Entity("TBS.Data.Models.Post.Bid.Carrier.CarrierBid", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("BidAmount");
+
+                    b.Property<int>("BidStatus");
+
+                    b.Property<DateTime>("DateBidPlaced");
+
+                    b.Property<int?>("PostId");
+
+                    b.Property<int?>("ShipperId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ShipperId");
+
+                    b.ToTable("CarrierBids");
+                });
+
+            modelBuilder.Entity("TBS.Data.Models.Post.Bid.Shipper.ShipperBid", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("BidAmount");
+
+                    b.Property<int>("BidStatus");
+
+                    b.Property<int?>("CarrierId");
+
+                    b.Property<DateTime>("DateBidPlaced");
+
+                    b.Property<int?>("PostId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarrierId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("ShipperBids");
+                });
+
             modelBuilder.Entity("TBS.Data.Models.Post.Carrier.CarrierPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CarrierId");
+                    b.Property<int>("CarrierId");
 
                     b.Property<DateTime>("DatePosted");
 
@@ -268,11 +316,34 @@ namespace TBS.Data.Migrations
                     b.ToTable("PostedVehicle");
                 });
 
-            modelBuilder.Entity("TBS.Data.Models.Post.Carrier.CarrierPost", b =>
+            modelBuilder.Entity("TBS.Data.Models.Post.Bid.Carrier.CarrierBid", b =>
+                {
+                    b.HasOne("TBS.Data.Models.Post.Carrier.CarrierPost", "Post")
+                        .WithMany("Bids")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("TBS.Data.Models.User.Shipper", "Shipper")
+                        .WithMany()
+                        .HasForeignKey("ShipperId");
+                });
+
+            modelBuilder.Entity("TBS.Data.Models.Post.Bid.Shipper.ShipperBid", b =>
                 {
                     b.HasOne("TBS.Data.Models.User.Carrier", "Carrier")
                         .WithMany()
                         .HasForeignKey("CarrierId");
+
+                    b.HasOne("TBS.Data.Models.Post.Shipper.ShipperPost", "Post")
+                        .WithMany("Bids")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("TBS.Data.Models.Post.Carrier.CarrierPost", b =>
+                {
+                    b.HasOne("TBS.Data.Models.User.Carrier", "Carrier")
+                        .WithMany()
+                        .HasForeignKey("CarrierId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Post.Shipper.ShipperPost", b =>

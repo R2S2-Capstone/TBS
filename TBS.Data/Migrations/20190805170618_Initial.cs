@@ -160,8 +160,9 @@ namespace TBS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
-                    CarrierId = table.Column<int>(nullable: true),
+                    CarrierId = table.Column<int>(nullable: false),
                     DatePosted = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: false),
                     PickupLocation = table.Column<string>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
                     DropoffLocation = table.Column<string>(nullable: false),
@@ -179,7 +180,7 @@ namespace TBS.Data.Migrations
                         column: x => x.CarrierId,
                         principalTable: "Carriers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,6 +191,7 @@ namespace TBS.Data.Migrations
                         .Annotation("MySQL:AutoIncrement", true),
                     ShipperId = table.Column<int>(nullable: true),
                     DatePosted = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: false),
                     VehicleId = table.Column<int>(nullable: false),
                     PickupLocationId = table.Column<int>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
@@ -241,6 +243,74 @@ namespace TBS.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CarrierBids",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    ShipperId = table.Column<int>(nullable: true),
+                    PostId = table.Column<int>(nullable: true),
+                    BidAmount = table.Column<double>(nullable: false),
+                    DateBidPlaced = table.Column<DateTime>(nullable: false),
+                    BidStatus = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarrierBids", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarrierBids_CarrierPosts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "CarrierPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarrierBids_Shippers_ShipperId",
+                        column: x => x.ShipperId,
+                        principalTable: "Shippers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShipperBids",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    CarrierId = table.Column<int>(nullable: true),
+                    PostId = table.Column<int>(nullable: true),
+                    BidAmount = table.Column<double>(nullable: false),
+                    DateBidPlaced = table.Column<DateTime>(nullable: false),
+                    BidStatus = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShipperBids", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShipperBids_Carriers_CarrierId",
+                        column: x => x.CarrierId,
+                        principalTable: "Carriers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ShipperBids_ShipperPosts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "ShipperPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_PostId",
+                table: "CarrierBids",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_ShipperId",
+                table: "CarrierBids",
+                column: "ShipperId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_CarrierPosts_CarrierId",
                 table: "CarrierPosts",
@@ -265,6 +335,16 @@ namespace TBS.Data.Migrations
                 name: "IX_Company_ContactId",
                 table: "Company",
                 column: "ContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShipperBids_CarrierId",
+                table: "ShipperBids",
+                column: "CarrierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShipperBids_PostId",
+                table: "ShipperBids",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShipperPosts_DropoffContactId",
@@ -304,6 +384,12 @@ namespace TBS.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CarrierBids");
+
+            migrationBuilder.DropTable(
+                name: "ShipperBids");
+
             migrationBuilder.DropTable(
                 name: "CarrierPosts");
 

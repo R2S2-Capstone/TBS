@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.General;
+using TBS.Data.Models.Post.Bid.Shipper;
 using TBS.Data.Models.User.Information;
 using TBS.Data.Models.Vehicle;
 
@@ -11,7 +13,7 @@ namespace TBS.Data.Models.Post.Shipper
     {
         public int Id { get; set; }
 
-        public TBS.Data.Models.User.Shipper Shipper { get; set; }
+        public User.Shipper Shipper { get; set; }
 
         public DateTime DatePosted { get; set; } = DateTime.Now;
 
@@ -43,5 +45,7 @@ namespace TBS.Data.Models.Post.Shipper
         public decimal StartingBid { get; set; }
 
         public PostStatus PostStatus { get; set; } = PostStatus.Open;
+
+        public IEnumerable<ShipperBid> Bids { get; set; }
     }
 }
