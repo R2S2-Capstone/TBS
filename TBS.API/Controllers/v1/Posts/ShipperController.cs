@@ -32,12 +32,12 @@ namespace TBS.API.Controllers.v1.Posts
 
         // GET: api/v1/Posts/Shipper/{PostId}
         [HttpGet("{postId}")]
-        public async Task<IActionResult> GetShipperPostAsync(int postId) => Ok(new { result = await _service.GetPostByIdAsync(postId) });
+        public async Task<IActionResult> GetShipperPostByIdAsync(int postId) => Ok(new { result = await _service.GetPostByIdAsync(postId) });
 
         // POST: api/v1/Posts/Shipper
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostShipperPostAsync(ShipperPost post)
+        public async Task<IActionResult> PostShipperCreatePostAsync(ShipperPost post)
         {
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
@@ -46,7 +46,7 @@ namespace TBS.API.Controllers.v1.Posts
         // POST: api/v1/Posts/Shipper/{PostId}
         [HttpPost("{postId}")]
         [Authorize]
-        public async Task<IActionResult> PutShipperPostAsync(int postId, ShipperPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
+        public async Task<IActionResult> PutShipperUpdateAsync(int postId, ShipperPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 
         // DELETE: api/v1/Posts/Shipper/{PostId}
         [HttpDelete("{postId}")]

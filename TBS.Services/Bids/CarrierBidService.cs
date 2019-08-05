@@ -37,7 +37,8 @@ namespace TBS.Services.Bids
         {
             var allBids = await _context.CarrierBids
                 .Include(b => b.Shipper)
-                .Where(b => b.Id == postId)
+                .Include(b => b.Post)
+                .Where(b => b.Post.Id == postId)
                 .ToListAsync();
             model.Count = allBids.Count();
             var paginatedBids = allBids

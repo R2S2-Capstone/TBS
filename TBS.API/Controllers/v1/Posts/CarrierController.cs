@@ -31,7 +31,7 @@ namespace TBS.API.Controllers.v1.Posts
 
         // GET: api/v1/Posts/Carrier/{PostId}
         [HttpGet("{postId}")]
-        public async Task<IActionResult> GetCarrierPostAsync(int postId) => Ok(new { result = await _service.GetPostByIdAsync(postId) });
+        public async Task<IActionResult> GetCarrierPostByIdAsync(int postId) => Ok(new { result = await _service.GetPostByIdAsync(postId) });
 
         // POST: api/v1/Posts/Carrier
         [HttpPost]
@@ -45,7 +45,7 @@ namespace TBS.API.Controllers.v1.Posts
         // POST: api/v1/Posts/Carrier/{PostId}
         [HttpPost("{postId}")]
         [Authorize]
-        public async Task<IActionResult> PutCarrierPostAsync(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
+        public async Task<IActionResult> PutCarrierUpdateAsync(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
 
         // DELETE: api/v1/Posts/Carrier/{PostId}
         [HttpDelete("{postId}")]

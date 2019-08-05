@@ -3,10 +3,10 @@
     <Back/>
     <div class="row">
       <div class="col-12">
-        <div class="row pb-3">
+        <div class="row pb-3" v-if="post">
           <div class="col-12 text-center">
-            <h2>Manage Bids for {{ post.pickupCity }} ({{ post.pickupDate }}) - {{ post.deliveryCity }} ({{ post.deliveryDate }})</h2>
-            <p class="text-success" v-if="post.acceptedBid">You have already accepted a bid</p>
+            <h2>Manage Bids for {{ post.pickupLocation }} ({{ post.pickupDate.split('T')[0] }}) - {{ post.dropoffLocation }} ({{ post.dropoffDate.split('T')[0] }})</h2>
+            <p class="text-danger" v-if="error">Failed to load post details</p>
           </div>
         </div>
         <div class="row">
@@ -21,13 +21,13 @@
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ bid.bidder.name }}</td>
-                <td>{{ format(bid.amount) }}</td>
-                <td>{{ bid.bidder.rating }} <i class="fas fa-star"></i></td>
-                <td>{{ bid.status }}</td>
+                <td>{{ post.carrier.name }}</td>
+                <td>{{ format(bid.bidAmount) }}</td>
+                <td>COMING SOON <i class="fas fa-star"></i></td>
+                <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
-                  <div v-if="bid.status == 'Pending'">
+                  <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -61,6 +61,8 @@
 <script>
 import Back from '@/components/Back.vue'
 
+import bidUtilities from '@/utils/bidUtilities.js'
+
 export default {
   name: 'carrierManageBids',
   components: {
@@ -74,16 +76,19 @@ export default {
     return {
       bidPage: 1,
       bidPageCount: 1,
-      post: {},
+      error: false,
+      post: null,
       bids: [],
     }
   },
   methods: {
     acceptBid(bidId) {
-      this.bids.find(b => b.id == bidId).status = 'Accepted'
+      // this.bids.find(b => b.id == bidId).status = 'Accepted'
+      //TODO: accept bid
     },
     declineBid(bidId) {
-      this.bids.find(b => b.id == bidId).status = 'Declined'
+      // this.bids.find(b => b.id == bidId).status = 'Declined'
+      //TODO: decline bid
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -96,8 +101,30 @@ export default {
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      // TODO: filter based on these results
+      this.fetchBids()
     },
+    fetchPost() {
+      this.$store.dispatch('posts/getPostById', { type: 'carrier', postId: this.$route.params.id })
+        .then((response) => {
+          this.post = response.data.result
+        })
+        .catch(() => {
+          this.error = true
+        })
+    },
+    fetchBids() {
+      this.$store.dispatch('bids/getBidsByPostId', { type: 'shipper', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
+        .then((response) => {
+          this.bids = response.data.result.bids
+          this.bidPageCount = response.data.result.paginationModel.totalPages
+        })
+        .catch(() => {
+          this.error = true
+        })
+    },
+    parseBidStatus(status) {
+      return bidUtilities.parseBidStatus(status)
+    }
   },
   computed: {
     currentPostPage() {
@@ -106,6 +133,10 @@ export default {
     currentBidPage() {
       return this.bidPage
     }
+  },
+  created() {
+    this.fetchPost()
+    this.fetchBids()
   }
 }
 </script>

@@ -29,7 +29,7 @@ namespace TBS.API.Controllers.v1.Bids
         // GET: api/v1/Bids/Shipper/{userFirebaseId}/{bidId}/{currentPage}/{pageSize}
         [HttpGet("{userFirebaseId}/{postId}/{currentPage}/{pageSize}")]
         [Authorize]
-        public async Task<IActionResult> GetAllBidsByPostIdAsync(string userFirebaseId, int bidId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllBidsByPostIdAsync(userFirebaseId, bidId, new PaginationModel { CurrentPage = currentPage, PageSize = pageSize }) });
+        public async Task<IActionResult> GetAllBidsByPostIdAsync(string userFirebaseId, int postId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllBidsByPostIdAsync(userFirebaseId, postId, new PaginationModel { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // GET: api/v1/Bids/Shipper/{userFirebaseId}/{currentPage}/{pageSize}
         [HttpGet("{userFirebaseId}/{currentPage}/{pageSize}")]
