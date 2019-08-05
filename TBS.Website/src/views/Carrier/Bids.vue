@@ -21,7 +21,7 @@
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ post.carrier.name }}</td>
+                <td>{{ bid.carrier.name }}</td>
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>COMING SOON <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
@@ -93,11 +93,6 @@ export default {
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     },
-    setPostPage(number) {
-      if (number <= 0 || number > this.postPageCount) return
-      this.postPage = number
-      // TODO: filter based on these results
-    },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
@@ -127,9 +122,6 @@ export default {
     }
   },
   computed: {
-    currentPostPage() {
-      return this.postPage
-    },
     currentBidPage() {
       return this.bidPage
     }

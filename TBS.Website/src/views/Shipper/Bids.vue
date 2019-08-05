@@ -3,7 +3,7 @@
     <Back/>
     <div class="row">
       <div class="col-12">
-        <div class="row pb-3" v-if="post">
+        <div class="row pb-3" v-if="post != null">
           <div class="col-12 text-center">
             <h2>
               Manage Bids for {{ post.pickupLocation.city }} <i class="fas fa-arrow-right"></i> {{ post.dropoffLocation.city }}
@@ -22,7 +22,7 @@
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ post.shipper.name }}</td>
+                <td>{{ bid.shipper.name }}</td>
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>COMING SOON <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
@@ -96,7 +96,7 @@ export default {
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      this.fetchPosts()
+      this.fetchPost()
     },
     fetchPost() {
       this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.id })
@@ -122,9 +122,6 @@ export default {
     }
   },
   computed: {
-    currentPostPage() {
-      return this.postPage
-    },
     currentBidPage() {
       return this.bidPage
     }
