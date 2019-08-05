@@ -72,48 +72,8 @@ export default {
     return {
       bidPage: 1,
       bidPageCount: 1,
-      post: {
-        address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-        acceptedBid: false,
-      },
-      bids: [
-        {
-          id: '1',
-          bidder: {
-            name: 'Reece Rose',
-            rating: 5,
-          },
-          status: 'Pending',
-          amount: 5000,
-        },
-        {
-          id: '2',
-          bidder: {
-            name: 'Sathira Paduka',
-            rating: 1.2,
-          },
-          status: 'Pending',
-          amount: 5100,
-        },
-        {
-          id: '3',
-          bidder: {
-            name: 'Robert Middlebrook',
-            rating: 2,
-          },
-          status: 'Pending',
-          amount: 5050,
-        },
-        {
-          id: '4',
-          bidder: {
-            name: 'Steven Boxall',
-            rating: 1,
-          },
-          status: 'Declined',
-          amount: 5000,
-        }
-      ]
+      post: null,
+      bids: null,
     }
   },
   methods: {

@@ -74,51 +74,8 @@ export default {
     return {
       bidPage: 1,
       bidPageCount: 1,
-      post: {
-        pickupCity: 'Oakville',
-        pickupDate: '03/28/2019',
-        deliveryCity: 'Brampton',
-        deliveryDate: '03/29/2019',
-        acceptedBid: false,
-      },
-      bids: [
-        {
-          id: '1',
-          bidder: {
-            name: 'Reece Rose',
-            rating: 5,
-          },
-          status: 'Pending',
-          amount: 5000,
-        },
-        {
-          id: '2',
-          bidder: {
-            name: 'Sathira Paduka',
-            rating: 1.2,
-          },
-          status: 'Pending',
-          amount: 5100,
-        },
-        {
-          id: '3',
-          bidder: {
-            name: 'Robert Middlebrook',
-            rating: 2,
-          },
-          status: 'Pending',
-          amount: 5050,
-        },
-        {
-          id: '4',
-          bidder: {
-            name: 'Steven Boxall',
-            rating: 1,
-          },
-          status: 'Declined',
-          amount: 5000,
-        }
-      ]
+      post: null,
+      bids: null,
     }
   },
   methods: {

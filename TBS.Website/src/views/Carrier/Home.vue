@@ -118,27 +118,8 @@ export default {
       postError: false,
       bidPage: 1,
       bidPageCount: 1,
-      posts: [],
-      bids: [
-        {
-          id: '1',
-          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-          amount: 5000,
-          bidStatus: 'Approved'
-        },
-        {
-          id: '2',
-          address: '1450 Trafalgar Rd, Oakville, ON L6H 2L1',
-          amount: 1000,
-          bidStatus: 'Pending'
-        },
-        {
-          id: '3',
-          address: '1450 Trafalgar Rd, Oakville, ON L6H 2L1',
-          amount: 5000,
-          bidStatus: 'Declined'
-        }
-      ]
+      posts: null,
+      bids: null,
     }
   },
   methods: {        
