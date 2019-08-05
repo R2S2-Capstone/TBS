@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Posts;
 using TBS.Data.Exceptions.Posts.Carrier;
-using TBS.Data.Interfaces.Post;
+using TBS.Data.Interfaces.Posts;
 using TBS.Data.Models;
-using TBS.Data.Models.Post.Carrier;
-using TBS.Data.Models.Post.Response;
+using TBS.Data.Models.Posts;
+using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Posts.Response;
 
 namespace TBS.Services.Posts
 {
@@ -24,7 +25,7 @@ namespace TBS.Services.Posts
         public async Task<PaginatedCarrierPosts> GetAllActivePosts(PaginationModel model)
         {
             var allPosts = await _context.CarrierPosts
-                .Where(p => p.PostStatus == Data.Models.Post.PostStatus.Open)
+                .Where(p => p.PostStatus == PostStatus.Open)
                 .ToListAsync();
             model.Count = allPosts.Count();
             var paginatedPosts = allPosts

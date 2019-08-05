@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TBS.Data.Models.Post.Bid.Carrier;
-using TBS.Data.Models.Post.Bid.Shipper;
-using TBS.Data.Models.Post.Carrier;
-using TBS.Data.Models.Post.Shipper;
-using TBS.Data.Models.User;
+using TBS.Data.Models.Bids.Carrier;
+using TBS.Data.Models.Bids.Shipper;
+using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Models.Users;
 
 namespace TBS.Data.Database
 {

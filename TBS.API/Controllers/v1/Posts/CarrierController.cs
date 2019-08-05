@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using TBS.Data.Interfaces.Post;
-using TBS.Data.Models.Post.Carrier;
+using TBS.Data.Interfaces.Posts;
+using TBS.Data.Models.Posts.Carrier;
 
 namespace TBS.API.Controllers.v1.Posts
 {

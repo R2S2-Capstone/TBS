@@ -10,10 +10,11 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TBS.API.Filters;
 using TBS.Data.Database;
-using TBS.Data.Interfaces.Post;
-using TBS.Data.Interfaces.User.Authentication;
+using TBS.Data.Interfaces.Posts;
+using TBS.Data.Interfaces.Users.Authentication;
+using TBS.Services.Post;
 using TBS.Services.Posts;
-using TBS.Services.User.Authentication;
+using TBS.Services.Users.Authentication;
 
 namespace TBS.API
 {

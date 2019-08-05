@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Posts;
 using TBS.Data.Exceptions.Posts.Shipper;
-using TBS.Data.Interfaces.Post;
+using TBS.Data.Interfaces.Posts;
 using TBS.Data.Models;
-using TBS.Data.Models.Post.Response;
-using TBS.Data.Models.Post.Shipper;
+using TBS.Data.Models.Posts;
+using TBS.Data.Models.Posts.Response;
+using TBS.Data.Models.Posts.Shipper;
 
-namespace TBS.Services.Posts
+namespace TBS.Services.Post
 {
     public class ShipperPostService : IShipperPostService
     {
@@ -27,7 +28,7 @@ namespace TBS.Services.Posts
                 .Include(p => p.Vehicle)
                 .Include(p => p.PickupLocation)
                 .Include(p => p.DropoffLocation)
-                .Where(p => p.PostStatus == Data.Models.Post.PostStatus.Open)
+                .Where(p => p.PostStatus == PostStatus.Open)
                 .ToListAsync();
             model.Count = allPosts.Count();
             var paginatedPosts = allPosts
