@@ -6,37 +6,6 @@ const bids = {
   getters: {},
   mutations: {},
   actions: {
-    getBids({ rootGetters, commit }, payload) {            
-      return new Promise((resolve, reject) => {
-        commit('global/setLoading', true, { root: true })
-        const apiCall = () => {
-          let oppositeAccountType = rootGetters['authentication/getAccountType'].toLowerCase() == 'carrier' ? 'shipper' : 'carrier';
-          axios({
-            method: 'GET',
-            url: `bids/${oppositeAccountType}/${payload.currentPage}/${payload.pageSize || 10}`,
-          })
-          .then((response) => {
-            resolve(response)
-          })
-          .catch((error) => {
-            reject(error)
-          })
-          .finally(() => {
-            commit('global/setLoading', false, { root: true })
-          })
-        }
-
-        if (rootGetters['authentication/isRefreshing']) {
-          this.watch(() => rootGetters['authentication/isRefreshing'],
-            () => {
-              apiCall()
-            }
-          )
-        } else {
-          apiCall()
-        }
-      })
-    },
     getMyBids({ commit, rootGetters }, payload) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
@@ -95,13 +64,13 @@ const bids = {
         })
       })
     },
-    cancelBid({ commit, rootGetters}, payload) {
+    updateBid({ commit, rootGetters}, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
         axios({
-          method: 'POST',
-          url: `bids/${payload.type}/${payload.bidId}`,
-          data: payload.bidId,
+          method: 'PUT',
+          url: `bids/${payload.type}`,
+          data: { bidId: payload.bidId, status: payload.bidStatus },
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {

@@ -25,7 +25,7 @@
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>COMING SOON <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
-                <td><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
+                <td><router-link :to="{ name: 'carrierViewBidDetails', params: { bidId: bid.id, postId: post.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
                   <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>

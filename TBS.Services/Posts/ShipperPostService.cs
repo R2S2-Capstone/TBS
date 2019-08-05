@@ -83,20 +83,6 @@ namespace TBS.Services.Post
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeletePostAsync(int id)
-        {
-            var shipperPost = await GetPostByIdAsync(id);
-
-            if (shipperPost == null)
-            {
-                throw new InvalidShipperPostException();
-            }
-
-            _context.ShipperPosts.Remove(shipperPost);
-            await _context.SaveChangesAsync();
-            return await Task.FromResult(true);
-        }
-
         public async Task<bool> UpdatePostAsync(int id, ShipperPost post)
         {
             if (id != post.Id)
@@ -116,6 +102,20 @@ namespace TBS.Services.Post
                 throw new FailedToUpdatePostException();
             }
 
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> DeletePostAsync(int id)
+        {
+            var shipperPost = await GetPostByIdAsync(id);
+
+            if (shipperPost == null)
+            {
+                throw new InvalidShipperPostException();
+            }
+
+            _context.ShipperPosts.Remove(shipperPost);
+            await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
     }

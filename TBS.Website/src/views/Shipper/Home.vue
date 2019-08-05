@@ -140,7 +140,7 @@ export default {
       this.fetchBids()
     },
     cancelBid(bidId) {
-      this.$store.dispatch('bids/cancelBid', { type: 'carrier', bidId: bidId })
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'cancelled' })
         .then((response) => {
           this.bids.find(b => b.id == bidId).bidStatus = 3
         })

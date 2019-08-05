@@ -75,11 +75,10 @@ namespace TBS.Services.Bids
         }
 
         // Cancel a carrier bid
-        public async Task<bool> CancelBidAsync(int bidId)
+        public async Task<bool> UpdateBidAsync(UpdateBidRequest request)
         {
-            var bid = _context.CarrierBids.First(p => p.Id == bidId);
-            if (bid.BidStatus != Data.Models.Bids.BidStatus.Open) throw new FailedToUpdateBidException();
-            bid.BidStatus = Data.Models.Bids.BidStatus.Cancelled;
+            var bid = _context.CarrierBids.First(p => p.Id == request.BidId);
+            bid.BidStatus = request.Status;
             _context.CarrierBids.Update(bid);
 
             try

@@ -2,7 +2,7 @@
   <div class="container pt-5">
     <Back/>
     <WideCard :title="'Bid from ' + bid.bidder.name">
-      <div slot="card-content" class="text-center">
+      <div slot="card-content" class="text-center" v-if="post && bid">
         <div class="row">
           <div class="col-12">
             <hr>
@@ -122,27 +122,8 @@ export default {
   },
   data() {
     return {
-      post: {
-        acceptedBid: false,
-      },
-      bid: {
-        id: '1',
-        bidder: {
-          name: 'Reece Rose',
-          rating: 5,
-        },
-        pickupCity: 'Oakville',
-        pickupDate: '03/29/2018',
-        deliveryCity: 'Brampton',
-        deliveryDate: '03/29/2018',
-        vehicle: {
-          make: 'Ford',
-          model: 'Escape',
-          year: '2019',
-          other: null
-        },
-        amount: 5000,
-      },
+      post: null,
+      bid: null,
     }
   },
   methods: {
@@ -155,6 +136,29 @@ export default {
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     },
+    fetchPost() {
+      this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.id })
+        .then((response) => {
+          this.post = response.data.result
+        })
+        .catch(() => {
+          this.error = true
+        })
+    },
+    fetchBid() {
+      this.$store.dispatch('bids/getBidById', { type: 'carrier', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
+        .then((response) => {
+          this.bids = response.data.result.bids
+          this.bidPageCount = response.data.result.paginationModel.totalPages
+        })
+        .catch(() => {
+          this.error = true
+        })
+    },
+  },
+  created() {
+    this.fetchPost()
+    this.fetchBid()
   }
 }
 </script>

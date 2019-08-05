@@ -62,6 +62,27 @@ namespace TBS.Services.Posts
 
             return carrierPost;
         }
+        public async Task<bool> UpdatePostAsync(int id, CarrierPost post)
+        {
+            if (id != post.Id)
+            {
+                throw new InvalidCarrierPostException();
+            }
+
+            post.UpdatedOn = DateTime.Now;
+            _context.CarrierPosts.Update(post);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new FailedToUpdatePostException();
+            }
+
+            return await Task.FromResult(true);
+        }
 
         public async Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post)
         {
@@ -82,28 +103,6 @@ namespace TBS.Services.Posts
 
             _context.CarrierPosts.Remove(carrierPost);
             await _context.SaveChangesAsync();
-            return await Task.FromResult(true);
-        }
-
-        public async Task<bool> UpdatePostAsync(int id, CarrierPost post)
-        {
-            if (id != post.Id)
-            {
-                throw new InvalidCarrierPostException();
-            }
-
-            post.UpdatedOn = DateTime.Now;
-            _context.CarrierPosts.Update(post);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw new FailedToUpdatePostException();
-            }
-
             return await Task.FromResult(true);
         }
     }

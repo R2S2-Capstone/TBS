@@ -45,10 +45,10 @@ namespace TBS.API.Controllers.v1.Bids
             return Ok(new { result = await _service.CreateBidAsync(userFirebaseId, request) });
         }
 
-        // POST: api/v1/Bids/Shipper/{BidID}
-        [HttpPost("{bidId}")]
+        // PUT: api/v1/Bids/Shipper/
+        [HttpPut]
         [Authorize]
-        public async Task<IActionResult> PostCancelShipperBidAsync(int bidId) => Ok(new { result = await _service.CancelBidAsync(bidId) });
+        public async Task<IActionResult> PutUpdateShipperBidAsync(UpdateBidRequest request) => Ok(new { result = await _service.UpdateBidAsync(request) });
 
         // DELETE: api/v1/Bids/Shipper/{bidId}
         [HttpDelete("{bidId}")]

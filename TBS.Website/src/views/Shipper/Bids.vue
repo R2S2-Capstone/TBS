@@ -3,7 +3,7 @@
     <Back/>
     <div class="row">
       <div class="col-12">
-        <div class="row pb-3" v-if="post != null">
+        <div class="row pb-3" v-if="post">
           <div class="col-12 text-center">
             <h2>
               Manage Bids for {{ post.pickupLocation.city }} <i class="fas fa-arrow-right"></i> {{ post.dropoffLocation.city }}

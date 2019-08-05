@@ -187,10 +187,11 @@ export default new Router({
           ...LoggedIn
         },
         {
-          path: 'ViewBid/:id?',
+          path: 'ViewBid/:postId?/:bidId?',
           name: 'carrierViewBidDetails',
           component: CarrierViewBidDetails,
-          ...LoggedIn
+          ...LoggedIn,
+          params: true,
         },
       ]
     },

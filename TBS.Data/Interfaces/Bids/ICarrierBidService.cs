@@ -14,7 +14,7 @@ namespace TBS.Data.Interfaces.Bids
 
         Task<PaginatedCarrierBids> GetAllUsersBidsAsync(string userFirebaseId, PaginationModel model);
 
-        Task<bool> CancelBidAsync(int bidId);
+        Task<bool> UpdateBidAsync(UpdateBidRequest request);
 
         Task<bool> CreateBidAsync(string userFirebaseId, CarrierCreateBidRequest request);
 
