@@ -62,6 +62,7 @@
         <div class="row pb-3">
           <div class="col-12 text-center">
             <h2>Manage My Bids</h2>
+            <h5 class="text-danger" v-if="bidError">Unable to load bids</h5>
           </div>
         </div>
         <div class="row">
@@ -113,13 +114,14 @@ export default {
   },
   data() {
     return {
+      posts: [],
       postPage: 1,
       postPageCount: 1,
       postError: false,
+      bids: [],
       bidPage: 1,
       bidPageCount: 1,
-      posts: [],
-      bids: [],
+      bidError: false,
     }
   },
   methods: {      
@@ -134,10 +136,11 @@ export default {
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      // TODO: filter based on these results
+      this.fetchBids()
     },
     cancelBid(bidId) {
       this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
+      //TODO: cancel bid
     },
     fetchPosts() {
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
@@ -146,7 +149,17 @@ export default {
           this.posts = response.data.result.posts
         })
         .catch(() => {
-          this.postsError = true
+          this.postError = true
+        })
+    },
+    fetchBids() {
+      this.$store.dispatch('bids/getMyBids', { currentPage: this.bidPage, count: this.bidPageCount })
+        .then((response) => {
+          this.bidPageCount = response.data.result.paginationModel.totalPages
+          this.bids = response.data.result.bids
+        })
+        .catch(() => {
+          this.bidError = true
         })
     },
     parsePostStatus(status) {
@@ -163,6 +176,7 @@ export default {
   },
   created() {
     this.fetchPosts()
+    this.fetchBids()
   }
 }
 </script>
