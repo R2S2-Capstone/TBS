@@ -47,7 +47,19 @@
                   <p></p>
                   <p>Date Posted: {{ this.post.datePosted.split('T')[0] }}</p>
                   <p>Starting Bid: ${{ this.post.startingBid }}</p>
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Bid Now!</button>
+                  <p>Current highest bid: Coming soon...</p>
+                  <p>Current lowest bid: Coming soon...</p>
+                  <div v-if="showModal" class ="pt-2 pb-2 col-6 offset-3 border">
+                    <div slot="description">
+                      Please enter your bid amount
+                      <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                    </div>
+                    <div slot="footer">
+                      <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
+                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="submitBid">Bid</button>
+                    </div>
+                  </div>
+                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
                 </div>
               </div>
             </div>
@@ -89,17 +101,26 @@
 </template>
 
 <script>
+import TextInput from '@/components/Form/Input/TextInput.vue'
+
 import utilities from '@/utils/postUtilities.js'
+import { required, helpers } from 'vuelidate/lib/validators'
+const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
 export default {
   name: 'detailedShipperPost',
+  components: {
+    TextInput,
+  },
   props: {
     id: String
   },
   data() {
     return {
       post: null,
+      bidAmount: '',
       error: false,
+      showModal: false,
     }
   },
   methods: {
@@ -108,17 +129,27 @@ export default {
         .then((response) => {
           this.error = false
           this.post = response.data.result
+          this.bidAmount = this.post.startingBid.toString()
         })
         .catch(() => {
           this.error = true
         })
     },
-    convertTime(value) {
-      return utilities.convertTime(value)
+    submitBid() {
+      console.log('asd')
     },
     formatAddress(address) {
       return utilities.formatAddress(address)
-    }
+    },
+    convertTime(value) {
+      return utilities.convertTime(value)
+    },
+  },
+  validations: {
+    bidAmount: {
+      required,
+      bidRegex,
+    },
   },
   created() {
     if (this.id == null) this.$router.go(-1)

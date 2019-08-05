@@ -98,10 +98,8 @@ export default {
         .then((response) => {
           this.bids = response.data.result.bids
           this.bidPageCount = response.data.result.paginationModel.totalPages
-          console.log(JSON.stringify(response))
         })
-        .catch((error) => {
-          console.log(JSON.stringify(error))
+        .catch(() => {
           this.error = true
         })
     }
