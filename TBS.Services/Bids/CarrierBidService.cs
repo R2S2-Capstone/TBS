@@ -29,6 +29,9 @@ namespace TBS.Services.Bids
                 _context.CarrierBids
                 .Include(b => b.Shipper)
                 .Include(b => b.Post)
+                .Include(b => b.PickupLocation)
+                .Include(b => b.Vehicle)
+                .Include(b => b.DropoffLocation)
                 .FirstOrDefault(b => b.Id == bidId)
             );
         }
