@@ -5,100 +5,48 @@
       <div slot="card-content" class="text-center">
         <div class="row">
           <div class="col-12">
-            <hr>
-            <h4>Bid Information</h4>
-            <hr>
-          </div>
-          <div class="col-12 text-left">
             <div class="row">
               <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-money-bill"></i> Bid Amount:</p></div>
-                  <div class="col text-right">{{ format(bid.bidAmount) }}</div>
-                </div>
+                <hr>
+                <h5>Vehicle Information</h5>
+                <hr>
+                <p>Vehicle Make: {{ bid.vehicle.make }}</p>
+                <p>Vehicle Model: {{ bid.vehicle.model }}</p>
+                <p>Vehicle Year: {{ bid.vehicle.year }}</p>
+                <p>Vehicle Condition: {{ parseVehicleCondition(bid.vehicle.condition) }}</p>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-star"></i> Bidder Rating:</p></div>
-                  <div class="col text-right">COMING SOON <i class="fas fa-star"></i></div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <h5 class="text-center">Pickup Information</h5>
-            <hr>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-city"></i> Pickup Location:</p></div>
-                  <div class="col text-right">{{ formatAddress(bid.pickupLocation) }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-calendar-day"></i> Pickup Date:</p></div>
-                  <div class="col text-right">{{ bid.pickupDate.split('T')[0] }}</div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <h5 class="text-center">Dropoff Information</h5>
-            <hr>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-city"></i> Dropoff Location:</p></div>
-                  <div class="col text-right">{{ formatAddress(bid.dropoffLocation) }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-calendar-day"></i> Dropoff Date:</p></div>
-                  <div class="col text-right">{{ bid.dropoffDate.split('T')[0] }}</div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <h5 class="text-center">Vehicle Description</h5>
-            <hr>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Vehicle Make:</p></div>
-                  <div class="col text-right">{{ bid.vehicle.make }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Vehicle Model:</p></div>
-                  <div class="col text-right">{{ bid.vehicle.model }}</div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Vehicle Year:</p></div>
-                  <div class="col text-right">{{ bid.vehicle.year }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Other</p></div>
-                  <div class="col text-right">{{ bid.vehicle.other }}</div>
-                </div>
+                <hr>
+                <h5>Bid Details</h5>
+                <hr>
+                <p>Amount: ${{ bid.bidAmount }}</p>
+                <p>Bidder Name: {{ bid.shipper.name }}</p>
+                <p>Bidder Rating: COMING SOON <i class="fas fa-star"></i></p>
               </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <hr>
+              <h5>Pickup Information</h5>
+              <hr>
+              <p>Pickup Location: {{ formatAddress(bid.pickupLocation) }}</p>
+              <p>Pickup Date: {{ bid.pickupDate.split('T')[0] }}</p>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <hr>
+              <h5>Dropoff Information</h5>
+              <hr>
+              <p></p>
+              <p>Dropoff Location: {{ formatAddress(bid.dropoffLocation) }}</p>
+              <p>Dropoff Date: {{ bid.dropoffDate.split('T')[0] }}</p>
+            </div>
+          </div>
+
           <div class="col-12">
-            <div class="row">
-                <div class="col-12 pb-3">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="acceptBid(bid.id)">Accept Bid</button>
-                </div>
-                <div class="col-12">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline Bid</button>
-                </div>
-              </div>
+            <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="acceptBid(bid.id)">Accept Bid</button><br>
+            <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline Bid</button>
           </div>
         </div>
       </div>
@@ -130,10 +78,10 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      this.post.acceptedBid = true
+      //TODO: Accept bid      
     },
     declineBid(bidId) {
-      console.log(`Decline bid ${bidId}`)
+      //TODO: decline bid
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -149,6 +97,9 @@ export default {
     },
     formatAddress(address) {
       return postUtilities.formatAddress(address)
+    },
+    parseVehicleCondition(condition) {
+      return postUtilities.parseVehicleCondition(condition)
     }
   },
   created() {
