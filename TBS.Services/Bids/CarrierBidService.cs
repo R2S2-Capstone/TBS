@@ -117,8 +117,8 @@ namespace TBS.Services.Bids
 
                         foreach (var pendingBid in pendingBids)
                         {
-                            pendingBid.BidStatus = Data.Models.Bids.BidStatus.Cancelled;
-                            _context.CarrierBids.Update(bid);
+                            pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
+                            _context.CarrierBids.Update(pendingBid);
                         }
                         await _context.SaveChangesAsync();
                     }

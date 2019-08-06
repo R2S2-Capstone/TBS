@@ -98,6 +98,18 @@ namespace TBS.Services.Bids
                 }
 
                 _context.ShipperBids.Update(bid);
+                await _context.SaveChangesAsync();
+
+                // Cancel all other bids
+                var pendingBids = _context.ShipperBids
+                    .Include(b => b.Post)
+                    .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Open);
+
+                foreach (var pendingBid in pendingBids)
+                {
+                    pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
+                    _context.ShipperBids.Update(pendingBid);
+                }
 
                 try
                 {
