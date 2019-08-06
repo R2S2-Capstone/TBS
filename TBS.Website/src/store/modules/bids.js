@@ -6,6 +6,25 @@ const bids = {
   getters: {},
   mutations: {},
   actions: {
+    getBidById({ commit, rootGetters }, payload) {
+      return new Promise((resolve, reject) => {
+        commit('global/setLoading', true, { root: true })
+        axios({
+          method: 'GET',
+          url: `bids/${payload.type}/${payload.bidId}`,
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
     getMyBids({ commit, rootGetters }, payload) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })

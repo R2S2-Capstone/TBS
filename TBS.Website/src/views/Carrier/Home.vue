@@ -141,7 +141,7 @@ export default {
     },
     cancelBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'cancelled' })
-        .then((response) => {
+        .then(() => {
           this.bids.find(b => b.id == bidId).bidStatus = 3
         })
     },
@@ -161,8 +161,7 @@ export default {
           this.bidPageCount = response.data.result.paginationModel.totalPages
           this.bids = response.data.result.bids
         })
-        .catch((error) => {
-          console.log(JSON.stringify(error))
+        .catch(() => {
           this.bidError = true
         })
     },

@@ -22,12 +22,12 @@
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ bid.shipper.name }}</td>
+                <td>{{ bid.carrier.name }}</td>
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>COMING SOON <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
-                <td v-if="parseBidStatus(bid.bidStatus) == 'Open'">
-                  <div>
+                <td>
+                  <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -108,7 +108,7 @@ export default {
         })
     },
     fetchBids() {
-      this.$store.dispatch('bids/getBidsByPostId', { type: 'carrier', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
+      this.$store.dispatch('bids/getBidsByPostId', { type: 'shipper', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
         .then((response) => {
           this.bids = response.data.result.bids
           this.bidPageCount = response.data.result.paginationModel.totalPages

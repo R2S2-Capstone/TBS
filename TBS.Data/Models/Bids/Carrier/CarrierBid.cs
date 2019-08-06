@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using TBS.Data.Models.General;
 using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Vehicle;
 
 namespace TBS.Data.Models.Bids.Carrier
 {
@@ -12,6 +14,21 @@ namespace TBS.Data.Models.Bids.Carrier
         public Users.Shipper Shipper { get; set; }
 
         public CarrierPost Post { get; set; }
+
+        [Required(ErrorMessage = "Vehicle required")]
+        public PostedVehicle Vehicle { get; set; }
+
+        [Required(ErrorMessage = "Pickup location required")]
+        public Address PickupLocation { get; set; }
+
+        [Required(ErrorMessage = "Pickup date required")]
+        public DateTime PickupDate { get; set; }
+
+        [Required(ErrorMessage = "Dropoff location required")]
+        public Address DropoffLocation { get; set; }
+
+        [Required(ErrorMessage = "Dropoff date required")]
+        public DateTime DropoffDate { get; set; }
 
         [Required]
         [Range(0, double.MaxValue)]

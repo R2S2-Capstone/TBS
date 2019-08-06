@@ -251,6 +251,11 @@ namespace TBS.Data.Migrations
                         .Annotation("MySQL:AutoIncrement", true),
                     ShipperId = table.Column<int>(nullable: true),
                     PostId = table.Column<int>(nullable: true),
+                    VehicleId = table.Column<int>(nullable: false),
+                    PickupLocationId = table.Column<int>(nullable: false),
+                    PickupDate = table.Column<DateTime>(nullable: false),
+                    DropoffLocationId = table.Column<int>(nullable: false),
+                    DropoffDate = table.Column<DateTime>(nullable: false),
                     BidAmount = table.Column<double>(nullable: false),
                     DateBidPlaced = table.Column<DateTime>(nullable: false),
                     BidStatus = table.Column<int>(nullable: false)
@@ -258,6 +263,18 @@ namespace TBS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CarrierBids", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarrierBids_Address_DropoffLocationId",
+                        column: x => x.DropoffLocationId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CarrierBids_Address_PickupLocationId",
+                        column: x => x.PickupLocationId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CarrierBids_CarrierPosts_PostId",
                         column: x => x.PostId,
@@ -270,6 +287,12 @@ namespace TBS.Data.Migrations
                         principalTable: "Shippers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarrierBids_PostedVehicle_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "PostedVehicle",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -302,6 +325,16 @@ namespace TBS.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_DropoffLocationId",
+                table: "CarrierBids",
+                column: "DropoffLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_PickupLocationId",
+                table: "CarrierBids",
+                column: "PickupLocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CarrierBids_PostId",
                 table: "CarrierBids",
                 column: "PostId");
@@ -310,6 +343,11 @@ namespace TBS.Data.Migrations
                 name: "IX_CarrierBids_ShipperId",
                 table: "CarrierBids",
                 column: "ShipperId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_VehicleId",
+                table: "CarrierBids",
+                column: "VehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarrierPosts_CarrierId",

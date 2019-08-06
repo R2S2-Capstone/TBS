@@ -17,23 +17,23 @@
               <div class="row">
                 <div class="col-12">
                   <p></p>
-                  <p>Pickup Location: {{ formatAddress(this.post.pickupLocation) }}</p>
-                  <p>Pickup Date: {{ this.post.pickupDate.split('T')[0] }}</p>
-                  <p>Pickup Time: {{ convertTime(this.post.pickupDate.split('T')[1]) }}</p>
+                  <p>Location: {{ formatAddress(this.post.pickupLocation) }}</p>
+                  <p>Date: {{ this.post.pickupDate.split('T')[0] }}</p>
+                  <p>Time: {{ convertTime(this.post.pickupDate.split('T')[1]) }}</p>
                 </div>
               </div>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-12">
-              <h5>Dropoff Details</h5>
+              <h5>Delivery Details</h5>
               <hr>
               <div class="row">
                 <div class="col-12">
                   <p></p>
-                  <p>Dropoff Location: {{ formatAddress(this.post.dropoffLocation) }}</p>
-                  <p>Dropoff Date: {{ this.post.dropoffDate.split('T')[0] }}</p>
-                  <p>Dropoff Time: {{ convertTime(this.post.dropoffDate.split('T')[1]) }}</p>
+                  <p>Location: {{ formatAddress(this.post.dropoffLocation) }}</p>
+                  <p>Date: {{ this.post.dropoffDate.split('T')[0] }}</p>
+                  <p>Time: {{ convertTime(this.post.dropoffDate.split('T')[1]) }}</p>
                 </div>
               </div>
             </div>
@@ -141,12 +141,11 @@ export default {
     },
     submitBid() {
       this.$store.dispatch('bids/createBid', { type: 'shipper', postId: this.post.id, bid: { bidAmount: this.bidAmount }})
-        .then((response) => {
+        .then(() => {
           this.bidError = false
           this.bidSuccess = true
         })
-        .catch((error) => {
-          console.log(JSON.stringify(error))
+        .catch(() => {
           this.bidError = false
           this.bidSuccess = false
         })

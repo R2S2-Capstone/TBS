@@ -260,7 +260,7 @@ export default {
           required
         },
         vin: {
-          // required
+          required
         },
       },
       pickupLocation: {

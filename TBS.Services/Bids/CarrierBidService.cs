@@ -28,6 +28,7 @@ namespace TBS.Services.Bids
             return await Task.FromResult(
                 _context.CarrierBids
                 .Include(b => b.Shipper)
+                .Include(b => b.Post)
                 .FirstOrDefault(b => b.Id == bidId)
             );
         }
