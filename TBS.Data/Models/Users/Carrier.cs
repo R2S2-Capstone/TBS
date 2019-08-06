@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.Users.Information;
 using TBS.Data.Models.Vehicle.Carrier;
 
@@ -7,7 +8,7 @@ namespace TBS.Data.Models.Users
     // Transporter
     public class Carrier
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "User firebase ID required")]
         public string UserFirebaseId { get; set; }

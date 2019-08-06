@@ -9,7 +9,7 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190806005215_Initial")]
+    [Migration("20190806214943_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,8 +20,9 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Bids.Carrier.CarrierBid", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<double>("BidAmount");
 
@@ -31,17 +32,25 @@ namespace TBS.Data.Migrations
 
                     b.Property<DateTime>("DropoffDate");
 
-                    b.Property<int>("DropoffLocationId");
+                    b.Property<byte[]>("DropoffLocationId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("PickupDate");
 
-                    b.Property<int>("PickupLocationId");
+                    b.Property<byte[]>("PickupLocationId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int?>("PostId");
+                    b.Property<byte[]>("PostId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int?>("ShipperId");
+                    b.Property<byte[]>("ShipperId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("VehicleId");
+                    b.Property<byte[]>("VehicleId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("Id");
 
@@ -60,18 +69,21 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Bids.Shipper.ShipperBid", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<double>("BidAmount");
 
                     b.Property<int>("BidStatus");
 
-                    b.Property<int?>("CarrierId");
+                    b.Property<byte[]>("CarrierId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("DateBidPlaced");
 
-                    b.Property<int?>("PostId");
+                    b.Property<byte[]>("PostId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("Id");
 
@@ -84,8 +96,9 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.General.Address", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<string>("AddressLine")
                         .IsRequired();
@@ -109,10 +122,14 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Posts.Carrier.CarrierPost", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<int>("CarrierId");
+
+                    b.Property<byte[]>("CarrierId1")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("DatePosted");
 
@@ -138,39 +155,51 @@ namespace TBS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarrierId");
+                    b.HasIndex("CarrierId1");
 
                     b.ToTable("CarrierPosts");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Posts.Shipper.ShipperPost", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("DatePosted");
 
-                    b.Property<int>("DropoffContactId");
+                    b.Property<byte[]>("DropoffContactId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("DropoffDate");
 
-                    b.Property<int>("DropoffLocationId");
+                    b.Property<byte[]>("DropoffLocationId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("PickupContactId");
+                    b.Property<byte[]>("PickupContactId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("PickupDate");
 
-                    b.Property<int>("PickupLocationId");
+                    b.Property<byte[]>("PickupLocationId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<int>("PostStatus");
 
-                    b.Property<int?>("ShipperId");
+                    b.Property<byte[]>("ShipperId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<decimal>("StartingBid");
 
                     b.Property<DateTime>("UpdatedOn");
 
-                    b.Property<int>("VehicleId");
+                    b.Property<byte[]>("VehicleId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("Id");
 
@@ -191,10 +220,13 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Users.Carrier", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("CompanyId");
+                    b.Property<byte[]>("CompanyId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<string>("DriversLicense")
                         .IsRequired();
@@ -208,7 +240,8 @@ namespace TBS.Data.Migrations
                     b.Property<string>("UserFirebaseId")
                         .IsRequired();
 
-                    b.Property<int?>("VehicleId");
+                    b.Property<byte[]>("VehicleId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("Id");
 
@@ -221,12 +254,17 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Users.Information.Company", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("AddressId");
+                    b.Property<byte[]>("AddressId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("ContactId");
+                    b.Property<byte[]>("ContactId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -242,8 +280,9 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Users.Information.Contact", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<string>("Email")
                         .IsRequired();
@@ -261,10 +300,13 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Users.Shipper", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("CompanyId");
+                    b.Property<byte[]>("CompanyId")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<string>("DealerNumber")
                         .IsRequired();
@@ -290,8 +332,9 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Vehicle.Carrier.CarrierVehicle", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<string>("Make")
                         .IsRequired();
@@ -313,8 +356,9 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Vehicle.PostedVehicle", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<int>("Condition");
 
@@ -375,8 +419,7 @@ namespace TBS.Data.Migrations
                 {
                     b.HasOne("TBS.Data.Models.Users.Carrier", "Carrier")
                         .WithMany()
-                        .HasForeignKey("CarrierId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CarrierId1");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Posts.Shipper.ShipperPost", b =>

@@ -23,7 +23,7 @@ namespace TBS.Services.Bids
         }
 
         // Get a bid by id, used on details page
-        public async Task<ShipperBid> GetBidByIdAsync(int bidId)
+        public async Task<ShipperBid> GetBidByIdAsync(Guid bidId)
         {
             return await Task.FromResult(
                 _context.ShipperBids
@@ -34,7 +34,7 @@ namespace TBS.Services.Bids
         }
 
         // Get all bids assoicated with a post given a post id, used on personal dashboard post detailed page
-        public async Task<PaginatedShipperBids> GetAllBidsByPostIdAsync(string userFirebaseId, int postId, PaginationModel model)
+        public async Task<PaginatedShipperBids> GetAllBidsByPostIdAsync(string userFirebaseId, Guid postId, PaginationModel model)
         {
             var allBids = await _context.ShipperBids
                 .Include(b => b.Carrier)
@@ -97,7 +97,7 @@ namespace TBS.Services.Bids
         }
 
         // Delete a shipper bid
-        public async Task<bool> DeleteBidAsync(int bidId)
+        public async Task<bool> DeleteBidAsync(Guid bidId)
         {
             var shipperBid = await GetBidByIdAsync(bidId);
 

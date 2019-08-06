@@ -1,10 +1,11 @@
-﻿using TBS.Data.Models.Bids.Shipper;
+﻿using System;
+using TBS.Data.Models.Bids.Shipper;
 
 namespace TBS.Data.Models.Bids.Request
 {
     public class ShipperCreateBidRequest
     {
-        public int PostId { get; set; }
+        public Guid PostId { get; set; }
         public ShipperBid Bid { get; set; }
     }
 }

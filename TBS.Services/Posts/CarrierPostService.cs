@@ -47,7 +47,7 @@ namespace TBS.Services.Posts
             return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
-        public async Task<CarrierPost> GetPostByIdAsync(int id)
+        public async Task<CarrierPost> GetPostByIdAsync(Guid id)
         {
             var carrierPost = await _context.CarrierPosts
                 .Include(p => p.Carrier)
@@ -62,7 +62,7 @@ namespace TBS.Services.Posts
 
             return carrierPost;
         }
-        public async Task<bool> UpdatePostAsync(int id, CarrierPost post)
+        public async Task<bool> UpdatePostAsync(Guid id, CarrierPost post)
         {
             if (id != post.Id)
             {
@@ -92,7 +92,7 @@ namespace TBS.Services.Posts
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeletePostAsync(int id)
+        public async Task<bool> DeletePostAsync(Guid id)
         {
             var carrierPost = await GetPostByIdAsync(id);
 

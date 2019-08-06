@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.Users.Information;
 
 namespace TBS.Data.Models.Users
@@ -6,7 +7,7 @@ namespace TBS.Data.Models.Users
     // Dealer
     public class Shipper
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name required")]
         public string Name { get; set; }

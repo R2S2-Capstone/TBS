@@ -7,7 +7,7 @@ namespace TBS.Data.Models.Posts.Carrier
     // Transporter post
     public class CarrierPost
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int CarrierId { get; set; }
         public Users.Carrier Carrier { get; set; }

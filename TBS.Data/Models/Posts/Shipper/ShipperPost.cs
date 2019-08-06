@@ -9,7 +9,7 @@ namespace TBS.Data.Models.Posts.Shipper
     // Dealer post
     public class ShipperPost
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public Users.Shipper Shipper { get; set; }
 

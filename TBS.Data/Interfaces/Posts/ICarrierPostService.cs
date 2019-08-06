@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TBS.Data.Models;
 using TBS.Data.Models.Posts.Carrier;
 using TBS.Data.Models.Posts.Response;
@@ -11,12 +12,12 @@ namespace TBS.Data.Interfaces.Posts
 
         Task<PaginatedCarrierPosts> GetAllUsersPostsAsync(string userFirebaseId, PaginationModel model);
 
-        Task<CarrierPost> GetPostByIdAsync(int postId);
+        Task<CarrierPost> GetPostByIdAsync(Guid postId);
 
         Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post);
 
-        Task<bool> UpdatePostAsync(int id, CarrierPost post);
+        Task<bool> UpdatePostAsync(Guid id, CarrierPost post);
 
-        Task<bool> DeletePostAsync(int id);
+        Task<bool> DeletePostAsync(Guid id);
     }
 }

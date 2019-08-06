@@ -53,7 +53,7 @@ namespace TBS.Services.Post
             return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
-        public async Task<ShipperPost> GetPostByIdAsync(int id)
+        public async Task<ShipperPost> GetPostByIdAsync(Guid id)
         {
             var shipperPost = await _context.ShipperPosts
                 .Include(p => p.Shipper)
@@ -83,7 +83,7 @@ namespace TBS.Services.Post
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdatePostAsync(int id, ShipperPost post)
+        public async Task<bool> UpdatePostAsync(Guid id, ShipperPost post)
         {
             if (id != post.Id)
             {
@@ -105,7 +105,7 @@ namespace TBS.Services.Post
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeletePostAsync(int id)
+        public async Task<bool> DeletePostAsync(Guid id)
         {
             var shipperPost = await GetPostByIdAsync(id);
 

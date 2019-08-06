@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.Posts;
@@ -31,7 +32,7 @@ namespace TBS.API.Controllers.v1.Posts
 
         // GET: api/v1/Posts/Carrier/{PostId}
         [HttpGet("{postId}")]
-        public async Task<IActionResult> GetCarrierPostByIdAsync(int postId) => Ok(new { result = await _service.GetPostByIdAsync(postId) });
+        public async Task<IActionResult> GetCarrierPostByIdAsync(string postId) => Ok(new { result = await _service.GetPostByIdAsync(Guid.Parse(postId)) });
 
         // POST: api/v1/Posts/Carrier
         [HttpPost]
@@ -45,11 +46,11 @@ namespace TBS.API.Controllers.v1.Posts
         // POST: api/v1/Posts/Carrier/{PostId}
         [HttpPost("{postId}")]
         [Authorize]
-        public async Task<IActionResult> PutCarrierUpdateAsync(int postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(postId, post) });
+        public async Task<IActionResult> PutCarrierUpdateAsync(string postId, CarrierPost post) => Ok(new { result = await _service.UpdatePostAsync(Guid.Parse(postId), post) });
 
         // DELETE: api/v1/Posts/Carrier/{PostId}
         [HttpDelete("{postId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteCarrierPostAsync(int postId) => Ok(new { result = await _service.DeletePostAsync(postId) });
+        public async Task<IActionResult> DeleteCarrierPostAsync(string postId) => Ok(new { result = await _service.DeletePostAsync(Guid.Parse(postId)) });
     }
 }

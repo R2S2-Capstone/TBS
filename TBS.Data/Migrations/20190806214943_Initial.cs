@@ -11,8 +11,7 @@ namespace TBS.Data.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     AddressLine = table.Column<string>(nullable: false),
                     City = table.Column<string>(nullable: false),
                     Province = table.Column<string>(nullable: false),
@@ -28,8 +27,7 @@ namespace TBS.Data.Migrations
                 name: "CarrierVehicle",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     Year = table.Column<int>(nullable: false),
                     Make = table.Column<string>(nullable: false),
                     Model = table.Column<string>(nullable: false),
@@ -45,8 +43,7 @@ namespace TBS.Data.Migrations
                 name: "Contact",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     PhoneNumber = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false)
@@ -60,8 +57,7 @@ namespace TBS.Data.Migrations
                 name: "PostedVehicle",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     Year = table.Column<int>(nullable: false),
                     Make = table.Column<string>(nullable: false),
                     Model = table.Column<string>(nullable: false),
@@ -77,11 +73,10 @@ namespace TBS.Data.Migrations
                 name: "Company",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    AddressId = table.Column<int>(nullable: false),
-                    ContactId = table.Column<int>(nullable: false)
+                    AddressId = table.Column<byte[]>(nullable: false),
+                    ContactId = table.Column<byte[]>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,14 +99,13 @@ namespace TBS.Data.Migrations
                 name: "Carriers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     UserFirebaseId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<byte[]>(nullable: false),
                     DriversLicense = table.Column<string>(nullable: false),
-                    VehicleId = table.Column<int>(nullable: true)
+                    VehicleId = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,12 +128,11 @@ namespace TBS.Data.Migrations
                 name: "Shippers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     UserFirebaseId = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<byte[]>(nullable: false),
                     RIN = table.Column<string>(nullable: false),
                     DealerNumber = table.Column<string>(nullable: false)
                 },
@@ -158,9 +151,9 @@ namespace TBS.Data.Migrations
                 name: "CarrierPosts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                    Id = table.Column<byte[]>(nullable: false),
                     CarrierId = table.Column<int>(nullable: false),
+                    CarrierId1 = table.Column<byte[]>(nullable: true),
                     DatePosted = table.Column<DateTime>(nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: false),
                     PickupLocation = table.Column<string>(nullable: false),
@@ -176,29 +169,28 @@ namespace TBS.Data.Migrations
                 {
                     table.PrimaryKey("PK_CarrierPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CarrierPosts_Carriers_CarrierId",
-                        column: x => x.CarrierId,
+                        name: "FK_CarrierPosts_Carriers_CarrierId1",
+                        column: x => x.CarrierId1,
                         principalTable: "Carriers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ShipperPosts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
-                    ShipperId = table.Column<int>(nullable: true),
+                    Id = table.Column<byte[]>(nullable: false),
+                    ShipperId = table.Column<byte[]>(nullable: true),
                     DatePosted = table.Column<DateTime>(nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: false),
-                    VehicleId = table.Column<int>(nullable: false),
-                    PickupLocationId = table.Column<int>(nullable: false),
+                    VehicleId = table.Column<byte[]>(nullable: false),
+                    PickupLocationId = table.Column<byte[]>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
-                    PickupContactId = table.Column<int>(nullable: false),
-                    DropoffLocationId = table.Column<int>(nullable: false),
+                    PickupContactId = table.Column<byte[]>(nullable: false),
+                    DropoffLocationId = table.Column<byte[]>(nullable: false),
                     DropoffDate = table.Column<DateTime>(nullable: false),
-                    DropoffContactId = table.Column<int>(nullable: false),
+                    DropoffContactId = table.Column<byte[]>(nullable: false),
                     StartingBid = table.Column<decimal>(nullable: false),
                     PostStatus = table.Column<int>(nullable: false)
                 },
@@ -247,14 +239,13 @@ namespace TBS.Data.Migrations
                 name: "CarrierBids",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
-                    ShipperId = table.Column<int>(nullable: true),
-                    PostId = table.Column<int>(nullable: true),
-                    VehicleId = table.Column<int>(nullable: false),
-                    PickupLocationId = table.Column<int>(nullable: false),
+                    Id = table.Column<byte[]>(nullable: false),
+                    ShipperId = table.Column<byte[]>(nullable: true),
+                    PostId = table.Column<byte[]>(nullable: true),
+                    VehicleId = table.Column<byte[]>(nullable: false),
+                    PickupLocationId = table.Column<byte[]>(nullable: false),
                     PickupDate = table.Column<DateTime>(nullable: false),
-                    DropoffLocationId = table.Column<int>(nullable: false),
+                    DropoffLocationId = table.Column<byte[]>(nullable: false),
                     DropoffDate = table.Column<DateTime>(nullable: false),
                     BidAmount = table.Column<double>(nullable: false),
                     DateBidPlaced = table.Column<DateTime>(nullable: false),
@@ -299,10 +290,9 @@ namespace TBS.Data.Migrations
                 name: "ShipperBids",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
-                    CarrierId = table.Column<int>(nullable: true),
-                    PostId = table.Column<int>(nullable: true),
+                    Id = table.Column<byte[]>(nullable: false),
+                    CarrierId = table.Column<byte[]>(nullable: true),
+                    PostId = table.Column<byte[]>(nullable: true),
                     BidAmount = table.Column<double>(nullable: false),
                     DateBidPlaced = table.Column<DateTime>(nullable: false),
                     BidStatus = table.Column<int>(nullable: false)
@@ -350,9 +340,9 @@ namespace TBS.Data.Migrations
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarrierPosts_CarrierId",
+                name: "IX_CarrierPosts_CarrierId1",
                 table: "CarrierPosts",
-                column: "CarrierId");
+                column: "CarrierId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carriers_CompanyId",

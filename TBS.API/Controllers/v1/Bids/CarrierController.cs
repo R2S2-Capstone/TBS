@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.Bids;
@@ -24,12 +25,12 @@ namespace TBS.API.Controllers.v1.Bids
         // GET: api/v1/Bids/Carrier/{bidId}
         [HttpGet("{bidId}")]
         [Authorize]
-        public async Task<IActionResult> GetBidByIdAsync(int bidId) => Ok(new { result = await _service.GetBidByIdAsync(bidId) });
+        public async Task<IActionResult> GetBidByIdAsync(string bidId) => Ok(new { result = await _service.GetBidByIdAsync(Guid.Parse(bidId)) });
 
         // GET: api/v1/Bids/Carrier/{userFirebaseId}/{bidId}/{currentPage}/{pageSize}
         [HttpGet("{userFirebaseId}/{postId}/{currentPage}/{pageSize}")]
         [Authorize]
-        public async Task<IActionResult> GetAllBidsByPostIdAsync(string userFirebaseId, int postId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllBidsByPostIdAsync(userFirebaseId, postId, new PaginationModel { CurrentPage = currentPage, PageSize = pageSize }) } );
+        public async Task<IActionResult> GetAllBidsByPostIdAsync(string userFirebaseId, string postId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllBidsByPostIdAsync(userFirebaseId, Guid.Parse(postId), new PaginationModel { CurrentPage = currentPage, PageSize = pageSize }) } );
 
         // GET: api/v1/Bids/Carrier/{userFirebaseId}/{currentPage}/{pageSize}
         [HttpGet("{userFirebaseId}/{currentPage}/{pageSize}")]
@@ -53,6 +54,6 @@ namespace TBS.API.Controllers.v1.Bids
         // DELETE: api/v1/Posts/Carrier/{bidId}
         [HttpDelete("{postId}")]
         [Authorize]
-        public async Task<IActionResult> DeleteCarrierBidAsync(int bidId) => Ok(new { result = await _service.DeleteBidAsync(bidId) });
+        public async Task<IActionResult> DeleteCarrierBidAsync(string bidId) => Ok(new { result = await _service.DeleteBidAsync(Guid.Parse(bidId)) });
     }
 }

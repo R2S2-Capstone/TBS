@@ -9,7 +9,7 @@ namespace TBS.Data.Models.Bids.Carrier
     // Note: this is a bid placed on a carriers post by a shipper
     public class CarrierBid
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public Users.Shipper Shipper { get; set; }
 
