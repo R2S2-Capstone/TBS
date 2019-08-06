@@ -27,7 +27,7 @@
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td v-if="bid.id"><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
-                  <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
+                  <div v-if="parsePostStatus(post.postStatus) == 'Open' && parseBidStatus(bid.bidStatus) == 'Open'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -61,6 +61,7 @@
 <script>
 import Back from '@/components/Back.vue'
 
+import postUtilities from '@/utils/postUtilities.js'
 import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
@@ -83,12 +84,18 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      // this.bids.find(b => b.id == bidId).status = 'Accepted'
-      //TODO: accept bid
+      //TODO: SHOW ALERT
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'approved' })
+        .then(() => {
+          this.bids.find(b => b.id == bidId).bidStatus = 1
+        })
     },
     declineBid(bidId) {
-      // this.bids.find(b => b.id == bidId).status = 'Declined'
-      //TODO: decline bid
+      //TODO: SHOW ALERT
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'declined' })
+        .then(() => {
+          this.bids.find(b => b.id == bidId).bidStatus = 2
+        })
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -116,6 +123,9 @@ export default {
         .catch(() => {
           this.error = true
         })
+    },
+    parsePostStatus(status) {
+      return postUtilities.parsePostStatus(status)
     },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)

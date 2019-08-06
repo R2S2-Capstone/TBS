@@ -76,7 +76,7 @@
             <div class="col-12">
               <p></p>
               <p>Company Name:<br>{{ post.shipper.company.name }}</p>
-              <p>
+              <p class="contact">
                 Contact Name:<br>{{ post.shipper.company.contact.name }}<br>
                 Contact Phone Number:<br><a :href="'tel:' + post.shipper.company.contact.phoneNumber">{{ post.shipper.company.contact.phoneNumber }}</a><br>
                 Contact Email:<br><a :href="'mailto:' + post.shipper.company.contact.email">{{ post.shipper.company.contact.email }}</a><br>
@@ -172,7 +172,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/global.scss";
-
 .background {
   background-color: #fff;
   border: 1px solid #dbdbdb;
@@ -183,5 +182,8 @@ hr {
   width: 15vw;
   max-width: 100%;
   border-top: 1px solid colour(colourPrimary);
+}
+.contact {
+  overflow: hidden;
 }
 </style>

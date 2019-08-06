@@ -52,7 +52,7 @@ namespace TBS.Services.Bids
         }
 
         // Get all of your personal bids, used on personal dashboard
-        // Note: this will get all bids for a shipper
+        // Note: this will get all bids for the shipper user
         public async Task<PaginatedCarrierBids> GetAllUsersBidsAsync(string userFirebaseId, PaginationModel model)
         {
             var allBids = await _context.CarrierBids
@@ -68,7 +68,7 @@ namespace TBS.Services.Bids
             return new PaginatedCarrierBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
-        // Create a carrier bid
+        // Create a bid on a carrier post
         public async Task<bool> CreateBidAsync(string userFirebaseId, CarrierCreateBidRequest request)
         {
             request.Bid.Shipper = _context.Shippers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
@@ -78,23 +78,73 @@ namespace TBS.Services.Bids
             return await Task.FromResult(true);
         }
 
-        // Cancel a carrier bid
+        // Update a bid on a carrier post
         public async Task<bool> UpdateBidAsync(UpdateBidRequest request)
         {
-            var bid = _context.CarrierBids.First(p => p.Id == request.BidId);
-            bid.BidStatus = request.Status;
-            _context.CarrierBids.Update(bid);
-
-            try
+            var bid = _context.CarrierBids
+                .Include(b => b.Post)
+                .First(p => p.Id == request.BidId);
+            if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
             {
-                await _context.SaveChangesAsync();
+                throw new FailedToUpdateBidException("Post is no longer accepting bids");
             }
-            catch (Exception)
+            else
             {
-                throw new FailedToUpdateBidException();
-            }
+                // A carrier post can have multiple accepted bids, make sure it is under the posted capacity
+                var approvedBids = _context.CarrierBids
+                    .Include(b => b.Post)
+                    .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Approved)
+                    .Count();
+                // Spaces still available
+                if (bid.Post.SpacesAvailable > approvedBids && request.Status == Data.Models.Bids.BidStatus.Approved)
+                {
+                    bid.BidStatus = request.Status;
 
-            return await Task.FromResult(true);
+                    // The plus one reperesnts the just added approved bid
+                    if (bid.Post.SpacesAvailable == approvedBids + 1)
+                    {
+                        // The post is at its maximum capacity so set it to a different state
+                        bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
+
+                        _context.CarrierBids.Update(bid);
+
+                        await _context.SaveChangesAsync();
+
+                        // Cancel all other bids
+                        var pendingBids = _context.CarrierBids
+                            .Include(b => b.Post)
+                            .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Open);
+
+                        foreach (var pendingBid in pendingBids)
+                        {
+                            pendingBid.BidStatus = Data.Models.Bids.BidStatus.Cancelled;
+                            _context.CarrierBids.Update(bid);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else if (bid.Post.SpacesAvailable <= approvedBids)
+                {
+                    throw new FailedToUpdateBidException("Already reached maximum accepted bids");
+                }
+                else
+                {
+                    bid.BidStatus = request.Status;
+                }
+
+                _context.CarrierBids.Update(bid);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw new FailedToUpdateBidException();
+                }
+
+                return await Task.FromResult(true);
+            }
         }
 
         // Delete a carrier bid

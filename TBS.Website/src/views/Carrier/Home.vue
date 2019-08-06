@@ -146,7 +146,7 @@ export default {
         })
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: 5 })
         .then((response) => {
           this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts

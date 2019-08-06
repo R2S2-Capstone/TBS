@@ -6,6 +6,9 @@
         <div class="row">
           <div class="col-12">
             <div class="row">
+              <div class="col-12">
+                <h4>Bid Status: {{ parseBidStatus(bid.bidStatus) }}</h4>
+              </div>
               <div class="col-lg-6 col-md-6 col-sm-12">
                 <hr>
                 <h5>Vehicle Information</h5>
@@ -44,7 +47,7 @@
             </div>
           </div>
 
-          <div class="col-12">
+          <div class="col-12" v-if="parseBidStatus(bid.bidStatus) == 'Open'">
             <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="acceptBid(bid.id)">Accept Bid</button><br>
             <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline Bid</button>
           </div>
@@ -59,6 +62,7 @@ import Back from '@/components/Back.vue'
 import WideCard from '@/components/Card/WideCard.vue'
 
 import postUtilities from '@/utils/postUtilities.js'
+import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
   name: 'carrierViewBidDetails',
@@ -78,10 +82,18 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      //TODO: Accept bid      
+      //TODO: SHOW ALERT
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'approved' })
+        .then(() => {
+          this.bid.bidStatus = 1
+        })
     },
     declineBid(bidId) {
-      //TODO: decline bid
+      //TODO: SHOW ALERT
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'declined' })
+        .then(() => {
+          this.bid.bidStatus = 2
+        })
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -100,6 +112,9 @@ export default {
     },
     parseVehicleCondition(condition) {
       return postUtilities.parseVehicleCondition(condition)
+    },
+    parseBidStatus(status) {
+      return bidUtilities.parseBidStatus(status)
     }
   },
   created() {

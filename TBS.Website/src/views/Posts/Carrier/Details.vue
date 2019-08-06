@@ -59,7 +59,7 @@
                       <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                       
                       <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 pt-2">
                           <h5>Vehicle Information</h5>
                           <hr>
                           <p></p>
@@ -184,7 +184,7 @@
             <div class="col-12">
               <p></p>
               <p>Company Name:<br>{{ post.carrier.company.name }}</p>
-              <p>
+              <p class="contact">
                 Contact Name:<br>{{ post.carrier.company.contact.name }}<br>
                 Contact Phone Number:<br><a :href="'tel:' + post.carrier.company.contact.phoneNumber">{{ this.post.carrier.company.contact.phoneNumber }}</a><br>
                 Contact Email:<br><a :href="'mailto:' + post.carrier.company.contact.email">{{ this.post.carrier.company.contact.email }}</a><br>
@@ -358,7 +358,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/global.scss";
-
 .background {
   background-color: #fff;
   border: 1px solid #dbdbdb;
@@ -369,5 +368,8 @@ hr {
   width: 15vw;
   max-width: 100%;
   border-top: 1px solid colour(colourPrimary);
+}
+.contact {
+  overflow: hidden;
 }
 </style>

@@ -49,7 +49,7 @@ namespace TBS.Services.Bids
         }
 
         // Get all of your personal bids, used on personal dashboard
-        // Note: this will get all bids for a carrier
+        // Note: this will get all bids for the carrier user
         public async Task<PaginatedShipperBids> GetAllUsersBidsAsync(string userFirebaseId, PaginationModel model)
         {
             var allBids = await _context.ShipperBids
@@ -67,7 +67,7 @@ namespace TBS.Services.Bids
             return new PaginatedShipperBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
-        // Create a shipper bid
+        // Create a bid on a shipper post
         public async Task<bool> CreateBidAsync(string userFirebaseId, ShipperCreateBidRequest request)
         {
             request.Bid.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
@@ -77,23 +77,39 @@ namespace TBS.Services.Bids
             return await Task.FromResult(true);
         }
 
-        // Cancel a carrier bid
+        // Update a bid on a shipper post
         public async Task<bool> UpdateBidAsync(UpdateBidRequest request)
         {
-            var bid = _context.ShipperBids.First(p => p.Id == request.BidId);
-            bid.BidStatus = request.Status;
-            _context.ShipperBids.Update(bid);
-
-            try
+            var bid = _context.ShipperBids
+                .Include(b => b.Post)
+                .First(p => p.Id == request.BidId);
+            if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
             {
-                await _context.SaveChangesAsync();
+                throw new FailedToUpdateBidException("Post is no longer accepting bids");
             }
-            catch (Exception)
+            else
             {
-                throw new FailedToUpdateBidException();
-            }
+                bid.BidStatus = request.Status;
 
-            return await Task.FromResult(true);
+                // A shipper post can only have one accepted bid so make sure it is moved into the next state
+                if (bid.BidStatus == Data.Models.Bids.BidStatus.Approved)
+                {
+                    bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
+                }
+
+                _context.ShipperBids.Update(bid);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw new FailedToUpdateBidException();
+                }
+
+                return await Task.FromResult(true);
+            }
         }
 
         // Delete a shipper bid

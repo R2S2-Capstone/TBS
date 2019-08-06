@@ -83,12 +83,18 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      // this.bids.find(b => b.id == bidId).status = 'Accepted'
-      //TODO: accept bid
+      //TODO: SHOW ALERT
+      this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'approved' })
+        .then(() => {
+          this.bids.find(b => b.id == bidId).bidStatus = 1
+        })
     },
     declineBid(bidId) {
-      // this.bids.find(b => b.id == bidId).status = 'Declined'
-      //TODO: decline bin
+      //TODO: SHOW ALERT
+      this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'declined' })
+        .then(() => {
+          this.bids.find(b => b.id == bidId).bidStatus = 2
+        })
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
