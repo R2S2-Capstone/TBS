@@ -156,7 +156,7 @@ export default {
         })
     },
     fetchBids() {
-      this.$store.dispatch('bids/getMyBids', { type: 'shipper', currentPage: this.bidPage, count: this.bidPageCount })
+      this.$store.dispatch('bids/getMyBids', { type: 'shipper', currentPage: this.bidPage, count: 5 })
         .then((response) => {
           this.bidPageCount = response.data.result.paginationModel.totalPages
           this.bids = response.data.result.bids
