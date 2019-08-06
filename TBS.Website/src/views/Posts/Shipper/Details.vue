@@ -17,9 +17,9 @@
               <div class="row">
                 <div class="col-12">
                   <p></p>
-                  <p>Location: {{ formatAddress(this.post.pickupLocation) }}</p>
-                  <p>Date: {{ this.post.pickupDate.split('T')[0] }}</p>
-                  <p>Time: {{ convertTime(this.post.pickupDate.split('T')[1]) }}</p>
+                  <p>Location: {{ formatAddress(post.pickupLocation) }}</p>
+                  <p>Date: {{ post.pickupDate.split('T')[0] }}</p>
+                  <p>Time: {{ convertTime(post.pickupDate.split('T')[1]) }}</p>
                 </div>
               </div>
             </div>
@@ -31,9 +31,9 @@
               <div class="row">
                 <div class="col-12">
                   <p></p>
-                  <p>Location: {{ formatAddress(this.post.dropoffLocation) }}</p>
-                  <p>Date: {{ this.post.dropoffDate.split('T')[0] }}</p>
-                  <p>Time: {{ convertTime(this.post.dropoffDate.split('T')[1]) }}</p>
+                  <p>Location: {{ formatAddress(post.dropoffLocation) }}</p>
+                  <p>Date: {{ post.dropoffDate.split('T')[0] }}</p>
+                  <p>Time: {{ convertTime(post.dropoffDate.split('T')[1]) }}</p>
                 </div>
               </div>
             </div>
@@ -45,8 +45,8 @@
               <div class="row">
                 <div class="col-12">
                   <p></p>
-                  <p>Date Posted: {{ this.post.datePosted.split('T')[0] }}</p>
-                  <p>Starting Bid: ${{ this.post.startingBid }}</p>
+                  <p>Date Posted: {{ post.datePosted.split('T')[0] }}</p>
+                  <p>Starting Bid: ${{ post.startingBid }}</p>
                   <p>Current highest bid: Coming soon...</p>
                   <p>Current lowest bid: Coming soon...</p>
                   <p v-if="bidError" class="text-danger">Failed to bid on post</p>
@@ -75,11 +75,11 @@
           <div class="row">
             <div class="col-12">
               <p></p>
-              <p>Company Name:<br>{{ this.post.shipper.company.name }}</p>
+              <p>Company Name:<br>{{ post.shipper.company.name }}</p>
               <p>
-                Contact Name:<br>{{ this.post.shipper.company.contact.name }}<br>
-                Contact Phone Number:<br><a :href="'tel:' + this.post.shipper.company.contact.phoneNumber">{{ this.post.shipper.company.contact.phoneNumber }}</a><br>
-                Contact Email:<br><a :href="'mailto:' + this.post.shipper.company.contact.email">{{ this.post.shipper.company.contact.email }}</a><br>
+                Contact Name:<br>{{ post.shipper.company.contact.name }}<br>
+                Contact Phone Number:<br><a :href="'tel:' + post.shipper.company.contact.phoneNumber">{{ post.shipper.company.contact.phoneNumber }}</a><br>
+                Contact Email:<br><a :href="'mailto:' + post.shipper.company.contact.email">{{ post.shipper.company.contact.email }}</a><br>
               </p>
             </div>
           </div>
@@ -91,7 +91,7 @@
             <div class="col-12">
               <p></p>            
               <p>
-                Name:<br>{{ this.post.shipper.name }}<br>
+                Name:<br>{{ post.shipper.name }}<br>
                 Rating:<br>Coming Soon!<br>
               </p>
             </div>
