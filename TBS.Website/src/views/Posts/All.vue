@@ -12,10 +12,10 @@
       <li v-for="(page, index) in  pageCount" :key="index" class="page-item" :class="page == currentPage ? 'active' : ''">
         <span class="page-link" @click="setPage(page)">{{ page }}</span>
       </li>
-      <li class="page-item" :class="currentPage == pageCount || currentPage == 1 ? 'disabled' : ''">
+      <li class="page-item" :class="currentPage == pageCount || pageCount == 1 ? 'disabled' : ''">
         <span class="page-link" @click="setPage(pageCount)">Last</span>
       </li>
-      <li class="page-item" :class="currentPage == pageCount || currentPage == 1 ? 'disabled' : ''">
+      <li class="page-item" :class="currentPage == pageCount || pageCount == 1 ? 'disabled' : ''">
         <span class="page-link" @click="setPage(currentPage + 1)">Next</span>
       </li>
     </ul>
