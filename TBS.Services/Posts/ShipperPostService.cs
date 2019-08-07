@@ -39,12 +39,15 @@ namespace TBS.Services.Post
 
         public async Task<PaginatedShipperPosts> GetAllUsersPostsAsync(string userFirebaseId, PaginationModel model)
         {
-            var allUserPosts = await _context.ShipperPosts
-                .Include(p => p.Vehicle)
-                .Include(p => p.PickupLocation)
-                .Include(p => p.DropoffLocation)
-                .Where(p => p.Shipper.UserFirebaseId == userFirebaseId)
-                .ToListAsync();
+            var user = await _context.Shippers
+                .Include(s => s.Posts)
+                    .ThenInclude(p => p.Vehicle)
+                .Include(s => s.Posts)
+                    .ThenInclude(p => p.PickupLocation)
+                .Include(s => s.Posts)
+                    .ThenInclude(p => p.DropoffLocation)
+                .FirstOrDefaultAsync(s => s.UserFirebaseId == userFirebaseId);
+            var allUserPosts = user.Posts.ToList();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
             model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts

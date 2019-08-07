@@ -36,15 +36,16 @@ namespace TBS.Services.Posts
 
         public async Task<PaginatedCarrierPosts> GetAllUsersPostsAsync(string userFirebaseId, PaginationModel model)
         {
-            var allUserPosts = await _context.CarrierPosts
-                .Where(p => p.Carrier.UserFirebaseId == userFirebaseId)
-                .ToListAsync();
+            var user = await _context.Carriers
+                .Include(c => c.Posts)
+                .FirstOrDefaultAsync(c => c.UserFirebaseId == userFirebaseId);
+            var allUserPosts = user.Posts.ToList();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
             model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
-            return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
+            return await Task.FromResult(new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts });
         }
 
         public async Task<CarrierPost> GetPostByIdAsync(Guid id)

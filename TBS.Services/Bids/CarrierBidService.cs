@@ -39,13 +39,12 @@ namespace TBS.Services.Bids
         // Get all bids assoicated with a post given a post id, used on personal dashboard post detailed page
         public async Task<PaginatedCarrierBids> GetAllBidsByPostIdAsync(string userFirebaseId, Guid postId, PaginationModel model)
         {
-            var allBids = await _context.CarrierBids
-                .Include(b => b.Shipper)
-                .Include(b => b.Post)
-                .Where(b => b.Post.Id == postId)
-                .ToListAsync();
-            model.Count = allBids.Count();
-            var paginatedBids = allBids
+            var post = await _context.CarrierPosts
+                .Include(p => p.Bids)
+                    .ThenInclude(b => b.Shipper)
+                .FirstOrDefaultAsync(p => p.Id == postId);
+            model.Count = post.Bids.Count();
+            var paginatedBids = post.Bids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
             return new PaginatedCarrierBids() { PaginationModel = model, Bids = paginatedBids };
@@ -59,7 +58,7 @@ namespace TBS.Services.Bids
                 .Include(b => b.Shipper)
                 .Include(b => b.Post)
                 .Where(b => b.Shipper.UserFirebaseId == userFirebaseId)
-                .OrderBy(p => p.BidStatus)
+                .OrderByDescending(p => p.BidStatus)
                 .ToListAsync();
             model.Count = allBids.Count();
             var paginatedBids = allBids

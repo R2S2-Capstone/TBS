@@ -9,7 +9,7 @@ using TBS.Data.Database;
 namespace TBS.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20190806214943_Initial")]
+    [Migration("20190807223446_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,9 +126,7 @@ namespace TBS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("CarrierId");
-
-                    b.Property<byte[]>("CarrierId1")
+                    b.Property<byte[]>("CarrierId")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("DatePosted");
@@ -155,7 +153,7 @@ namespace TBS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarrierId1");
+                    b.HasIndex("CarrierId");
 
                     b.ToTable("CarrierPosts");
                 });
@@ -391,7 +389,7 @@ namespace TBS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TBS.Data.Models.Posts.Carrier.CarrierPost", "Post")
-                        .WithMany()
+                        .WithMany("Bids")
                         .HasForeignKey("PostId");
 
                     b.HasOne("TBS.Data.Models.Users.Shipper", "Shipper")
@@ -411,15 +409,15 @@ namespace TBS.Data.Migrations
                         .HasForeignKey("CarrierId");
 
                     b.HasOne("TBS.Data.Models.Posts.Shipper.ShipperPost", "Post")
-                        .WithMany()
+                        .WithMany("Bids")
                         .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Posts.Carrier.CarrierPost", b =>
                 {
                     b.HasOne("TBS.Data.Models.Users.Carrier", "Carrier")
-                        .WithMany()
-                        .HasForeignKey("CarrierId1");
+                        .WithMany("Posts")
+                        .HasForeignKey("CarrierId");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Posts.Shipper.ShipperPost", b =>
@@ -445,7 +443,7 @@ namespace TBS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TBS.Data.Models.Users.Shipper", "Shipper")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("ShipperId");
 
                     b.HasOne("TBS.Data.Models.Vehicle.PostedVehicle", "Vehicle")

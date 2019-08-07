@@ -152,8 +152,7 @@ namespace TBS.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<byte[]>(nullable: false),
-                    CarrierId = table.Column<int>(nullable: false),
-                    CarrierId1 = table.Column<byte[]>(nullable: true),
+                    CarrierId = table.Column<byte[]>(nullable: true),
                     DatePosted = table.Column<DateTime>(nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: false),
                     PickupLocation = table.Column<string>(nullable: false),
@@ -169,8 +168,8 @@ namespace TBS.Data.Migrations
                 {
                     table.PrimaryKey("PK_CarrierPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CarrierPosts_Carriers_CarrierId1",
-                        column: x => x.CarrierId1,
+                        name: "FK_CarrierPosts_Carriers_CarrierId",
+                        column: x => x.CarrierId,
                         principalTable: "Carriers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -340,9 +339,9 @@ namespace TBS.Data.Migrations
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarrierPosts_CarrierId1",
+                name: "IX_CarrierPosts_CarrierId",
                 table: "CarrierPosts",
-                column: "CarrierId1");
+                column: "CarrierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carriers_CompanyId",
