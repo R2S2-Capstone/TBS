@@ -49,8 +49,6 @@
                   <p>Starting Bid: ${{ post.startingBid }}</p>
                   <p>Current highest bid: Coming soon...</p>
                   <p>Current lowest bid: Coming soon...</p>
-                  <p v-if="bidError" class="text-danger">Failed to bid on post</p>
-                  <p v-if="bidSuccess" class="text-success">Successfully bid on post</p>
                   <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
                     <div slot="description">
                       Please enter your bid amount
@@ -103,6 +101,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import TextInput from '@/components/Form/Input/TextInput.vue'
 
 import utilities from '@/utils/postUtilities.js'
@@ -142,12 +142,20 @@ export default {
     submitBid() {
       this.$store.dispatch('bids/createBid', { type: 'shipper', postId: this.post.id, bid: { bidAmount: this.bidAmount }})
         .then(() => {
-          this.bidError = false
-          this.bidSuccess = true
+          this.showModal = false
+          Swal.fire({
+            type: 'success',
+            title: 'Successfully bid',
+            text: 'Bid has successfully been posted!',
+          })
         })
         .catch(() => {
-          this.bidError = false
-          this.bidSuccess = false
+          this.showModal = false
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
         })
     },
     formatAddress(address) {
