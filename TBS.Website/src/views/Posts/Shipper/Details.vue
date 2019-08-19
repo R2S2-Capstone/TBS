@@ -12,6 +12,12 @@
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12">
+              <h3>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h3>
+              <hr>
+            </div>
+          </div>
+          <div class="row pt-3">
+            <div class="col-12">
               <h5>Pickup Details</h5>
               <hr>
               <div class="row">

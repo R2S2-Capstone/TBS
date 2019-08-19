@@ -126,7 +126,7 @@ export default {
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      this.fetchPost()
+      this.fetchBids()
     },
     fetchPost() {
       this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.id })

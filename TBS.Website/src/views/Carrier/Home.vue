@@ -145,6 +145,11 @@ export default {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'cancelled' })
         .then(() => {
           this.bids.find(b => b.id == bidId).bidStatus = 3
+          Swal.fire({
+            type: 'success',
+            title: 'Cancelled',
+            text: 'Bid has successfully been cancelled!',
+          })
         })
     },
     fetchPosts() {
