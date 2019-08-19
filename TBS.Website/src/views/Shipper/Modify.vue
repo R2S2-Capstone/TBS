@@ -171,6 +171,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Back from '@/components/Back.vue'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 
@@ -327,6 +329,11 @@ export default {
           this.$router.push({ name: 'shipperHome' })
 				})
 				.catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to process your request. Please try again!',
+          })
 					this.error = true
 				}) 
     },
@@ -336,6 +343,11 @@ export default {
           this.$router.push({name: 'shipperHome' })
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to delete this post. Please try again!',
+          })
           this.deleteError = true
         })
     }
@@ -363,6 +375,11 @@ export default {
               this.failedToLoadError = false
             })
             .catch(() => {
+              Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong! We are unable to load this post. Please try again!',
+              })
               this.failedToLoadError = true
             })
         }

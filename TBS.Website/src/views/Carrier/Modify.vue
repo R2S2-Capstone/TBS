@@ -90,6 +90,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Back from '@/components/Back.vue'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 
@@ -164,17 +166,37 @@ export default {
         this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         this.$store.dispatch('posts/updatePost', this.post)
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Successfully bid',
+            text: 'Post has successfully been updated!',
+          })
           this.$router.push({name: 'carrierHome' })
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to update this post. Please try again!',
+          })
           this.error = true
         })
       } else {
         this.$store.dispatch('posts/createPost', { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Successfully bid',
+            text: 'Post has successfully been posted!',
+          })
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to create this post. Please try again!',
+          })
           this.error = true
         })
       }
@@ -185,6 +207,11 @@ export default {
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to delete this post. Please try again!',
+          })
           this.deleteError = true
         })
     }
@@ -212,6 +239,11 @@ export default {
           this.failedToLoadError = false
 				})
 				.catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
 					this.failedToLoadError = true
 				})
     }

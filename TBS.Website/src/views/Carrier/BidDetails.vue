@@ -128,7 +128,11 @@ export default {
           this.bid = response.data.result
         })
         .catch(() => {
-          this.error = true
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this bid. Please try again!',
+          })
         })
     },
     formatAddress(address) {

@@ -134,6 +134,11 @@ export default {
           this.post = response.data.result
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
           this.error = true
         })
     },
@@ -144,6 +149,11 @@ export default {
           this.bidPageCount = response.data.result.paginationModel.totalPages
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load these bids. Please try again!',
+          })
           this.error = true
         })
     },

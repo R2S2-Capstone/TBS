@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Posts from '@/components/Posts.vue'
 
 export default {
@@ -47,6 +49,11 @@ export default {
           this.postPageCount = response.data.result.paginationModel.totalPages
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load these posts. Please try again!',
+          })
           this.postsError = true
         })
     },

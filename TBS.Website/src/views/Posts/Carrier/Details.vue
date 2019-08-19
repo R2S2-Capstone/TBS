@@ -281,6 +281,11 @@ export default {
           this.bidAmount = this.post.startingBid.toString()
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
           this.error = true
         })
     },

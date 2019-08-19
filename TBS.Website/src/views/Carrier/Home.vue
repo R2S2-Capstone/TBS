@@ -106,6 +106,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import postUtilities from '@/utils/postUtilities.js'
 import bidUtilities from '@/utils/bidUtilities.js'
 
@@ -152,7 +154,12 @@ export default {
           this.posts = response.data.result.posts
         })
         .catch(() => {
-          this.postsError = true
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load your posts. Please try again!',
+          })
+          this.postError = true
         })
     },
     fetchBids() {
@@ -162,6 +169,11 @@ export default {
           this.bids = response.data.result.bids
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load your bids. Please try again!',
+          })
           this.bidError = true
         })
     },
