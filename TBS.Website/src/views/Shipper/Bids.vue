@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Back from '@/components/Back.vue'
 
 import bidUtilities from '@/utils/bidUtilities.js'
@@ -83,17 +85,39 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      //TODO: SHOW ALERT
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'approved' })
         .then(() => {
           this.bids.find(b => b.id == bidId).bidStatus = 1
+          Swal.fire({
+            type: 'success',
+            title: 'Accepted',
+            text: 'Bid has successfully been accepted!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
         })
     },
     declineBid(bidId) {
-      //TODO: SHOW ALERT
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'declined' })
         .then(() => {
           this.bids.find(b => b.id == bidId).bidStatus = 2
+          Swal.fire({
+            type: 'success',
+            title: 'Declined',
+            text: 'Bid has successfully been declined!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
         })
     },
     format(number) {
