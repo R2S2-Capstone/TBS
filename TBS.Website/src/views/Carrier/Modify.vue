@@ -79,7 +79,7 @@
               </div>
               <div class="col-12 pt-2" v-if="type == 'Update'">
                 <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
-                <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" />
+                <!-- <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" /> -->
               </div>
             </div>
           </div>
@@ -99,7 +99,6 @@ import TimeInput from '@/components/Form/Input/TimeInput.vue'
 import CapacityInput from '@/components/Form/Input/CapacityInput.vue'
 import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
 
-import Modal from '@/components/Modal.vue'
 
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
@@ -116,14 +115,12 @@ export default {
     TimeInput,
     CapacityInput,
     TrailerInput,
-    Modal,
   },
   data() {
     return {
       error: false,
       deleteError: false,
       failedToLoadError: false,
-      showModal: false,
       post: {
         pickupLocation: '',
         pickupDate: '', 
