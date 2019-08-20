@@ -6,6 +6,7 @@ using TBS.Data.Database;
 using TBS.Data.Exceptions.Bids;
 using TBS.Data.Exceptions.Bids.Shipper;
 using TBS.Data.Interfaces.Bids;
+using TBS.Data.Interfaces.Notifications;
 using TBS.Data.Models;
 using TBS.Data.Models.Bids.Request;
 using TBS.Data.Models.Bids.Response;
@@ -16,10 +17,12 @@ namespace TBS.Services.Bids
     public class ShipperBidService : IShipperBidService
     {
         private readonly DatabaseContext _context;
+        private readonly IEmailService _emailService;
 
-        public ShipperBidService(DatabaseContext databaseContext)
+        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService)
         {
             _context = databaseContext;
+            _emailService = emailService;
         }
 
         // Get a bid by id, used on details page
@@ -73,6 +76,7 @@ namespace TBS.Services.Bids
             request.Bid.Post = _context.ShipperPosts.FirstOrDefault(p => p.Id == request.PostId);
             await _context.ShipperBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
+ 
             return await Task.FromResult(true);
         }
 

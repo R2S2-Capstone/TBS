@@ -6,6 +6,7 @@ using TBS.Data.Database;
 using TBS.Data.Exceptions.Bids;
 using TBS.Data.Exceptions.Bids.Carrier;
 using TBS.Data.Interfaces.Bids;
+using TBS.Data.Interfaces.Notifications;
 using TBS.Data.Models;
 using TBS.Data.Models.Bids.Carrier;
 using TBS.Data.Models.Bids.Request;
@@ -16,10 +17,12 @@ namespace TBS.Services.Bids
     public class CarrierBidService : ICarrierBidService
     {
         private readonly DatabaseContext _context;
+        private readonly IEmailService _emailService;
 
-        public CarrierBidService(DatabaseContext databaseContext)
+        public CarrierBidService(DatabaseContext databaseContext, IEmailService emailService)
         {
             _context = databaseContext;
+            _emailService = emailService;
         }
 
         // Get a bid by id, used on details page
