@@ -65,7 +65,7 @@
                       <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="submitBid">Bid</button>
                     </div>
                   </div>
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
+                  <button v-if="!showModal" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
                 </div>
               </div>
             </div>

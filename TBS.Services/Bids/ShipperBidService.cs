@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Bids;
-using TBS.Data.Exceptions.Bids.Shipper;
 using TBS.Data.Interfaces.Bids;
 using TBS.Data.Interfaces.Notifications;
 using TBS.Data.Models;
@@ -46,7 +45,9 @@ namespace TBS.Services.Bids
             model.Count = post.Bids.Count();
             var paginatedBids = post.Bids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
-                .Take(model.PageSize).ToArray();
+                .Take(model.PageSize)
+                .OrderBy(p => p.BidStatus)
+                .ToArray();
             return new PaginatedShipperBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
@@ -72,11 +73,25 @@ namespace TBS.Services.Bids
         // Create a bid on a shipper post
         public async Task<bool> CreateBidAsync(string userFirebaseId, ShipperCreateBidRequest request)
         {
-            request.Bid.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
-            request.Bid.Post = _context.ShipperPosts.FirstOrDefault(p => p.Id == request.PostId);
+            request.Bid.Carrier = _context.Carriers
+                .FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
+            request.Bid.Post = _context.ShipperPosts
+                .Include(p => p.Shipper)
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
+                .FirstOrDefault(p => p.Id == request.PostId);
             await _context.ShipperBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
- 
+
+            //TODO: Add a link and make email prettier
+            await _emailService.SendEmailAsync(
+                request.Bid.Post.Shipper.Name,
+                request.Bid.Post.Shipper.Email,
+                $"New bid placed on {request.Bid.Post.PickupLocation.City} -> {request.Bid.Post.DropoffLocation.City}",
+                $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Carrier.Name}<br>" +
+                "Thanks,<br>" +
+                "TBS Inc."
+            );
             return await Task.FromResult(true);
         }
 
@@ -85,6 +100,10 @@ namespace TBS.Services.Bids
         {
             var bid = _context.ShipperBids
                 .Include(b => b.Post)
+                .ThenInclude(p => p.PickupLocation)
+                .Include(b => b.Post)
+                .ThenInclude(p => p.DropoffLocation)
+                .Include(b => b.Carrier)
                 .First(p => p.Id == request.BidId);
             if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
             {
@@ -98,9 +117,31 @@ namespace TBS.Services.Bids
                 if (bid.BidStatus == Data.Models.Bids.BidStatus.Approved)
                 {
                     bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
+                    //TODO: Add a link and make email prettier
+                    await _emailService.SendEmailAsync(
+                        bid.Carrier.Name,
+                        bid.Carrier.Email,
+                        $"Bid has been accepted on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
+                        $"Your bid has been accepted!<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
+                }
+                else
+                {
+                    //TODO: Add a link and make email prettier
+                    await _emailService.SendEmailAsync(
+                        bid.Carrier.Name,
+                        bid.Carrier.Email,
+                        $"Bid updated on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
+                        $"Your bid has been updated to {bid.BidStatus.ToString().ToLower()}.<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
                 }
 
                 _context.ShipperBids.Update(bid);
+
                 await _context.SaveChangesAsync();
 
                 // Cancel all other bids
@@ -112,6 +153,16 @@ namespace TBS.Services.Bids
                 {
                     pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
                     _context.ShipperBids.Update(pendingBid);
+
+                    //TODO: Add a link and make email prettier
+                    await _emailService.SendEmailAsync(
+                        pendingBid.Carrier.Name,
+                        pendingBid.Carrier.Email,
+                        $"Bid automatically cancelled on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
+                        $"Your bid has automatically been cancelled as the shipper has accepted another bid.<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
                 }
 
                 try
@@ -125,21 +176,6 @@ namespace TBS.Services.Bids
 
                 return await Task.FromResult(true);
             }
-        }
-
-        // Delete a shipper bid
-        public async Task<bool> DeleteBidAsync(Guid bidId)
-        {
-            var shipperBid = await GetBidByIdAsync(bidId);
-
-            if (shipperBid == null)
-            {
-                throw new InvalidShipperBidException();
-            }
-
-            _context.ShipperBids.Remove(shipperBid);
-            await _context.SaveChangesAsync();
-            return await Task.FromResult(true);
         }
     }
 }

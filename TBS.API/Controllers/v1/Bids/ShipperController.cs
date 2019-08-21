@@ -50,10 +50,5 @@ namespace TBS.API.Controllers.v1.Bids
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> PutUpdateShipperBidAsync(UpdateBidRequest request) => Ok(new { result = await _service.UpdateBidAsync(request) });
-
-        // DELETE: api/v1/Bids/Shipper/{bidId}
-        [HttpDelete("{bidId}")]
-        [Authorize]
-        public async Task<IActionResult> DeleteShipperBidAsync(string bidId) => Ok(new { result = await _service.DeleteBidAsync(Guid.Parse(bidId)) });
     }
 }

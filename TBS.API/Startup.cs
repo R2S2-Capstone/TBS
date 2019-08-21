@@ -44,13 +44,13 @@ namespace TBS.API
             services.AddFirebaseAuthentication(Configuration["Firebase:Issuer"], Configuration["Firebase:Audience"]);
 
             services.AddSingleton(Configuration);
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<DatabaseContext, DatabaseContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICarrierPostService, CarrierPostService>();
             services.AddScoped<ICarrierBidService, CarrierBidService>();
             services.AddScoped<IShipperPostService, ShipperPostService>();
             services.AddScoped<IShipperBidService, ShipperBidService>();
-            services.AddScoped<IEmailService, EmailService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 

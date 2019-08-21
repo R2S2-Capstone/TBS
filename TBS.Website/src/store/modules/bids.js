@@ -103,26 +103,6 @@ const bids = {
         })
       })
     },
-    deleteBid({ commit, rootGetters }, payload) {
-      commit('global/setLoading', true, { root: true })
-      return new Promise((resolve, reject) => {
-        axios({
-          method: 'DELETE',
-          url: `bids/${rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.id}`,
-          data: payload,
-          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
-        })
-        .then((response) => {
-          resolve(response)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-        .finally(() => {
-          commit('global/setLoading', false, { root: true })
-        })
-      })
-    }
   }
 }
 

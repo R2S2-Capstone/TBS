@@ -164,13 +164,7 @@ export default {
       // Required as create post cannot have a postId
       if (this.type == 'Update') {
         this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
-        this.$store.dispatch('posts/updatePost', this.post)
         .then(() => {
-          Swal.fire({
-            type: 'success',
-            title: 'Successfully bid',
-            text: 'Post has successfully been updated!',
-          })
           this.$router.push({name: 'carrierHome' })
         })
         .catch(() => {
@@ -184,11 +178,6 @@ export default {
       } else {
         this.$store.dispatch('posts/createPost', { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
-          Swal.fire({
-            type: 'success',
-            title: 'Successfully bid',
-            text: 'Post has successfully been posted!',
-          })
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
