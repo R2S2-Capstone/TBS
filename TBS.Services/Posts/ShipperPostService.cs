@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,10 +17,12 @@ namespace TBS.Services.Post
     public class ShipperPostService : IShipperPostService
     {
         private readonly DatabaseContext _context;
+        private readonly ILogger<ShipperPostService> _logger;
 
-        public ShipperPostService(DatabaseContext databaseContext)
+        public ShipperPostService(DatabaseContext databaseContext, ILogger<ShipperPostService> logger)
         {
             _context = databaseContext;
+            _logger = logger;
         }
 
         public async Task<PaginatedShipperPosts> GetAllActivePostsAsync(PaginationModel model)
@@ -83,6 +86,9 @@ namespace TBS.Services.Post
             post.Shipper = _context.Shippers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
             await _context.ShipperPosts.AddAsync(post);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Shipper Post: Successfully created a post {post.PickupLocation.City} -> {post.DropoffLocation.City}");
+
             return await Task.FromResult(true);
         }
 
@@ -95,6 +101,8 @@ namespace TBS.Services.Post
 
             post.UpdatedOn = DateTime.Now;
             _context.ShipperPosts.Update(post);
+
+            _logger.LogInformation($"Shipper Post: Successfully updated a post {post.PickupLocation.City} -> {post.DropoffLocation.City} ({post.Id})");
 
             try
             {
@@ -110,15 +118,18 @@ namespace TBS.Services.Post
 
         public async Task<bool> DeletePostAsync(Guid id)
         {
-            var shipperPost = await GetPostByIdAsync(id);
+            var post = await GetPostByIdAsync(id);
 
-            if (shipperPost == null)
+            if (post == null)
             {
                 throw new InvalidShipperPostException();
             }
 
-            _context.ShipperPosts.Remove(shipperPost);
+            _context.ShipperPosts.Remove(post);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Shipper Post: Successfully deleted a post {post.PickupLocation.City} -> {post.DropoffLocation.City}. ({post.Id})");
+
             return await Task.FromResult(true);
         }
     }

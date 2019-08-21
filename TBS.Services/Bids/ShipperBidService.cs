@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +18,13 @@ namespace TBS.Services.Bids
     {
         private readonly DatabaseContext _context;
         private readonly IEmailService _emailService;
+        private readonly ILogger<ShipperBidService> _logger;
 
-        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService)
+        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService, ILogger<ShipperBidService> logger)
         {
             _context = databaseContext;
             _emailService = emailService;
+            _logger = logger;
         }
 
         // Get a bid by id, used on details page
@@ -92,6 +95,9 @@ namespace TBS.Services.Bids
                 "Thanks,<br>" +
                 "TBS Inc."
             );
+
+            _logger.LogInformation($"Shipper Bid: Successfully created a new bid on {request.Bid.Post.PickupLocation.City} -> {request.Bid.Post.DropoffLocation.City}. From {request.Bid.Carrier.Name} for ${request.Bid.BidAmount}");
+
             return await Task.FromResult(true);
         }
 
@@ -126,6 +132,8 @@ namespace TBS.Services.Bids
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
+
+                    _logger.LogInformation($"Shipper Bid: Successfully accepted a bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
                 }
                 else
                 {
@@ -138,6 +146,8 @@ namespace TBS.Services.Bids
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
+
+                    _logger.LogInformation($"Shipper Bid: Updated bid to {bid.BidStatus} for {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Carrier.Name} for ${bid.BidAmount}");
                 }
 
                 _context.ShipperBids.Update(bid);
@@ -163,6 +173,8 @@ namespace TBS.Services.Bids
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
+
+                    _logger.LogInformation($"Shipper Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation.City} -> {pendingBid.Post.DropoffLocation.City} ({bid.Id}). From {pendingBid.Carrier.Name} for ${pendingBid.BidAmount}");
                 }
 
                 try

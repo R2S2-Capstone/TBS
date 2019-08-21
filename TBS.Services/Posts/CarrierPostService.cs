@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,10 +17,13 @@ namespace TBS.Services.Posts
     public class CarrierPostService : ICarrierPostService
     {
         private readonly DatabaseContext _context;
+        private readonly ILogger<CarrierPostService> _logger;
 
-        public CarrierPostService(DatabaseContext databaseContext)
+
+        public CarrierPostService(DatabaseContext databaseContext, ILogger<CarrierPostService> logger)
         {
             _context = databaseContext;
+            _logger = logger;
         }
 
         public async Task<PaginatedCarrierPosts> GetAllActivePostsAsync(PaginationModel model)
@@ -63,6 +67,18 @@ namespace TBS.Services.Posts
 
             return carrierPost;
         }
+
+        public async Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post)
+        {
+            post.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
+            await _context.CarrierPosts.AddAsync(post);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Carrier Post: Successfully created a post {post.PickupLocation} -> {post.DropoffLocation}");
+
+            return await Task.FromResult(true);
+        }
+
         public async Task<bool> UpdatePostAsync(Guid id, CarrierPost post)
         {
             if (id != post.Id)
@@ -72,6 +88,8 @@ namespace TBS.Services.Posts
 
             post.UpdatedOn = DateTime.Now;
             _context.CarrierPosts.Update(post);
+
+            _logger.LogInformation($"Carrier Post: Successfully updated a post {post.PickupLocation} -> {post.DropoffLocation} ({post.Id})");
 
             try
             {
@@ -85,25 +103,20 @@ namespace TBS.Services.Posts
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post)
-        {
-            post.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
-            await _context.CarrierPosts.AddAsync(post);
-            await _context.SaveChangesAsync();
-            return await Task.FromResult(true);
-        }
-
         public async Task<bool> DeletePostAsync(Guid id)
         {
-            var carrierPost = await GetPostByIdAsync(id);
+            var post = await GetPostByIdAsync(id);
 
-            if (carrierPost == null)
+            if (post == null)
             {
                 throw new InvalidCarrierPostException();
             }
 
-            _context.CarrierPosts.Remove(carrierPost);
+            _context.CarrierPosts.Remove(post);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Carrier Post: Successfully deleted a post {post.PickupLocation} -> {post.DropoffLocation}. ({post.Id})");
+
             return await Task.FromResult(true);
         }
     }

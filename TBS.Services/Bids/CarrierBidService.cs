@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +18,14 @@ namespace TBS.Services.Bids
     {
         private readonly DatabaseContext _context;
         private readonly IEmailService _emailService;
+        private readonly ILogger<CarrierBidService> _logger;
 
-        public CarrierBidService(DatabaseContext databaseContext, IEmailService emailService)
+
+        public CarrierBidService(DatabaseContext databaseContext, IEmailService emailService, ILogger<CarrierBidService> logger)
         {
             _context = databaseContext;
             _emailService = emailService;
+            _logger = logger;
         }
 
         // Get a bid by id, used on details page
@@ -90,6 +94,9 @@ namespace TBS.Services.Bids
                 "Thanks,<br>" + 
                 "TBS Inc."
             );
+
+            _logger.LogInformation($"Carrier Bid: Successfully created a new bid on {request.Bid.Post.PickupLocation} -> {request.Bid.Post.DropoffLocation}. From {request.Bid.Shipper.Name} for ${request.Bid.BidAmount}");
+
             return await Task.FromResult(true);
         }
 
@@ -126,6 +133,9 @@ namespace TBS.Services.Bids
                         "TBS Inc."
                     );
 
+                    _logger.LogInformation($"Carrier Bid: Successfully accepted a bid on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation} ({bid.Id}). From {bid.Post.Carrier.Name} for ${bid.BidAmount}");
+
+
                     // The plus one reperesnts the just added approved bid
                     if (bid.Post.SpacesAvailable == approvedBids + 1)
                     {
@@ -156,6 +166,8 @@ namespace TBS.Services.Bids
                                 "Thanks,<br>" +
                                 "TBS Inc."
                             );
+
+                            _logger.LogInformation($"Carrier Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation} -> {pendingBid.Post.DropoffLocation} ({bid.Id}). From {pendingBid.Shipper.Name} for ${pendingBid.BidAmount}");
                         }
                         await _context.SaveChangesAsync();
                     }
@@ -177,6 +189,8 @@ namespace TBS.Services.Bids
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
+
+                    _logger.LogInformation($"Carrier Bid: Updated bid to {bid.BidStatus} for {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation} ({bid.Id}). From {bid.Shipper.Name} for ${bid.BidAmount}");
                 }
 
                 _context.CarrierBids.Update(bid);
