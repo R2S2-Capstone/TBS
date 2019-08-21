@@ -163,7 +163,7 @@
         </div>
         <div class="col-12 pt-2" v-if="type == 'Update'">
           <button type="button" class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
-          <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" />
+            <!-- <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" /> -->
         </div>
       </div>
     </WideFormCard>
@@ -171,6 +171,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Back from '@/components/Back.vue'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 
@@ -181,8 +183,6 @@ import DateInput from '@/components/Form/Input/DateInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
 import CountryInput from '@/components/Form/Input/CountryInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
-
-import Modal from '@/components/Modal.vue'
 
 import { required, helpers, email } from 'vuelidate/lib/validators'
 const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
@@ -203,14 +203,12 @@ export default {
     ConditionInput,
     CountryInput,
     YearInput,
-    Modal,
   },
   data() {
     return {
       error: false,
       deleteError: false,
       failedToLoadError: false,
-      showModal: false,
       post: {
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
@@ -260,7 +258,7 @@ export default {
           required
         },
         vin: {
-          // required
+          required
         },
       },
       pickupLocation: {
@@ -331,6 +329,11 @@ export default {
           this.$router.push({ name: 'shipperHome' })
 				})
 				.catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to process your request. Please try again!',
+          })
 					this.error = true
 				}) 
     },
@@ -340,6 +343,11 @@ export default {
           this.$router.push({name: 'shipperHome' })
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to delete this post. Please try again!',
+          })
           this.deleteError = true
         })
     }
@@ -367,6 +375,11 @@ export default {
               this.failedToLoadError = false
             })
             .catch(() => {
+              Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong! We are unable to load this post. Please try again!',
+              })
               this.failedToLoadError = true
             })
         }

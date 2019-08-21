@@ -35,6 +35,7 @@ const postUtilities = {
     }
   },
   convertTime(value) {
+    if (value === undefined) return
     var hour = value.substring ( 0,2 )
     var minutes = value.substring ( 3,5 )
     var identifier = 'AM'
