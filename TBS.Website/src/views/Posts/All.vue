@@ -12,10 +12,10 @@
       <li v-for="(page, index) in  pageCount" :key="index" class="page-item" :class="page == currentPage ? 'active' : ''">
         <span class="page-link" @click="setPage(page)">{{ page }}</span>
       </li>
-      <li class="page-item" :class="currentPage == pageCount || currentPage == 1 ? 'disabled' : ''">
+      <li class="page-item" :class="currentPage == pageCount || pageCount <= 1 ? 'disabled' : ''">
         <span class="page-link" @click="setPage(pageCount)">Last</span>
       </li>
-      <li class="page-item" :class="currentPage == pageCount || currentPage == 1 ? 'disabled' : ''">
+      <li class="page-item" :class="currentPage == pageCount || pageCount <= 1 ? 'disabled' : ''">
         <span class="page-link" @click="setPage(currentPage + 1)">Next</span>
       </li>
     </ul>
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Posts from '@/components/Posts.vue'
 
 export default {
@@ -47,6 +49,11 @@ export default {
           this.postPageCount = response.data.result.paginationModel.totalPages
         })
         .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load these posts. Please try again!',
+          })
           this.postsError = true
         })
     },

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TBS.Data.Interfaces.User.Authentication;
-using TBS.Data.Models.User.Authentication.Request;
+using TBS.Data.Interfaces.Users.Authentication;
+using TBS.Data.Models.Users.Authentication.Request;
 
 namespace TBS.API.Controllers.v1
 {
