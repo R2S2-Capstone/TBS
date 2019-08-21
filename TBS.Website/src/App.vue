@@ -3,7 +3,7 @@
     <Spinner v-if="loading" />
     <TheHeader />
     <router-view />
-    <TheFooter />
+    <TheFooter v-if="!loading" />
   </div>
 </template>
 

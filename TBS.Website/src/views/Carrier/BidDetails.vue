@@ -1,104 +1,55 @@
 <template>
   <div class="container pt-5">
     <Back/>
-    <WideCard :title="'Bid from ' + bid.bidder.name">
+    <WideCard v-if="bid" :title="'Bid from ' + bid.shipper.name">
       <div slot="card-content" class="text-center">
         <div class="row">
           <div class="col-12">
-            <hr>
-            <h4>Bid Information</h4>
-            <hr>
-          </div>
-          <div class="col-12 text-left">
             <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-money-bill"></i> Bid Amount:</p></div>
-                  <div class="col text-right">{{ format(bid.amount) }}</div>
-                </div>
+              <div class="col-12">
+                <h4>Bid Status: {{ parseBidStatus(bid.bidStatus) }}</h4>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-star"></i> Bidder Rating:</p></div>
-                  <div class="col text-right">{{ bid.bidder.rating }} <i class="fas fa-star"></i></div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <h5 class="text-center">Pickup Information</h5>
-            <hr>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-city"></i> Pickup City:</p></div>
-                  <div class="col text-right">{{ bid.pickupCity }}</div>
-                </div>
+                <hr>
+                <h5>Vehicle Information</h5>
+                <hr>
+                <p>Vehicle Make: {{ bid.vehicle.make }}</p>
+                <p>Vehicle Model: {{ bid.vehicle.model }}</p>
+                <p>Vehicle Year: {{ bid.vehicle.year }}</p>
+                <p>Vehicle Condition: {{ parseVehicleCondition(bid.vehicle.condition) }}</p>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-calendar-day"></i> Pickup Date:</p></div>
-                  <div class="col text-right">{{ bid.pickupDate }}</div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <h5 class="text-center">Delivery Information</h5>
-            <hr>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-city"></i> Delivery City:</p></div>
-                  <div class="col text-right">{{ bid.deliveryCity }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-calendar-day"></i> Delivery Date:</p></div>
-                  <div class="col text-right">{{ bid.deliveryDate }}</div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <h5 class="text-center">Vehicle Description</h5>
-            <hr>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Vehicle Make:</p></div>
-                  <div class="col text-right">{{ bid.vehicle.make }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Vehicle Model:</p></div>
-                  <div class="col text-right">{{ bid.vehicle.model }}</div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Vehicle Year:</p></div>
-                  <div class="col text-right">{{ bid.vehicle.year }}</div>
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row">
-                  <div class="col"><p><i class="fas fa-car"></i> Other</p></div>
-                  <div class="col text-right">{{ bid.vehicle.other }}</div>
-                </div>
+                <hr>
+                <h5>Bid Details</h5>
+                <hr>
+                <p>Amount: ${{ bid.bidAmount }}</p>
+                <p>Bidder Name: {{ bid.shipper.name }}</p>
+                <p>Bidder Rating: COMING SOON <i class="fas fa-star"></i></p>
               </div>
             </div>
           </div>
-          <div class="col-12" v-if="!post.acceptedBid">
-            <div class="row">
-                <div class="col-12 pb-3">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="acceptBid(bid.id)">Accept Bid</button>
-                </div>
-                <div class="col-12">
-                  <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline Bid</button>
-                </div>
-              </div>
+
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <hr>
+              <h5>Pickup Information</h5>
+              <hr>
+              <p>Pickup Location: {{ formatAddress(bid.pickupLocation) }}</p>
+              <p>Pickup Date: {{ bid.pickupDate.split('T')[0] }}</p>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <hr>
+              <h5>Dropoff Information</h5>
+              <hr>
+              <p></p>
+              <p>Dropoff Location: {{ formatAddress(bid.dropoffLocation) }}</p>
+              <p>Dropoff Date: {{ bid.dropoffDate.split('T')[0] }}</p>
+            </div>
+          </div>
+
+          <div class="col-12" v-if="parseBidStatus(bid.bidStatus) == 'Open'">
+            <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="acceptBid(bid.id)">Accept Bid</button><br>
+            <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline Bid</button>
           </div>
         </div>
       </div>
@@ -107,54 +58,95 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Back from '@/components/Back.vue'
 import WideCard from '@/components/Card/WideCard.vue'
+
+import postUtilities from '@/utils/postUtilities.js'
+import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
   name: 'carrierViewBidDetails',
   components: {
     Back,
-    WideCard
+    WideCard,
   },
   beforeCreate() {
-    // A post ID must be passed, if not return to previous route
+    // A bid id must be passed, if not return to previous route
     if (this.$route.params.id == null) this.$router.go(-1)
   },
   data() {
     return {
-      post: {
-        acceptedBid: false,
-      },
-      bid: {
-        id: '1',
-        bidder: {
-          name: 'Reece Rose',
-          rating: 5,
-        },
-        pickupCity: 'Oakville',
-        pickupDate: '03/29/2018',
-        deliveryCity: 'Brampton',
-        deliveryDate: '03/29/2018',
-        vehicle: {
-          make: 'Ford',
-          model: 'Escape',
-          year: '2019',
-          other: null
-        },
-        amount: 5000,
-      },
+      post: null,
+      bid: null,
     }
   },
   methods: {
     acceptBid(bidId) {
-      this.post.acceptedBid = true
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'approved' })
+        .then(() => {
+          this.bid.bidStatus = 1
+          Swal.fire({
+            type: 'success',
+            title: 'Accepted',
+            text: 'Bid has successfully been accepted!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
     },
     declineBid(bidId) {
-      console.log(`Decline bid ${bidId}`)
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'declined' })
+        .then(() => {
+          this.bid.bidStatus = 2
+          Swal.fire({
+            type: 'success',
+            title: 'Declined',
+            text: 'Bid has successfully been declined!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     },
+    fetchBid() {
+      this.$store.dispatch('bids/getBidById', { type: 'carrier', bidId: this.$route.params.id })
+        .then((response) => {
+          this.bid = response.data.result
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this bid. Please try again!',
+          })
+        })
+    },
+    formatAddress(address) {
+      return postUtilities.formatAddress(address)
+    },
+    parseVehicleCondition(condition) {
+      return postUtilities.parseVehicleCondition(condition)
+    },
+    parseBidStatus(status) {
+      return bidUtilities.parseBidStatus(status)
+    }
+  },
+  created() {
+    this.fetchBid()
   }
 }
 </script>

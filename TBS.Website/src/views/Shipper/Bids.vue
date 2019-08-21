@@ -3,10 +3,12 @@
     <Back/>
     <div class="row">
       <div class="col-12">
-        <div class="row pb-3">
+        <div class="row pb-3" v-if="post">
           <div class="col-12 text-center">
-            <h2>Manage Bids for {{ post.address }}</h2>
-            <p class="text-success" v-if="post.acceptedBid">You have already accepted a bid</p>
+            <h2>
+              Manage Bids for {{ post.pickupLocation.city }} <i class="fas fa-arrow-right"></i> {{ post.dropoffLocation.city }}
+            </h2>
+            <p class="text-danger" v-if="error">Failed to load post details</p>
           </div>
         </div>
         <div class="row">
@@ -16,16 +18,16 @@
               <th>Amount</th>
               <th>Rating</th>
               <th>Status</th>
-              <th v-if="!post.acceptedBid">Management</th>
+              <th>Management</th>
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ bid.bidder.name }}</td>
-                <td>{{ format(bid.amount) }}</td>
-                <td>{{ bid.bidder.rating }} <i class="fas fa-star"></i></td>
-                <td>{{ bid.status }}</td>
-                <td v-if="bid.status == 'Pending' && !post.acceptedBid">
-                  <div>
+                <td>{{ bid.carrier.name }}</td>
+                <td>{{ format(bid.bidAmount) }}</td>
+                <td>COMING SOON <i class="fas fa-star"></i></td>
+                <td>{{ parseBidStatus(bid.bidStatus) }}</td>
+                <td>
+                  <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
@@ -43,10 +45,10 @@
             <li v-for="(page, index) in  bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
                 <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
             </li>
-            <li class="page-item" :class="currentBidPage == bidPageCount || currentBidPage == 1 ? 'disabled' : ''">
+            <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
             </li>
-            <li class="page-item" :class="currentBidPage == bidPageCount || currentBidPage == 1 ? 'disabled' : ''">
+            <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
             </li>
           </ul>
@@ -57,7 +59,11 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 import Back from '@/components/Back.vue'
+
+import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
   name: 'shipperManageBids',
@@ -72,79 +78,97 @@ export default {
     return {
       bidPage: 1,
       bidPageCount: 1,
-      post: {
-        address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
-        acceptedBid: false,
-      },
-      bids: [
-        {
-          id: '1',
-          bidder: {
-            name: 'Reece Rose',
-            rating: 5,
-          },
-          status: 'Pending',
-          amount: 5000,
-        },
-        {
-          id: '2',
-          bidder: {
-            name: 'Sathira Paduka',
-            rating: 1.2,
-          },
-          status: 'Pending',
-          amount: 5100,
-        },
-        {
-          id: '3',
-          bidder: {
-            name: 'Robert Middlebrook',
-            rating: 2,
-          },
-          status: 'Pending',
-          amount: 5050,
-        },
-        {
-          id: '4',
-          bidder: {
-            name: 'Steven Boxall',
-            rating: 1,
-          },
-          status: 'Declined',
-          amount: 5000,
-        }
-      ]
+      error: false,
+      post: null,
+      bids: [],
     }
   },
   methods: {
     acceptBid(bidId) {
-      this.post.acceptedBid = true
-      this.bids.find(b => b.id == bidId).status = 'Accepted'
+      this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'approved' })
+        .then(() => {
+          this.bids.find(b => b.id == bidId).bidStatus = 1
+          Swal.fire({
+            type: 'success',
+            title: 'Accepted',
+            text: 'Bid has successfully been accepted!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
     },
     declineBid(bidId) {
-      this.bids.find(b => b.id == bidId).status = 'Declined'
+      this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'declined' })
+        .then(() => {
+          this.bids.find(b => b.id == bidId).bidStatus = 2
+          Swal.fire({
+            type: 'success',
+            title: 'Declined',
+            text: 'Bid has successfully been declined!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
     },
     format(number) {
       return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     },
-    setPostPage(number) {
-      if (number <= 0 || number > this.postPageCount) return
-      this.postPage = number
-      // TODO: filter based on these results
-    },
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      // TODO: filter based on these results
+      this.fetchBids()
     },
+    fetchPost() {
+      this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.id })
+        .then((response) => {
+          this.post = response.data.result
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
+          this.error = true
+        })
+    },
+    fetchBids() {
+      this.$store.dispatch('bids/getBidsByPostId', { type: 'shipper', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
+        .then((response) => {
+          this.bids = response.data.result.bids
+          this.bidPageCount = response.data.result.paginationModel.totalPages
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load these bids. Please try again!',
+          })
+          this.error = true
+        })
+    },
+    parseBidStatus(status) {
+      return bidUtilities.parseBidStatus(status)
+    }
   },
   computed: {
-    currentPostPage() {
-      return this.postPage
-    },
     currentBidPage() {
       return this.bidPage
     }
+  },
+  created() {
+    this.fetchPost()
+    this.fetchBids()
   }
 }
 </script>

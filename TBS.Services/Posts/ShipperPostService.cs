@@ -1,33 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Posts;
 using TBS.Data.Exceptions.Posts.Shipper;
-using TBS.Data.Interfaces.Post;
+using TBS.Data.Interfaces.Posts;
 using TBS.Data.Models;
-using TBS.Data.Models.Post.Response;
-using TBS.Data.Models.Post.Shipper;
+using TBS.Data.Models.Posts;
+using TBS.Data.Models.Posts.Response;
+using TBS.Data.Models.Posts.Shipper;
 
-namespace TBS.Services.Posts
+namespace TBS.Services.Post
 {
     public class ShipperPostService : IShipperPostService
     {
         private readonly DatabaseContext _context;
+        private readonly ILogger<ShipperPostService> _logger;
 
-        public ShipperPostService(DatabaseContext databaseContext)
+        public ShipperPostService(DatabaseContext databaseContext, ILogger<ShipperPostService> logger)
         {
             _context = databaseContext;
+            _logger = logger;
         }
 
-        public async Task<PaginatedShipperPosts> GetAllActivePosts(PaginationModel model)
+        public async Task<PaginatedShipperPosts> GetAllActivePostsAsync(PaginationModel model)
         {
             var allPosts = await _context.ShipperPosts
                 .Include(p => p.Vehicle)
                 .Include(p => p.PickupLocation)
                 .Include(p => p.DropoffLocation)
-                .Where(p => p.PostStatus == Data.Models.Post.PostStatus.Open)
+                .Where(p => p.PostStatus == PostStatus.Open)
                 .ToListAsync();
             model.Count = allPosts.Count();
             var paginatedPosts = allPosts
@@ -36,14 +40,17 @@ namespace TBS.Services.Posts
             return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
-        public async Task<PaginatedShipperPosts> GetAllUsersPosts(string userFirebaseId, PaginationModel model)
+        public async Task<PaginatedShipperPosts> GetAllUsersPostsAsync(string userFirebaseId, PaginationModel model)
         {
-            var allUserPosts = await _context.ShipperPosts
-                .Include(p => p.Vehicle)
-                .Include(p => p.PickupLocation)
-                .Include(p => p.DropoffLocation)
-                .Where(p => p.Shipper.UserFirebaseId == userFirebaseId)
-                .ToListAsync();
+            var user = await _context.Shippers
+                .Include(s => s.Posts)
+                    .ThenInclude(p => p.Vehicle)
+                .Include(s => s.Posts)
+                    .ThenInclude(p => p.PickupLocation)
+                .Include(s => s.Posts)
+                    .ThenInclude(p => p.DropoffLocation)
+                .FirstOrDefaultAsync(s => s.UserFirebaseId == userFirebaseId);
+            var allUserPosts = user.Posts.ToList();
             var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
             model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
@@ -52,7 +59,7 @@ namespace TBS.Services.Posts
             return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
-        public async Task<ShipperPost> GetPostById(int id)
+        public async Task<ShipperPost> GetPostByIdAsync(Guid id)
         {
             var shipperPost = await _context.ShipperPosts
                 .Include(p => p.Shipper)
@@ -79,24 +86,13 @@ namespace TBS.Services.Posts
             post.Shipper = _context.Shippers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
             await _context.ShipperPosts.AddAsync(post);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Shipper Post: Successfully created a post {post.PickupLocation.City} -> {post.DropoffLocation.City}");
+
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeletePostAsync(int id)
-        {
-            var shipperPost = await GetPostById(id);
-
-            if (shipperPost == null)
-            {
-                throw new InvalidShipperPostException();
-            }
-
-            _context.ShipperPosts.Remove(shipperPost);
-            await _context.SaveChangesAsync();
-            return await Task.FromResult(true);
-        }
-
-        public async Task<bool> UpdatePostAsync(int id, ShipperPost post)
+        public async Task<bool> UpdatePostAsync(Guid id, ShipperPost post)
         {
             if (id != post.Id)
             {
@@ -106,6 +102,8 @@ namespace TBS.Services.Posts
             post.UpdatedOn = DateTime.Now;
             _context.ShipperPosts.Update(post);
 
+            _logger.LogInformation($"Shipper Post: Successfully updated a post {post.PickupLocation.City} -> {post.DropoffLocation.City} ({post.Id})");
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -114,6 +112,23 @@ namespace TBS.Services.Posts
             {
                 throw new FailedToUpdatePostException();
             }
+
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> DeletePostAsync(Guid id)
+        {
+            var post = await GetPostByIdAsync(id);
+
+            if (post == null)
+            {
+                throw new InvalidShipperPostException();
+            }
+
+            _context.ShipperPosts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Shipper Post: Successfully deleted a post {post.PickupLocation.City} -> {post.DropoffLocation.City}. ({post.Id})");
 
             return await Task.FromResult(true);
         }
