@@ -79,7 +79,7 @@
               </div>
               <div class="col-12 pt-2" v-if="type == 'Update'">
                 <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
-                <!-- <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" /> -->
+                <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" />
               </div>
             </div>
           </div>
@@ -90,8 +90,6 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-
 import Back from '@/components/Back.vue'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 
@@ -101,6 +99,7 @@ import TimeInput from '@/components/Form/Input/TimeInput.vue'
 import CapacityInput from '@/components/Form/Input/CapacityInput.vue'
 import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
 
+import Modal from '@/components/Modal.vue'
 
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
@@ -117,12 +116,14 @@ export default {
     TimeInput,
     CapacityInput,
     TrailerInput,
+    Modal,
   },
   data() {
     return {
       error: false,
       deleteError: false,
       failedToLoadError: false,
+      showModal: false,
       post: {
         pickupLocation: '',
         pickupDate: '', 
@@ -164,15 +165,11 @@ export default {
       // Required as create post cannot have a postId
       if (this.type == 'Update') {
         this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
+        this.$store.dispatch('posts/updatePost', this.post)
         .then(() => {
           this.$router.push({name: 'carrierHome' })
         })
         .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to update this post. Please try again!',
-          })
           this.error = true
         })
       } else {
@@ -181,11 +178,6 @@ export default {
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to create this post. Please try again!',
-          })
           this.error = true
         })
       }
@@ -196,11 +188,6 @@ export default {
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to delete this post. Please try again!',
-          })
           this.deleteError = true
         })
     }
@@ -228,11 +215,6 @@ export default {
           this.failedToLoadError = false
 				})
 				.catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load this post. Please try again!',
-          })
 					this.failedToLoadError = true
 				})
     }

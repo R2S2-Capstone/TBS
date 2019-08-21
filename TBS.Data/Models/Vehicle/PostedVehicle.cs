@@ -1,11 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TBS.Data.Models.Vehicle
 {
     public class PostedVehicle
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Vehicle year required")]
         [Range(1900, 2100, ErrorMessage = "Invalid vehicle year")]

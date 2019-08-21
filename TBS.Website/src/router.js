@@ -150,7 +150,7 @@ export default new Router({
           ...LoggedIn
         },
         {
-          path: 'Bids/:id?',
+          path: 'ManageBids/:id?',
           name: 'shipperManageBids',
           component: ShipperManageBids,
           ...LoggedIn
@@ -181,7 +181,7 @@ export default new Router({
           ...LoggedIn
         },
         {
-          path: 'Bids/:id?',
+          path: 'ManageBids/:id?',
           name: 'carrierManageBids',
           component: CarrierManageBids,
           ...LoggedIn
@@ -190,8 +190,7 @@ export default new Router({
           path: 'ViewBid/:id?',
           name: 'carrierViewBidDetails',
           component: CarrierViewBidDetails,
-          ...LoggedIn,
-          params: true,
+          ...LoggedIn
         },
       ]
     },

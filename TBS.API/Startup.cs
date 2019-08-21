@@ -6,20 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using TBS.API.Filters;
 using TBS.Data.Database;
-using TBS.Data.Interfaces.Bids;
-using TBS.Data.Interfaces.Notifications;
-using TBS.Data.Interfaces.Posts;
-using TBS.Data.Interfaces.Users.Authentication;
-using TBS.Services.Bids;
-using TBS.Services.Notifications;
-using TBS.Services.Post;
+using TBS.Data.Interfaces.Post;
+using TBS.Data.Interfaces.User.Authentication;
 using TBS.Services.Posts;
-using TBS.Services.Users.Authentication;
+using TBS.Services.User.Authentication;
 
 namespace TBS.API
 {
@@ -44,13 +38,10 @@ namespace TBS.API
             services.AddFirebaseAuthentication(Configuration["Firebase:Issuer"], Configuration["Firebase:Audience"]);
 
             services.AddSingleton(Configuration);
-            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<DatabaseContext, DatabaseContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICarrierPostService, CarrierPostService>();
-            services.AddScoped<ICarrierBidService, CarrierBidService>();
             services.AddScoped<IShipperPostService, ShipperPostService>();
-            services.AddScoped<IShipperBidService, ShipperBidService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 
@@ -76,7 +67,6 @@ namespace TBS.API
             {
                 options.Filters.Add(typeof(CustomExceptionFilterAttribute));
             })
-            .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

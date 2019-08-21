@@ -6,8 +6,7 @@
 
 <style lang="scss" scoped>
 .background {
-  // background-color: rgba(0, 0, 0, 0.5);
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   left: 0;
   width: 100vw;

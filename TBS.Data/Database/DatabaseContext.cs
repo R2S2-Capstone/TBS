@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TBS.Data.Models.Bids.Carrier;
-using TBS.Data.Models.Bids.Shipper;
-using TBS.Data.Models.Posts.Carrier;
-using TBS.Data.Models.Posts.Shipper;
-using TBS.Data.Models.Users;
+using TBS.Data.Models.Post.Carrier;
+using TBS.Data.Models.Post.Shipper;
+using TBS.Data.Models.User;
 
 namespace TBS.Data.Database
 {
@@ -17,8 +15,6 @@ namespace TBS.Data.Database
         public DbSet<Carrier> Carriers { get; set; }
         public DbSet<Shipper> Shippers { get; set; }
         public DbSet<CarrierPost> CarrierPosts { get; set; }
-        public DbSet<CarrierBid> CarrierBids { get; set; }
         public DbSet<ShipperPost> ShipperPosts { get; set; }
-        public DbSet<ShipperBid> ShipperBids { get; set; }
     }
 }

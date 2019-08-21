@@ -46,10 +46,10 @@
               <li v-for="(page, index) in  postPageCount" :key="index" class="page-item" :class="page == currentPostPage ? 'active' : ''">
                 <span class="page-link" @click="setPostPage(page)">{{ page }}</span>
               </li>
-              <li class="page-item" :class="currentPostPage == postPageCount || postPageCount == 1 ? 'disabled' : ''">
+              <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(postPageCount)">Last</span>
               </li>
-              <li class="page-item" :class="currentPostPage == postPageCount || postPageCount == 1 ? 'disabled' : ''">
+              <li class="page-item" :class="currentPostPage == postPageCount || currentPostPage == 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(currentPostPage+1)">Next</span>
               </li>
             </ul>
@@ -62,7 +62,6 @@
         <div class="row pb-3">
           <div class="col-12 text-center">
             <h2>Manage My Bids</h2>
-            <h5 class="text-danger" v-if="bidError">Unable to load bids</h5>
           </div>
         </div>
         <div class="row">
@@ -75,10 +74,10 @@
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ bid.post.pickupLocation }} <i class="fas fa-arrow-right"></i> {{ bid.post.dropoffLocation }}</td>
-                <td>{{ format(bid.bidAmount) }}</td>
-                <td>{{ parseBidStatus(bid.bidStatus) }}</td>
-                <td><button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button></td>
+                <td>{{ bid.address }}</td>
+                <td>{{ format(bid.amount) }}</td>
+                <td>{{ bid.bidStatus }}</td>
+                <td><button v-if="bid.bidStatus == 'Pending'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button></td>
               </tr>
             </tbody>
           </table>
@@ -92,10 +91,10 @@
             <li v-for="(page, index) in  bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
               <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
             </li>
-            <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount == 1 ? 'disabled' : ''">
+            <li class="page-item" :class="currentBidPage == bidPageCount || currentBidPage == 1 ? 'disabled' : ''">
               <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
             </li>
-            <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount == 1 ? 'disabled' : ''">
+            <li class="page-item" :class="currentBidPage == bidPageCount || currentBidPage == 1 ? 'disabled' : ''">
               <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
             </li>
           </ul>
@@ -106,10 +105,7 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-
-import postUtilities from '@/utils/postUtilities.js'
-import bidUtilities from '@/utils/bidUtilities.js'
+import utilities from '@/utils/postUtilities.js'
 
 export default {
   name: 'shipperHome',
@@ -117,14 +113,32 @@ export default {
   },
   data() {
     return {
-      posts: [],
       postPage: 1,
       postPageCount: 1,
       postError: false,
-      bids: [],
       bidPage: 1,
       bidPageCount: 1,
-      bidError: false,
+      posts: [],
+      bids: [
+        {
+          id: '1',
+          address: '1430 Trafalgar Rd, Oakville, ON L6H 2L1',
+          amount: 5000,
+          bidStatus: 'Approved'
+        },
+        {
+          id: '2',
+          address: '1450 Trafalgar Rd, Oakville, ON L6H 2L1',
+          amount: 1000,
+          bidStatus: 'Pending'
+        },
+        {
+          id: '3',
+          address: '1450 Trafalgar Rd, Oakville, ON L6H 2L1',
+          amount: 5000,
+          bidStatus: 'Declined'
+        }
+      ]
     }
   },
   methods: {      
@@ -139,54 +153,23 @@ export default {
     setBidPage(number) {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
-      this.fetchBids()
+      // TODO: filter based on these results
     },
     cancelBid(bidId) {
-      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'cancelled' })
-        .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 3
-          Swal.fire({
-            type: 'success',
-            title: 'Cancelled',
-            text: 'Bid has successfully been cancelled!',
-          })
-        })
+      this.bids.find(b => b.id == bidId).bidStatus = 'Cancelled'
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: 5 })
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: this.postPageCount })
         .then((response) => {
           this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts
         })
         .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load your posts. Please try again!',
-          })
-          this.postError = true
-        })
-    },
-    fetchBids() {
-      this.$store.dispatch('bids/getMyBids', { type: 'carrier', currentPage: this.bidPage, count: 5 })
-        .then((response) => {
-          this.bidPageCount = response.data.result.paginationModel.totalPages
-          this.bids = response.data.result.bids
-        })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load your bids. Please try again!',
-          })
-          this.bidError = true
+          this.postsError = true
         })
     },
     parsePostStatus(status) {
-      return postUtilities.parsePostStatus(status)
-    },
-    parseBidStatus(status) {
-      return bidUtilities.parseBidStatus(status)
+      return utilities.parsePostStatus(status)
     }
   },
   computed: {
@@ -199,7 +182,6 @@ export default {
   },
   created() {
     this.fetchPosts()
-    this.fetchBids()
   }
 }
 </script>

@@ -1,18 +1,4 @@
 # Changelog
-## v0.0.3 (August 21, 2019)
-#### Features:
-- Created bid classes
-- Created bid services
-- Created bid API controllers (Get, Create, and Update)
-- Sending emails on bid creation/updates
-- Added 'sweetalert2' for better alerts
-#### Enhancements:
- - Improved logging
-#### Bug Fixes:
- - Fixed spinner issue where it did not overlap all of the screen
- - Pagination UI fixes
-
----
 ## v0.0.3 (August 01, 2019)
 #### Features:
  - Docker Support
