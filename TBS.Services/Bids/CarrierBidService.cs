@@ -105,6 +105,7 @@ namespace TBS.Services.Bids
         {
             var bid = _context.CarrierBids
                 .Include(b => b.Post)
+                .ThenInclude(p => p.Carrier)
                 .Include(b => b.Shipper)
                 .First(p => p.Id == request.BidId);
             if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
