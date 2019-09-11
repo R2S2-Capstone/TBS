@@ -61,6 +61,15 @@ namespace TBS.API
                   optionsBuilder => { optionsBuilder.MigrationsAssembly("TBS.Data"); }
                   )
               );
+            
+            if (_environment.IsDevelopment() == true) 
+            {
+                Configuration["URL"] = Configuration["URLS:DEV"];
+            }
+            else 
+            {
+                Configuration["URL"] = Configuration["URLS:PROD"];
+            }
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
