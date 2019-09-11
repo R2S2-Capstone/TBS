@@ -6,5 +6,7 @@
         Approved,
         Declined,
         Cancelled,
+        PendingPayment,
+        PaymentRecieved
     }
 }

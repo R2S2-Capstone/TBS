@@ -22,7 +22,6 @@ namespace TBS.Services.Bids
         private readonly IConfiguration _configuration;
         private readonly ILogger<CarrierBidService> _logger;
 
-
         public CarrierBidService(DatabaseContext databaseContext, IEmailService emailService, IConfiguration configuration, ILogger<CarrierBidService> logger)
         {
             _context = databaseContext;
