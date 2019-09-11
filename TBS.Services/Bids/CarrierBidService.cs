@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -18,13 +19,15 @@ namespace TBS.Services.Bids
     {
         private readonly DatabaseContext _context;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<CarrierBidService> _logger;
 
 
-        public CarrierBidService(DatabaseContext databaseContext, IEmailService emailService, ILogger<CarrierBidService> logger)
+        public CarrierBidService(DatabaseContext databaseContext, IEmailService emailService, IConfiguration configuration, ILogger<CarrierBidService> logger)
         {
             _context = databaseContext;
             _emailService = emailService;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -85,12 +88,13 @@ namespace TBS.Services.Bids
             await _context.CarrierBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 
-            //TODO: Add a link and make email prettier
+            //TODO: Make email prettier
             await _emailService.SendEmailAsync(
                 request.Bid.Post.Carrier.Name,
                 request.Bid.Post.Carrier.Email,
                 $"New bid placed on {request.Bid.Post.PickupLocation} -> {request.Bid.Post.DropoffLocation}",
                 $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Shipper.Name}<br>" +
+                $"To view it click <a href='{_configuration["URL"]}/Carrier/ViewBid/{request.Bid.Id}'>here</a>" +
                 "Thanks,<br>" + 
                 "TBS Inc."
             );
@@ -124,12 +128,13 @@ namespace TBS.Services.Bids
                 {
                     bid.BidStatus = request.Status;
 
-                    //TODO: Add a link and make email prettier
+                    //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         bid.Shipper.Name,
                         bid.Shipper.Email,
                         $"Bid has been accepted on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation}",
                         $"Your bid has been accepted!<br>" +
+                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/${bid.Id}'>here</a>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
@@ -187,6 +192,7 @@ namespace TBS.Services.Bids
                         bid.Shipper.Email,
                         $"Bid updated on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation}",
                         $"Your bid has been updated to {bid.BidStatus.ToString().ToLower()}.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Shipper'>here</a> and look under the 'Manage My Bids' section" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );

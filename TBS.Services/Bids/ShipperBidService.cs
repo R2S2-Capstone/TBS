@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -18,12 +19,14 @@ namespace TBS.Services.Bids
     {
         private readonly DatabaseContext _context;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<ShipperBidService> _logger;
 
-        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService, ILogger<ShipperBidService> logger)
+        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService, IConfiguration configuration, ILogger<ShipperBidService> logger)
         {
             _context = databaseContext;
             _emailService = emailService;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -86,12 +89,13 @@ namespace TBS.Services.Bids
             await _context.ShipperBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 
-            //TODO: Add a link and make email prettier
+            //TODO: Make email prettier
             await _emailService.SendEmailAsync(
                 request.Bid.Post.Shipper.Name,
                 request.Bid.Post.Shipper.Email,
                 $"New bid placed on {request.Bid.Post.PickupLocation.City} -> {request.Bid.Post.DropoffLocation.City}",
-                $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Carrier.Name}<br>" +
+                $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Carrier.Name}.<br>" +
+                $"To view it click <a href='{_configuration["URL"]}/Shipper/Bids/{request.Bid.Post.Id}'>here</a>" +
                 "Thanks,<br>" +
                 "TBS Inc."
             );
@@ -123,12 +127,13 @@ namespace TBS.Services.Bids
                 if (bid.BidStatus == Data.Models.Bids.BidStatus.Approved)
                 {
                     bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
-                    //TODO: Add a link and make email prettier
+                    //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         bid.Carrier.Name,
                         bid.Carrier.Email,
                         $"Bid has been accepted on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
                         $"Your bid has been accepted!<br>" +
+                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/${bid.Id}'>here</a>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
@@ -137,12 +142,13 @@ namespace TBS.Services.Bids
                 }
                 else
                 {
-                    //TODO: Add a link and make email prettier
+                    //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         bid.Carrier.Name,
                         bid.Carrier.Email,
                         $"Bid updated on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
                         $"Your bid has been updated to {bid.BidStatus.ToString().ToLower()}.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Carrier'>here</a> and look under the 'Manage My Bids' section" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
@@ -164,7 +170,7 @@ namespace TBS.Services.Bids
                     pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
                     _context.ShipperBids.Update(pendingBid);
 
-                    //TODO: Add a link and make email prettier
+                    //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         pendingBid.Carrier.Name,
                         pendingBid.Carrier.Email,
