@@ -31,6 +31,14 @@ const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
 // Carrier Posts
 const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
+// About
+const AboutIndex = () => import('@/views/About/Index.vue')
+const AboutUs = () => import('@/views/About/Us.vue')
+const PrivacyPolicy = () => import('@/views/About/PrivacyPolicy.vue')
+const FAQ = () => import('@/views/About/FAQ.vue')
+const AboutCarrier = () => import('@/views/About/Carrier.vue')
+const AboutShipper = () => import('@/views/About/Shipper.vue')
+
 Vue.use(Router)
 
 const LoggedIn = {
@@ -109,6 +117,37 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/About',
+      component: AboutIndex,
+      children: [
+        {
+          path: '',
+          name: 'aboutUs',
+          component: AboutUs,
+        },
+        {
+          path: 'Carrier',
+          name: 'aboutCarrier',
+          component: AboutCarrier,
+        },
+        {
+          path: 'Shipper',
+          name: 'aboutShipper',
+          component: AboutShipper,
+        },
+        {
+          path: 'FAQ',
+          name: 'faq',
+          component: FAQ,
+        },
+        {
+          path: 'PrivacyPolicy',
+          name: 'privacyPolicy',
+          component: PrivacyPolicy,
+        },
+      ]
     },
     {
       path: '/Login',
