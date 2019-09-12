@@ -32,19 +32,12 @@ const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
 const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
 // About
-const Us = () => import('@/views/About/Us.vue')
-
-// Privacy
-const Privacy = () => import('@/views/About/Privacy.vue')
-
-// FAQ
+const AboutIndex = () => import('@/views/About/Index.vue')
+const AboutUs = () => import('@/views/About/Us.vue')
+const PrivacyPolicy = () => import('@/views/About/PrivacyPolicy.vue')
 const FAQ = () => import('@/views/About/FAQ.vue')
-
-// Carrier
-const Carrier = () => import('@/views/About/Carrier.vue')
-
-// Shipper
-const Shipper = () => import('@/views/About/Shipper.vue')
+const AboutCarrier = () => import('@/views/About/Carrier.vue')
+const AboutShipper = () => import('@/views/About/Shipper.vue')
 
 Vue.use(Router)
 
@@ -126,29 +119,35 @@ export default new Router({
       component: Home
     },
     {
-      path: '/About/Us',
-      name: 'aboutUs',
-      component: Us
-    },
-    {
-      path: '/About/Carrier',
-      name: 'carrier',
-      component: Carrier
-    },
-    {
-      path: '/About/Privacy',
-      name: 'privacy',
-      component: Privacy
-    },
-    {
-      path: '/About/FAQ',
-      name: 'faq',
-      component: FAQ
-    },
-    {
-      path: '/About/Shipper',
-      name: 'shipper',
-      component: Shipper
+      path: '/About',
+      component: AboutIndex,
+      children: [
+        {
+          path: '',
+          name: 'aboutUs',
+          component: AboutUs,
+        },
+        {
+          path: 'Carrier',
+          name: 'aboutCarrier',
+          component: AboutCarrier,
+        },
+        {
+          path: 'Shipper',
+          name: 'aboutShipper',
+          component: AboutShipper,
+        },
+        {
+          path: 'FAQ',
+          name: 'faq',
+          component: FAQ,
+        },
+        {
+          path: 'PrivacyPolicy',
+          name: 'privacyPolicy',
+          component: PrivacyPolicy,
+        },
+      ]
     },
     {
       path: '/Login',

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row pt-5 pb-5 mb-5">
       <div class="col">            
-        <h3 class="heading">What We Do For Our Carriers</h3>
+        <h3 class="heading">Our Privacy Policy</h3>
         <p class="sub-heading pt-2">Transportation Bidding System</p>
         <hr>
         <p>We help our customers to connect with each other to fulfil their needs</p>
@@ -13,9 +13,7 @@
 
 <script>
 export default {
-  name: 'aboutCarrier',
-  components: {
-  }
+  name: 'privacyPolicy',
 }
 </script>
 

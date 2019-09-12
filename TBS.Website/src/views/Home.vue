@@ -10,7 +10,7 @@
           <h3 class="heading">Find a carrier at a reasonable price</h3>
           <hr>
           <p>We will help you find a carrier to transport your vehicle and put your mind at ease. With us you can find a carrier for a reasonable price</p>
-          <router-link class="how-link pb-2" :to="{ name: 'shipper' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
+          <router-link class="how-link pb-2" :to="{ name: 'aboutShipper' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
             <h3 class="heading">Directly connect with shippers</h3>
             <hr>
             <p>We will help you match with customers who will fill up your truck so you don't have to travel light</p>
-            <router-link class="how-link pb-2" :to="{ name: 'carrier' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
+            <router-link class="how-link pb-2" :to="{ name: 'aboutCarrier' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
           </div>
           <div class="col">
             <img src="https://static.reecerose.com/images/tbs/carrier.jpg" class="img-fluid carrier" alt="">

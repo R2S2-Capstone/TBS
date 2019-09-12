@@ -5,8 +5,7 @@
         <div class="text-center mt-3">
           <router-link :to="{ name: 'faq' }" class="fade-on-hover">FAQ</router-link> | 
           <a href="mailto:tbs@reecerose.com" class="fade-on-hover"> Contact Us</a> |
-          <router-link :to="{ name: 'privacy' }" class="fade-on-hover"> Privacy Policy</router-link> 
-
+          <router-link :to="{ name: 'privacyPolicy' }" class="fade-on-hover"> Privacy Policy</router-link> 
         </div>
         <div class="text-center p-3">© {{ new Date().getFullYear() }} Copyright:
           <router-link :to="{ name: 'home' }" class="fade-on-hover"> TBS Inc.</router-link> and its licensors. All rights reserved.
