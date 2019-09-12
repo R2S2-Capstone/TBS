@@ -31,6 +31,9 @@ const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
 // Carrier Posts
 const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
+// Delivery
+const Delivery = () => import('@/views/Delivery/Index.vue')
+
 Vue.use(Router)
 
 const LoggedIn = {
@@ -217,6 +220,13 @@ export default new Router({
           props: true,
         },
       ]
+    },
+    {
+      path: '/Delivery/:id?',
+      name: 'delivery',
+      component: Delivery,
+      props: true,
+      ...LoggedIn
     },
     {
       path: '/401',
