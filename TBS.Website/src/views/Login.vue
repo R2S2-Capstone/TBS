@@ -68,7 +68,7 @@ export default {
 			}
 			this.$store.dispatch('authentication/login', { email: this.email, password: this.password })
 				.then(() => {
-					this.$router.push({ name: 'home' })
+					this.$router.push({ name: 'viewAllPosts' })
 				})
 				.catch(() => {
 					this.error = true
