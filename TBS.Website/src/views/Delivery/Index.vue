@@ -1,18 +1,16 @@
 <template>
-  <CarrierPost v-if="accountType == 'shipper'" :id="id" />
-  <ShipperPost v-else :id="id" />
+  <div class="container pt-5">
+    <div class="row">
+      <div class="col-12">
+        
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import CarrierPost from '@/views/Delivery/CarrierPost.vue'
-import ShipperPost from '@/views/Delivery/ShipperPost.vue'
-
 export default {
   name: 'deliveryIndex',
-  components: {
-    CarrierPost,
-    ShipperPost
-  },
   data() {
     return {
       accountType: ''
