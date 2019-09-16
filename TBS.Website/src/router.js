@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store/store.js'
 
-const Home = () => import('@/views/Home.vue')
+const Home = () => import('@/views/Index.vue')
 const Error401 = () => import('@/views/Error/401.vue')
 const Error404 = () => import('@/views/Error/404.vue')
 
@@ -111,7 +111,8 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      props: true,
     },
     {
       path: '/Login',
@@ -194,7 +195,7 @@ export default new Router({
           name: 'carrierViewBidDetails',
           component: CarrierViewBidDetails,
           ...LoggedIn,
-          params: true,
+          props: true,
         },
       ]
     },
