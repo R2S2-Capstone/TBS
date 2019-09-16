@@ -9,7 +9,7 @@
           <p class="sub-heading pt-2">Ship your vehicle</p>
           <h3 class="heading">Find a carrier at a reasonable price</h3>
           <hr>
-          <p>We will help you find a carrier to transport your vehicle. With us you can find a carrier for a reasonable price</p>
+          <p>We will help you find a carrier to transport your vehicle. With us, you can find a carrier for a reasonable price</p>
           <router-link class="how-link pb-2" :to="{ name: 'aboutShipper' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
         </div>
       </div>
@@ -59,7 +59,7 @@
             <p class="sub-heading pt-2">Transportation Bidding System</p>
             <h3 class="heading">What We Do</h3>
             <hr>
-            <p>We help our customers to connect with each other to fulfil their needs</p>
+            <p>We help our customers to connect with each other to fulfill their needs</p>
             <router-link class="how-link" :to="{ name: 'aboutUs' }">About Us <i class="fas fa-arrow-right"></i></router-link>
           </div>
         </div>
