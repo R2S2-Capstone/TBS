@@ -39,16 +39,16 @@ export default {
     return {
       questions: [
         {
-          title: 'Question 1',
-          answer: 'Answer 1'
+          title: 'What costs are associated with using this product?',
+          answer: 'There is a two dollar surcharge when purchasing a service using our platform from either a carrier or a shipper. That is the only cost!'
         },
         {
-          title: 'Question 2',
-          answer: 'Answer 2'
+          title: 'Why should we use you over other shipping websites?',
+          answer: 'Our website is specialized specifically for people looking to ship vehicles and has features specifically to help with that.'
         },
         {
-          title: 'Question 3',
-          answer: 'Answer 3'
+          title: 'If I have a dispute with someone I purchased a service from, What do I do?',
+          answer: 'You will need to utilize the Paypal dispute resolution centre to resolve any issues with repayment. Otherwise, you can contact the seller directly using the email attached to the bid.'
         },
       ]
     }

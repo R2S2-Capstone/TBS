@@ -9,7 +9,7 @@
           <p class="sub-heading pt-2">Ship your vehicle</p>
           <h3 class="heading">Find a carrier at a reasonable price</h3>
           <hr>
-          <p>We will help you find a carrier to transport your vehicle and put your mind at ease. With us you can find a carrier for a reasonable price</p>
+          <p>We will help you find a carrier to transport your vehicle. With us you can find a carrier for a reasonable price</p>
           <router-link class="how-link pb-2" :to="{ name: 'aboutShipper' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
         </div>
       </div>
@@ -21,7 +21,7 @@
             <p class="sub-heading pt-2">Fill Your Empty Space</p>
             <h3 class="heading">Directly connect with shippers</h3>
             <hr>
-            <p>We will help you match with customers who will fill up your truck so you don't have to travel light</p>
+            <p>We will match you with reputable customers to help you maximize the efficiency of your shipping business</p>
             <router-link class="how-link pb-2" :to="{ name: 'aboutCarrier' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
           </div>
           <div class="col">
@@ -36,19 +36,19 @@
           <i class="fas fa-dollar-sign fa-4x pb-3 text-blue"></i>
           <h3 class="heading">Post For Free</h3>
           <hr>
-          <p>It will cost you nothing to post with us, so you can post as many times as you want</p>
+          <p>Post as many times as you want without worry</p>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 pb-2 text-center">
           <i class="fas fa-gavel fa-4x pb-3 text-blue"></i>
           <h3 class="heading">Competitive Bidding</h3>
           <hr>
-          <p>You will have to benifit to bid on the postings</p>
+          <p>Ensure you get the best price for your business</p>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 pb-2 text-center">
           <i class="fas fa-mobile-alt fa-4x pb-3 text-blue"></i>
           <h3 class="heading">Available Everywhere</h3>
           <hr>
-          <p>We are accessible from anywhere, easy access for you</p>
+          <p>We are accessible from anywhere! No matter where you are, we provide easy access to carriers and shippers who can help your business</p>
         </div>
       </div>
     </div>
