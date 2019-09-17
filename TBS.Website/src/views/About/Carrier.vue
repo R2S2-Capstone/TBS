@@ -10,7 +10,6 @@
         </p>
         <p>If you're on the flip side of this and wish to post your requirements to ship, this is also completely free. You can create your own post with your requirements 
           that shippers can bid on if you're willing to wait for a period of time for the bidding.
-          
         </p>
       </div>
     </div>
