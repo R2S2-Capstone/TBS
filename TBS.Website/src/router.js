@@ -37,6 +37,7 @@ const Delivery = () => import('@/views/Delivery/Index.vue')
 
 Vue.use(Router)
 
+// Add when it is required to be logged in to view this page
 const LoggedIn = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -59,6 +60,7 @@ const LoggedIn = {
   }
 }
 
+// Add when it is required to be logged out to view this page
 const NotLoggedIn = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -81,6 +83,7 @@ const NotLoggedIn = {
   }
 }
 
+// This will redirect to either the home page or view posts depending on if the user is logged in or not
 const CustomeHomePage = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -103,6 +106,7 @@ const CustomeHomePage = {
   }
 }
 
+// Add when only a carrier can view this page
 const CarrierOnly = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -126,6 +130,7 @@ const CarrierOnly = {
   }
 }
 
+// Add when only shipper can view this page
 const ShipperOnly = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -154,12 +159,16 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      // Rroute does not contain any HTML, it is simply used as a redirect for the homepage
+      // depending on if the user is logged in or not
       path: '/',
       name: 'home',
       component: Index,
       ...CustomeHomePage
     },
     {
+      // Default route for anyone who is not logged in, it contains a lot of information
+      // regarding the website
       path: '/home',
       name: 'homepage',
       component: Home,
@@ -182,11 +191,13 @@ export default new Router({
       component: ResetPassword
     },
     {
+      // All routes for shipper only pages
       path: '/Shipper',
       component: ShipperIndex,
       ...ShipperOnly,
       children: [
         {
+          // Default shipper page, also known as 'dashboard' and 'manage my posts'
           path: '',
           name: 'shipperHome',
           component: ShipperHome,
@@ -213,11 +224,13 @@ export default new Router({
       ]
     },
     {
+      // All routes for carrier only pages
       path: '/Carrier',
       component: CarrierIndex,
       ...CarrierOnly,
       children: [
         {
+          // Default carrier page, also known as 'dashboard' and 'manage my posts'
           path: '',
           name: 'carrierHome',
           component: CarrierHome,
@@ -251,6 +264,7 @@ export default new Router({
       ]
     },
     {
+      // All routes for viewing others posts
       path: '/Posts',
       component: PostsIndex,
       children: [
