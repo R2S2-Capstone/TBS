@@ -7,9 +7,9 @@
         </div>
         <div class="col">
           <p class="sub-heading pt-2">Ship your vehicle</p>
-          <h3 class="heading">Find a carrier at a reasonable price</h3>
+          <h3 class="heading">Connect with a Carrier</h3>
           <hr>
-          <p>We will help you find a carrier to transport your vehicle. With us, you can find a carrier for a reasonable price</p>
+          <p>Instantly connect with a carrier that can move your vehicle when you want, where you want and for the right price</p>
           <router-link class="how-link pb-2" :to="{ name: 'aboutShipper' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
         </div>
       </div>
@@ -18,10 +18,10 @@
       <div class="container">
         <div class="row pt-5 pb-5">
           <div class="col-lg-4 col-md-4 col-sm-12 pb-2">
-            <p class="sub-heading pt-2">Fill Your Empty Space</p>
-            <h3 class="heading">Directly connect with shippers</h3>
+            <p class="sub-heading pt-2">Fill your empty trailer spaces</p>
+            <h3 class="heading">Find freight now</h3>
             <hr>
-            <p>We will match you with reputable customers to help you maximize the efficiency of your shipping business</p>
+            <p>Review and accept freight to instantly fill up your car-carrier-trailer</p>
             <router-link class="how-link pb-2" :to="{ name: 'aboutCarrier' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
           </div>
           <div class="col">
