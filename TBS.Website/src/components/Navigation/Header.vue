@@ -1,7 +1,7 @@
 <template>
 	<nav class="navbar navbar-expand-lg navbar-light bg-white">
 		<!-- <router-link :to="{ name: 'home' }" class="navbar-brand font-blue-on-hover text-white"><i class="fas fa-truck"></i> TBS </router-link> -->
-		<router-link class="navbar-brand" :to="{ name: 'home', params: { viewPosts: isAuthenticated != null ? true : false }}">
+		<router-link class="navbar-brand" :to="{ name: 'home' }">
 			<img src="https://static.reecerose.com/images/tbs/logo.png" alt="TBS">
 		</router-link>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigationBar" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,7 +10,7 @@
 		<div class="collapse navbar-collapse text-center" id="navigationBar">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<router-link :to="{ name: 'home', params: { viewPosts: isAuthenticated != null ? true : false } }" class="btn font-blue-on-hover">Home</router-link>
+					<router-link :to="{ name: 'home' }" class="btn font-blue-on-hover">Home</router-link>
 				</li>
 				<li class="nav-item" v-if="!isAuthenticated">
 					<router-link :to="{ name: 'viewAllPosts' }" class="btn font-blue-on-hover">View Posts</router-link>

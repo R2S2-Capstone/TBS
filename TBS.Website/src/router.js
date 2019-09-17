@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store/store.js'
 
-const Home = () => import('@/views/Index.vue')
+const Index = () => import('@/views/Index.vue')
+const Home = () => import('@/views/Home.vue')
 const Error401 = () => import('@/views/Error/401.vue')
 const Error404 = () => import('@/views/Error/404.vue')
 
@@ -44,6 +45,50 @@ const LoggedIn = {
         next()
       } else {
         next({ name: 'login',  params: { redirect: to.fullPath } })
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+const NotLoggedIn = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const token = store.getters['authentication/getToken']
+      if (!token) {
+        next()
+      } else {
+        next(from)
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+const CustomeHomePage = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const token = store.getters['authentication/getToken']
+      if (token) {
+        next({ name: 'viewAllPosts' })
+      } else {
+        next({ name: 'homepage' })
       }
     }
     if (store.getters['authentication/isRefreshing']) {
@@ -111,8 +156,14 @@ export default new Router({
     {
       path: '/',
       name: 'home',
+      component: Index,
+      ...CustomeHomePage
+    },
+    {
+      path: '/home',
+      name: 'homepage',
       component: Home,
-      props: true,
+      ...NotLoggedIn
     },
     {
       path: '/Login',
@@ -227,7 +278,7 @@ export default new Router({
       name: 'delivery',
       component: Delivery,
       props: true,
-      ...LoggedIn
+      // ...LoggedIn
     },
     {
       path: '/401',
