@@ -159,7 +159,7 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      // Rroute does not contain any HTML, it is simply used as a redirect for the homepage
+      // Route does not contain any HTML, it is simply used as a redirect for the homepage
       // depending on if the user is logged in or not
       path: '/',
       name: 'home',
