@@ -1,5 +1,18 @@
 # Changelog
-## v0.0.3 (August 21, 2019)
+
+## v0.0.4 (September 18, 2019)
+#### Features:
+- Vehicle delivery
+- Delivery confirmation
+#### Enhancements:
+ - Improved content on homepage
+ - Added 'about' section
+ - Now redirecting to a different homepage if logged in
+ - Minor UI tweaks
+#### Bug Fixes:
+ - Fixed cancel bid issue
+
+## v0.0.4 (August 21, 2019)
 #### Features:
 - Created bid classes
 - Created bid services
