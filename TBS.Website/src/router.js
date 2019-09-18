@@ -38,6 +38,14 @@ const DeliveryHome = () => import('@/views/Delivery/Home.vue')
 const CarrierDelivery = () => import('@/views/Delivery/Carrier/Index.vue')
 const ShipperDelivery = () => import('@/views/Delivery/Shipper/Index.vue')
 
+// About
+const AboutIndex = () => import('@/views/About/Index.vue')
+const AboutUs = () => import('@/views/About/Us.vue')
+const PrivacyPolicy = () => import('@/views/About/PrivacyPolicy.vue')
+const FAQ = () => import('@/views/About/FAQ.vue')
+const AboutCarrier = () => import('@/views/About/Carrier.vue')
+const AboutShipper = () => import('@/views/About/Shipper.vue')
+
 Vue.use(Router)
 
 // Add when it is required to be logged in to view this page
@@ -178,6 +186,37 @@ export default new Router({
       ...NotLoggedIn
     },
     {
+      path: '/About',
+      component: AboutIndex,
+      children: [
+        {
+          path: '',
+          name: 'aboutUs',
+          component: AboutUs,
+        },
+        {
+          path: 'Carrier',
+          name: 'aboutCarrier',
+          component: AboutCarrier,
+        },
+        {
+          path: 'Shipper',
+          name: 'aboutShipper',
+          component: AboutShipper,
+        },
+        {
+          path: 'FAQ',
+          name: 'faq',
+          component: FAQ,
+        },
+        {
+          path: 'PrivacyPolicy',
+          name: 'privacyPolicy',
+          component: PrivacyPolicy,
+        },
+      ]
+    },
+    {
       path: '/Login',
       name: 'login',
       component: Login,
@@ -316,13 +355,6 @@ export default new Router({
         },
       ]
     },
-    // {
-    //   path: '/Delivery/:postId?/:bidId?',
-    //   name: 'delivery',
-    //   component: Delivery,
-    //   props: true,
-    //   // ...LoggedIn
-    // },
     {
       path: '/401',
       name: 'error401',
