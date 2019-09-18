@@ -31,6 +31,7 @@
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
+                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval'" :to="{ name: 'carrierDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>                       
                 </td>
               </tr>
             </tbody>
