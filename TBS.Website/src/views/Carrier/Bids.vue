@@ -19,7 +19,7 @@
               <th>Details</th>
               <th>Management</th>
             </thead>
-            <tbody>
+            <tbody v-if="bids">
               <tr v-for="bid in bids" :key="bid.id">
                 <td>{{ bid.shipper.name }}</td>
                 <td>{{ format(bid.bidAmount) }}</td>
@@ -31,6 +31,7 @@
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
                   </div>
+                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'carrierDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>                       
                 </td>
               </tr>
             </tbody>
@@ -86,9 +87,9 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'approved' })
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'pendingDelivery' })
         .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 1
+          this.bids.find(b => b.id == bidId).bidStatus = 3
           Swal.fire({
             type: 'success',
             title: 'Accepted',
@@ -133,27 +134,13 @@ export default {
       this.$store.dispatch('posts/getPostById', { type: 'carrier', postId: this.$route.params.id })
         .then((response) => {
           this.post = response.data.result
+          this.bids = this.post.bids
         })
         .catch(() => {
           Swal.fire({
             type: 'error',
             title: 'Oops...',
             text: 'Something went wrong! We are unable to load this post. Please try again!',
-          })
-          this.error = true
-        })
-    },
-    fetchBids() {
-      this.$store.dispatch('bids/getBidsByPostId', { type: 'carrier', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
-        .then((response) => {
-          this.bids = response.data.result.bids
-          this.bidPageCount = response.data.result.paginationModel.totalPages
-        })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load these bids. Please try again!',
           })
           this.error = true
         })
@@ -172,7 +159,6 @@ export default {
   },
   created() {
     this.fetchPost()
-    this.fetchBids()
   }
 }
 </script>

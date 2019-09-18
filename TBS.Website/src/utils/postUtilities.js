@@ -7,7 +7,7 @@ const postUtilities = {
     } else if (status === 2) {
       return 'Pending Delivery'
     } else if (status === 3) {
-      return 'Pending Delivery Approval'
+      return 'Completed'
     } else {
       return 'Unknown'
     }
@@ -52,6 +52,10 @@ const postUtilities = {
   },
   formatAddress(address) {
     return `${address.addressLine}, ${address.city}, ${address.province}, ${address.country} ${address.postalCode}`
+  },
+  //TODO: Remove all other occurences of the code below to use this method
+  trimDate(date) {
+    return new Date(date).toISOString().split('T')[0]
   }
 }
 export default postUtilities
