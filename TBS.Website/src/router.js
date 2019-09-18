@@ -288,7 +288,7 @@ export default new Router({
       ]
     },
     {
-      path: '/Delivery/:id?',
+      path: '/Delivery/:postId?/:bidId?',
       name: 'delivery',
       component: Delivery,
       props: true,

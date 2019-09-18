@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     acceptBid(bidId) {
-      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'approved' })
+      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'pendingDelivery' })
         .then(() => {
           this.bids.find(b => b.id == bidId).bidStatus = 1
           Swal.fire({

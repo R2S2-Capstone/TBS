@@ -110,9 +110,10 @@ namespace TBS.Services.Bids
         {
             var bid = _context.ShipperBids
                 .Include(b => b.Post)
-                .ThenInclude(p => p.PickupLocation)
+                    .ThenInclude(p => p.PickupLocation)
                 .Include(b => b.Post)
-                .ThenInclude(p => p.DropoffLocation)
+                    .ThenInclude(p => p.DropoffLocation)
+                .Include(b => b.Post.Shipper)
                 .Include(b => b.Carrier)
                 .First(p => p.Id == request.BidId);
             if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
@@ -124,7 +125,7 @@ namespace TBS.Services.Bids
                 bid.BidStatus = request.Status;
 
                 // A shipper post can only have one accepted bid so make sure it is moved into the next state
-                if (bid.BidStatus == Data.Models.Bids.BidStatus.Approved)
+                if (bid.Post.PostStatus == Data.Models.Posts.PostStatus.Open)
                 {
                     bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
                     //TODO: Make email prettier
@@ -133,7 +134,7 @@ namespace TBS.Services.Bids
                         bid.Carrier.Email,
                         $"Bid has been accepted on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
                         $"Your bid has been accepted!<br>" +
-                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/${bid.Id}'>here</a>" +
+                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/{bid.Post.Id}/{bid.Id}'>here</a>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );

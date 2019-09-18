@@ -3,15 +3,15 @@ const bidUtilities = {
     if (status === 0) {
       return 'Open' 
     } else if (status === 1) {
-      return 'Approved'
-    } else if (status === 2) {
       return 'Declined'
-    } else if (status === 3) {
+    } else if (status === 2) {
       return 'Cancelled'
+    } else if (status === 3) {
+      return 'Pending Delivery'
     } else if (status === 4) {
-      return 'Pending Payment'
+      return 'Pending Delivery Approval'
     } else if (status === 5) {
-      return 'Payment Recieved'
+      return 'Completed'
     } else {
       return 'Unknown'
     }

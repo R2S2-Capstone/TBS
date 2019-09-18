@@ -120,10 +120,18 @@ namespace TBS.Services.Bids
                 // A carrier post can have multiple accepted bids, make sure it is under the posted capacity
                 var approvedBids = _context.CarrierBids
                     .Include(b => b.Post)
-                    .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Approved)
+                    .Where(b => b.Post.Id == bid.Post.Id 
+                        && (b.BidStatus == Data.Models.Bids.BidStatus.PendingDelivery 
+                            || b.BidStatus == Data.Models.Bids.BidStatus.PendingDeliveryApproval 
+                            || b.BidStatus == Data.Models.Bids.BidStatus.Completed)
+                        )
                     .Count();
                 // Spaces still available
-                if (bid.Post.SpacesAvailable > approvedBids && request.Status == Data.Models.Bids.BidStatus.Approved)
+                if (bid.Post.SpacesAvailable > approvedBids 
+                        && (request.Status == Data.Models.Bids.BidStatus.PendingDelivery
+                            || request.Status == Data.Models.Bids.BidStatus.PendingDeliveryApproval
+                            || request.Status == Data.Models.Bids.BidStatus.Completed)
+                        )
                 {
                     bid.BidStatus = request.Status;
 
@@ -133,7 +141,7 @@ namespace TBS.Services.Bids
                         bid.Shipper.Email,
                         $"Bid has been accepted on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation}",
                         $"Your bid has been accepted!<br>" +
-                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/${bid.Id}'>here</a>" +
+                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/{bid.Post.Id}/{bid.Id}'>here</a>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
