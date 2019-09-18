@@ -110,10 +110,10 @@ namespace TBS.Services.Bids
         {
             var bid = _context.ShipperBids
                 .Include(b => b.Post)
-                    .ThenInclude(p => p.PickupLocation)
-                .Include(b => b.Post)
-                    .ThenInclude(p => p.DropoffLocation)
+                .Include(b => b.Post.PickupLocation)
+                .Include(b => b.Post.DropoffLocation)
                 .Include(b => b.Post.Shipper)
+                .Include(b => b.Post.Vehicle)
                 .Include(b => b.Carrier)
                 .First(p => p.Id == request.BidId);
 
@@ -129,7 +129,7 @@ namespace TBS.Services.Bids
                 _context.ShipperBids.Update(bid);
 
                 // A shipper post can only have one accepted bid so make sure it is moved into the next state
-                if (bid.Post.PostStatus == Data.Models.Posts.PostStatus.Open)
+                if (request.Status == Data.Models.Bids.BidStatus.PendingDelivery)
                 {
                     bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
                     //TODO: Make email prettier
@@ -142,8 +142,6 @@ namespace TBS.Services.Bids
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
-
-                    _logger.LogInformation($"Shipper Bid: Successfully accepted a bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
 
                     // Save the changes so it's not considered a pending bid
                     await _context.SaveChangesAsync();
@@ -170,7 +168,41 @@ namespace TBS.Services.Bids
 
                         _logger.LogInformation($"Shipper Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation.City} -> {pendingBid.Post.DropoffLocation.City} ({bid.Id}). From {pendingBid.Carrier.Name} for ${pendingBid.BidAmount}");
                     }
+
+                    _logger.LogInformation($"Shipper Bid: Successfully accepted a bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
                 }
+                else if (request.Status == Data.Models.Bids.BidStatus.PendingDeliveryApproval)
+                {
+                    //TODO: Make email prettier
+                    await _emailService.SendEmailAsync(
+                        bid.Post.Shipper.Name,
+                        bid.Post.Shipper.Email,
+                        $"{bid.Post.Vehicle.Year} {bid.Post.Vehicle.Make} {bid.Post.Vehicle.Model} has been delivered!",
+                        $"Your vehicle has been delivered.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Delivery/Shipper/{bid.Post.Id}/{bid.Id}'>here</a> to confirm delivery<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
+                    _logger.LogInformation($"Shipper Bid: Vehicle has been delivered for bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
+
+                }
+                else if (request.Status == Data.Models.Bids.BidStatus.Completed)
+                {
+                    bid.Post.PostStatus = Data.Models.Posts.PostStatus.Closed;
+                    //TODO: Make email prettier
+                    await _emailService.SendEmailAsync(
+                        bid.Carrier.Name,
+                        bid.Carrier.Email,
+                        $"{bid.Post.Vehicle.Year} {bid.Post.Vehicle.Make} {bid.Post.Vehicle.Model} delivery has been confirmed!",
+                        $"Your delivery has been confirmed.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Delivery/Shipper/{bid.Post.Id}/{bid.Id}'>here</a> to add a rating<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
+                    _logger.LogInformation($"Shipper Bid: Delivery has been confirmed for bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
+
+                }
+                // Any other bid updates
                 else
                 {
                     //TODO: Make email prettier

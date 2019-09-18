@@ -209,23 +209,37 @@ namespace TBS.Services.Bids
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
-
+                    _logger.LogInformation($"Carrier Bid: Delivery has been confirmed for bid on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation} ({bid.Id}). From {bid.Post.Carrier.Name} for ${bid.BidAmount}");
                 }
                 else if (request.Status == Data.Models.Bids.BidStatus.Completed)
                 {
-                    //TODO: Check if other bids have been delivered then close the post
                     bid.BidStatus = request.Status;
                     //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         bid.Shipper.Name,
                         bid.Shipper.Email,
-                        $"{bid.Vehicle.Year} {bid.Vehicle.Make} {bid.Vehicle.Model} delivery confirmed!",
+                        $"{bid.Vehicle.Year} {bid.Vehicle.Make} {bid.Vehicle.Model} delivery has been confirmed!",
                         $"Your delivery has been confirmed.<br>" +
                         $"Click <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a> to add a rating<br>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
+                    _logger.LogInformation($"Carrier Bid: Delivery has been confirmed for bid on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation} ({bid.Id}). From {bid.Post.Carrier.Name} for ${bid.BidAmount}");
+
+                    var pendingBids = _context.CarrierBids
+                        .Include(b => b.Post)
+                        .Include(b => b.Shipper)
+                        .Where(b => b.Post.Id == bid.Post.Id && (b.BidStatus == Data.Models.Bids.BidStatus.PendingDelivery || b.BidStatus == Data.Models.Bids.BidStatus.PendingDeliveryApproval))
+                        .Count();
+
+                    // No other pending bids, post can now be closed
+                    if (pendingBids - 1 <= 0)
+                    {
+                        bid.Post.PostStatus = Data.Models.Posts.PostStatus.Closed;
+                        _context.CarrierPosts.Update(bid.Post);
+                    }
                 }
+                // Any other bid updates
                 else
                 {
                     bid.BidStatus = request.Status;

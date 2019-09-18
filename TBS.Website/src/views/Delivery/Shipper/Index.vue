@@ -127,7 +127,7 @@ export default {
       this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.postId })
         .then((response) => {
           this.post = response.data.result
-          this.bid = this.post.bids.find((bid) => bid.id = this.bidId)
+          this.bid = this.post.bids.find((bid) => bid.id == this.bidId)
           this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
         })
         .catch(() => {
@@ -146,7 +146,7 @@ export default {
           this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
           Swal.fire({
             type: 'success',
-            title: 'Accepted',
+            title: 'Updated',
             text: 'Bid has successfully been updated!',
           })
         })
