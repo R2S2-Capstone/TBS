@@ -141,7 +141,7 @@ namespace TBS.Services.Bids
                         bid.Shipper.Email,
                         $"Bid has been accepted on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation}",
                         $"Your bid has been accepted!<br>" +
-                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/{bid.Post.Id}/{bid.Id}'>here</a>" +
+                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );

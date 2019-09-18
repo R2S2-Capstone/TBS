@@ -33,7 +33,10 @@ const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
 const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
 // Delivery
-const Delivery = () => import('@/views/Delivery/Index.vue')
+const DeliveryIndex = () => import('@/views/Delivery/Index.vue')
+const DeliveryHome = () => import('@/views/Delivery/Home.vue')
+const CarrierDelivery = () => import('@/views/Delivery/Carrier.vue')
+const ShipperDelivery = () => import('@/views/Delivery/Shipper.vue')
 
 Vue.use(Router)
 
@@ -288,12 +291,38 @@ export default new Router({
       ]
     },
     {
-      path: '/Delivery/:postId?/:bidId?',
-      name: 'delivery',
-      component: Delivery,
-      props: true,
-      // ...LoggedIn
+      // All routes for viewing delivery information
+      path: '/Delivery',
+      component: DeliveryIndex,
+      children: [
+        {
+          path: '',
+          name: 'delivery',
+          component: DeliveryHome,
+        },
+        {
+          path: 'Carrier/:postId?/:bidId?',
+          name: 'carrierDelivery',
+          component: CarrierDelivery,
+          props: true,
+          ...LoggedIn
+        },
+        {
+          path: 'Shipper/:postId?/:bidId?',
+          name: 'shipperDelivery',
+          component: ShipperDelivery,
+          props: true,
+          ...LoggedIn
+        },
+      ]
     },
+    // {
+    //   path: '/Delivery/:postId?/:bidId?',
+    //   name: 'delivery',
+    //   component: Delivery,
+    //   props: true,
+    //   // ...LoggedIn
+    // },
     {
       path: '/401',
       name: 'error401',
