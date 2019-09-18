@@ -3,7 +3,7 @@
     <Back />
     <div class="row text-center">
       <div class="col-12">
-        <h2>Delivery for {{ post.pickupLocation }} -> {{ post.dropoffLocation }}</h2>
+        <h2>{{ formatAddress(post.pickupLocation) }} -><br> {{ formatAddress(post.dropoffLocation) }}</h2>
         <h4 v-if="error" class="text-danger mb-5">Failed to load post information</h4>
       </div>
     </div>
@@ -31,10 +31,9 @@
                   <th>Vehicle Information</th>
                 </thead>
                 <tbody>
-                  <td>{{ post.pickupLocation }} - {{ trimDate(post.pickupDate) }}</td>
-                  <td>{{ post.dropoffLocation }} - {{ trimDate(post.dropoffDate) }}</td>
-                  <td v-if="post.carrier.vehicle">{{ `${post.carrier.vehicle.year} ${post.carrier.vehicle.make} ${post.carrier.vehicle.model} (${parseTrailerType(post.carrier.vehicle.trailerType)})` }}</td>
-                  <td v-else>Carrier vehicle not specified. <br>Trailer type: {{ `${parseTrailerType(post.trailerType)}` }}</td>
+                  <td>{{ formatAddress(post.pickupLocation) }} - {{ trimDate(post.pickupDate) }}</td>
+                  <td>{{ formatAddress(post.dropoffLocation) }} - {{ trimDate(post.dropoffDate) }}</td>
+                  <td>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</td>
                 </tbody>
               </table>
               <table class="table">
@@ -44,12 +43,14 @@
                 </thead>
                 <tbody>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link><br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a>
+                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.pickupContact.name }}</router-link><br>
+                    Phone Number: <a :href="'tel:' + post.pickupContact.phoneNumber">{{ post.pickupContact.phoneNumber }}</a><br>
+                    Email: <a :href="'mailto:' + post.pickupContact.email">{{ post.pickupContact.email }}</a><br>
                   </td>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link><br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{post.carrier.email }}</a>
+                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.dropoffContact.name }}</router-link><br>
+                    Phone Number: <a :href="'tel:' + post.dropoffContact.phoneNumber">{{ post.dropoffContact.phoneNumber }}</a><br>
+                    Email: <a :href="'mailto:' + post.dropoffContact.email">{{ post.dropoffContact.email }}</a><br>
                   </td>
                 </tbody>
               </table>
@@ -74,7 +75,7 @@
                 </tr>
                 <tr>
                   <!-- TODO: Generate router-link to profile page -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
                   <td>${{ bid.bidAmount }}</td>
                   <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 </tr>
@@ -86,9 +87,9 @@
     </div>
     <div class="row pt-3 pb-5 text-center">
       <div class="col-12 pt-3">
-        <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDelivery">Confirm Delivery</button>
-        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="forceDelivery">Force Delivery</button>
-        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDelivery">Approve Delivery</button>
+        <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
+        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
+        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
       </div>
     </div>
   </div>
@@ -103,7 +104,7 @@ import postUtilities from '@/utils/postUtilities.js'
 import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
-  name: 'carrierDelivery',
+  name: 'shipperDelivery',
   components: {
     Back
   },
@@ -114,6 +115,7 @@ export default {
   data() {
     return {
       accountType: '',
+      postType: '',
       post: null,
       bid: null,
       error: null,
@@ -122,7 +124,7 @@ export default {
   },
   methods: {
     loadDetails() {
-      this.$store.dispatch('posts/getPostById', { type: 'carrier', postId: this.$route.params.postId })
+      this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.postId })
         .then((response) => {
           this.post = response.data.result
           this.bid = this.post.bids.find((bid) => bid.id = this.bidId)
@@ -137,14 +139,30 @@ export default {
           this.error = true
         })
     },
-    confirmDelivery() {
-
-    },
-    forceDelivery() {
-
+    updateBid(newStatus) {
+      this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: this.bid.id, bidStatus: this.reverseBidStatus(newStatus.toLowerCase()) })
+        .then(() => {
+          this.bid.bidStatus = this.reverseBidStatus(newStatus.toLowerCase())
+          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
+          Swal.fire({
+            type: 'success',
+            title: 'Accepted',
+            text: 'Bid has successfully been updated!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
     },
     parsePostStatus(status) {
       return postUtilities.parsePostStatus(status)
+    },
+    reverseBidStatus(status) {
+      return bidUtilities.reverseBidStatus(status)
     },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)
@@ -154,6 +172,9 @@ export default {
     },
     trimDate(time) {
       return postUtilities.trimDate(time)
+    },
+    formatAddress(address) {
+      return postUtilities.formatAddress(address)
     }
   },
   created() {

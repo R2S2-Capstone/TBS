@@ -16,5 +16,22 @@ const bidUtilities = {
       return 'Unknown'
     }
   },
+  reverseBidStatus: (status) => {
+    if (status == 'open') {
+      return 0
+    } else if (status == 'declined') {
+      return 1
+    } else if (status == 'cancelled') {
+      return 2
+    } else if (status == 'pending delivery') {
+      return 3
+    } else if (status == 'pending delivery approval') {
+      return 4
+    } else if (status == 'completed') {
+      return 5
+    } else {
+      return 'Unknown'
+    }
+  },
 }
 export default bidUtilities

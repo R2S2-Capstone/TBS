@@ -35,8 +35,8 @@ const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 // Delivery
 const DeliveryIndex = () => import('@/views/Delivery/Index.vue')
 const DeliveryHome = () => import('@/views/Delivery/Home.vue')
-const CarrierDelivery = () => import('@/views/Delivery/Carrier.vue')
-const ShipperDelivery = () => import('@/views/Delivery/Shipper.vue')
+const CarrierDelivery = () => import('@/views/Delivery/Carrier/Index.vue')
+const ShipperDelivery = () => import('@/views/Delivery/Shipper/Index.vue')
 
 Vue.use(Router)
 

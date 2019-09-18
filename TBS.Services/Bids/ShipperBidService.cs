@@ -116,13 +116,17 @@ namespace TBS.Services.Bids
                 .Include(b => b.Post.Shipper)
                 .Include(b => b.Carrier)
                 .First(p => p.Id == request.BidId);
-            if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
+
+            // Make sure the post is not closed
+            if (bid.Post.PostStatus == Data.Models.Posts.PostStatus.Closed)
             {
                 throw new FailedToUpdateBidException("Post is no longer accepting bids");
             }
             else
             {
                 bid.BidStatus = request.Status;
+
+                _context.ShipperBids.Update(bid);
 
                 // A shipper post can only have one accepted bid so make sure it is moved into the next state
                 if (bid.Post.PostStatus == Data.Models.Posts.PostStatus.Open)
@@ -140,6 +144,32 @@ namespace TBS.Services.Bids
                     );
 
                     _logger.LogInformation($"Shipper Bid: Successfully accepted a bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
+
+                    // Save the changes so it's not considered a pending bid
+                    await _context.SaveChangesAsync();
+
+                    // Cancel all other bids
+                    var pendingBids = _context.ShipperBids
+                        .Include(b => b.Post)
+                        .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Open);
+
+                    foreach (var pendingBid in pendingBids)
+                    {
+                        pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
+                        _context.ShipperBids.Update(pendingBid);
+
+                        //TODO: Make email prettier
+                        await _emailService.SendEmailAsync(
+                            pendingBid.Carrier.Name,
+                            pendingBid.Carrier.Email,
+                            $"Bid automatically cancelled on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
+                            $"Your bid has automatically been cancelled as the shipper has accepted another bid.<br>" +
+                            "Thanks,<br>" +
+                            "TBS Inc."
+                        );
+
+                        _logger.LogInformation($"Shipper Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation.City} -> {pendingBid.Post.DropoffLocation.City} ({bid.Id}). From {pendingBid.Carrier.Name} for ${pendingBid.BidAmount}");
+                    }
                 }
                 else
                 {
@@ -157,41 +187,7 @@ namespace TBS.Services.Bids
                     _logger.LogInformation($"Shipper Bid: Updated bid to {bid.BidStatus} for {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Carrier.Name} for ${bid.BidAmount}");
                 }
 
-                _context.ShipperBids.Update(bid);
-
                 await _context.SaveChangesAsync();
-
-                // Cancel all other bids
-                var pendingBids = _context.ShipperBids
-                    .Include(b => b.Post)
-                    .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Open);
-
-                foreach (var pendingBid in pendingBids)
-                {
-                    pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
-                    _context.ShipperBids.Update(pendingBid);
-
-                    //TODO: Make email prettier
-                    await _emailService.SendEmailAsync(
-                        pendingBid.Carrier.Name,
-                        pendingBid.Carrier.Email,
-                        $"Bid automatically cancelled on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
-                        $"Your bid has automatically been cancelled as the shipper has accepted another bid.<br>" +
-                        "Thanks,<br>" +
-                        "TBS Inc."
-                    );
-
-                    _logger.LogInformation($"Shipper Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation.City} -> {pendingBid.Post.DropoffLocation.City} ({bid.Id}). From {pendingBid.Carrier.Name} for ${pendingBid.BidAmount}");
-                }
-
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw new FailedToUpdateBidException();
-                }
 
                 return await Task.FromResult(true);
             }
