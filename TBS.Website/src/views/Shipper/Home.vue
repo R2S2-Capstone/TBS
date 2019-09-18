@@ -78,7 +78,10 @@
                 <td>{{ bid.post.pickupLocation }} <i class="fas fa-arrow-right"></i> {{ bid.post.dropoffLocation }}</td>
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
-                <td><button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button></td>
+                <td>
+                  <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button>
+                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval'" :to="{ name: 'carrierDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>
+                </td>
               </tr>
             </tbody>
           </table>

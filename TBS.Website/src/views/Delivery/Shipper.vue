@@ -1,5 +1,6 @@
 <template>
   <div class="container pt-5" v-if="post">
+    <Back />
     <div class="row text-center">
       <div class="col-12">
         <h2>{{ formatAddress(post.pickupLocation) }} -><br> {{ formatAddress(post.dropoffLocation) }}</h2>
@@ -95,13 +96,18 @@
 </template>
 
 <script>
+import Back from '@/components/Back.vue'
+
 import Swal from 'sweetalert2'
 
 import postUtilities from '@/utils/postUtilities.js'
 import bidUtilities from '@/utils/bidUtilities.js'
 
 export default {
-  name: 'delivery',
+  name: 'shipperDelivery',
+  components: {
+    Back
+  },
   props: {
     postId: String,
     bidId: String,
@@ -118,12 +124,10 @@ export default {
   },
   methods: {
     loadDetails() {
-      // this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.postId })
-      this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: 'ea2ceb02-fdea-4529-6afa-08d73bdaaba3' })
+      this.$store.dispatch('posts/getPostById', { type: 'shipper', postId: this.$route.params.postId })
         .then((response) => {
           this.post = response.data.result
-          // this.bid = this.post.bids.find((bid) => bid.id = this.bidId)
-          this.bid = this.post.bids.find((bid) => bid.id = 'aeddc9ab-9ff2-48fb-88e7-08d73bdab51b')
+          this.bid = this.post.bids.find((bid) => bid.id = this.bidId)
           this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
         })
         .catch(() => {
