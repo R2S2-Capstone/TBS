@@ -23,9 +23,23 @@
         <div class="row">
           <div class="col-12">
             <p></p>
-            <p>
-             Details
-            </p>
+            <div v-if="postType == 'carrier'">
+              <table class="table">
+                <tr>
+                  <th>Departure</th>
+                  <th>Destination</th>
+                  <th>Status</th>
+                </tr>
+                <tr>
+                  <td>{{ post.pickupLocation }} - {{ post.pickupDate }} {{ post.pickupTime }}</td>
+                  <td>{{ post.dropoffLocation }}</td>
+                  <td>{{ post.postStatus }}</td>
+                </tr>
+              </table>
+            </div>
+            <div v-else>
+
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +66,16 @@ export default {
     loadDetails() {
       //TODO: Load post/bid/review details
       //TODO: set postType
-    }
+      // this.$store.dispatch('bids/getBidById', { type: this.postType, bidId: '9347ec36-ad00-45d3-ff0e-08d73bce4d1c' })
+      //   .then((response) => {
+      //     this.bid = response.data.result
+      //     console.log(response.data.result)
+      //   })
+      //   .catch(() => {
+         
+      //     this.error = true
+      //   })
+    },
   },
   props: {
     id: String
@@ -60,6 +83,7 @@ export default {
   created() {
     if (this.id == null) this.$router.go(-1)
     this.accountType = this.$store.getters['authentication/getAccountType'].toLowerCase()
+    this.postType = this.accountType == 'carrier' ? 'shipper' : 'carrier'
     this.loadDetails()
   }
 }
@@ -132,13 +156,11 @@ hr {
   }
 
   .active {
-    color: green;
-
     &:before {
-      border-color: #55b776;
+      border-color: colour(colourPrimary);
     }
     &:after {
-      background-color: #55b776;
+      background-color: colour(colourPrimary);
     }
   }
 }

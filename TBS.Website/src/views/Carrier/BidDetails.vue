@@ -78,7 +78,6 @@ export default {
   },
   data() {
     return {
-      post: null,
       bid: null,
     }
   },

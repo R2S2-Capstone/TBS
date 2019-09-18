@@ -19,7 +19,7 @@
               <th>Details</th>
               <th>Management</th>
             </thead>
-            <tbody>
+            <tbody v-if="bids">
               <tr v-for="bid in bids" :key="bid.id">
                 <td>{{ bid.shipper.name }}</td>
                 <td>{{ format(bid.bidAmount) }}</td>
@@ -133,27 +133,13 @@ export default {
       this.$store.dispatch('posts/getPostById', { type: 'carrier', postId: this.$route.params.id })
         .then((response) => {
           this.post = response.data.result
+          this.bids = this.post.bids
         })
         .catch(() => {
           Swal.fire({
             type: 'error',
             title: 'Oops...',
             text: 'Something went wrong! We are unable to load this post. Please try again!',
-          })
-          this.error = true
-        })
-    },
-    fetchBids() {
-      this.$store.dispatch('bids/getBidsByPostId', { type: 'carrier', postId: this.$route.params.id, currentPage: this.bidPage, pageSize: 5 })
-        .then((response) => {
-          this.bids = response.data.result.bids
-          this.bidPageCount = response.data.result.paginationModel.totalPages
-        })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load these bids. Please try again!',
           })
           this.error = true
         })
@@ -172,7 +158,6 @@ export default {
   },
   created() {
     this.fetchPost()
-    this.fetchBids()
   }
 }
 </script>
