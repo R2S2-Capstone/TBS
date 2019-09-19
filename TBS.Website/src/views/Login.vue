@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <NarrowFormCard title="Login" :submit="submit" v-if="this.$route.name === 'login'">
       <div slot="card-information">
         <p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>

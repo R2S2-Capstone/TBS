@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <div class="row">
       <div class="col-12">
         <div class="row pb-3">
@@ -147,7 +147,7 @@ export default {
     cancelBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'cancelled' })
         .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 3
+          this.bids.find(b => b.id == bidId).bidStatus = 2
           Swal.fire({
             type: 'success',
             title: 'Cancelled',
