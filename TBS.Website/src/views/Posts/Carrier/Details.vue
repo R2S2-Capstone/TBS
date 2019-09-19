@@ -164,7 +164,7 @@
                     </div>
                     <div slot="footer">
                       <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
-                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="submitBid">Bid</button>
+                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
                     </div>
                   </div>
                   <button v-if="!showModal" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
@@ -289,11 +289,26 @@ export default {
           this.error = true
         })
     },
-    submitBid() {
+    confirmBid() {
       this.$v.$touch()
       if (this.$v.$invalid) {
 				return
       }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to place a bid for $${this.bidAmount}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, place my bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.submitBid()
+        }
+      })
+    },
+    submitBid() {
       this.$store.dispatch('bids/createBid', { type: 'carrier', postId: this.post.id, bid: { bidAmount: this.bidAmount, ...this.bidPost }})
         .then(() => {
           this.showModal = false

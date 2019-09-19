@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store/store.js'
 
+const Index = () => import('@/views/Index.vue')
 const Home = () => import('@/views/Home.vue')
 const Error401 = () => import('@/views/Error/401.vue')
 const Error404 = () => import('@/views/Error/404.vue')
@@ -31,8 +32,23 @@ const DetailedShipperPost = () => import('@/views/Posts/Shipper/Details.vue')
 // Carrier Posts
 const DetailedCarrierPost = () => import('@/views/Posts/Carrier/Details.vue')
 
+// Delivery
+const DeliveryIndex = () => import('@/views/Delivery/Index.vue')
+const DeliveryHome = () => import('@/views/Delivery/Home.vue')
+const CarrierDelivery = () => import('@/views/Delivery/Carrier/Index.vue')
+const ShipperDelivery = () => import('@/views/Delivery/Shipper/Index.vue')
+
+// About
+const AboutIndex = () => import('@/views/About/Index.vue')
+const AboutUs = () => import('@/views/About/Us.vue')
+const PrivacyPolicy = () => import('@/views/About/PrivacyPolicy.vue')
+const FAQ = () => import('@/views/About/FAQ.vue')
+const AboutCarrier = () => import('@/views/About/Carrier.vue')
+const AboutShipper = () => import('@/views/About/Shipper.vue')
+
 Vue.use(Router)
 
+// Add when it is required to be logged in to view this page
 const LoggedIn = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -55,6 +71,53 @@ const LoggedIn = {
   }
 }
 
+// Add when it is required to be logged out to view this page
+const NotLoggedIn = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const token = store.getters['authentication/getToken']
+      if (!token) {
+        next()
+      } else {
+        next(from)
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+// This will redirect to either the home page or view posts depending on if the user is logged in or not
+const CustomeHomePage = {
+  beforeEnter: (to, from, next) => {
+    const redirect = () => {
+      const token = store.getters['authentication/getToken']
+      if (token) {
+        next({ name: 'viewAllPosts' })
+      } else {
+        next({ name: 'homepage' })
+      }
+    }
+    if (store.getters['authentication/isRefreshing']) {
+      store.watch(() => store.getters['authentication/isRefreshing'],
+        () => {
+          redirect()
+        }
+      )
+    } else {
+      redirect()
+    }
+  }
+}
+
+// Add when only a carrier can view this page
 const CarrierOnly = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -78,6 +141,7 @@ const CarrierOnly = {
   }
 }
 
+// Add when only shipper can view this page
 const ShipperOnly = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
@@ -106,9 +170,51 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      // Route does not contain any HTML, it is simply used as a redirect for the homepage
+      // depending on if the user is logged in or not
       path: '/',
       name: 'home',
-      component: Home
+      component: Index,
+      ...CustomeHomePage
+    },
+    {
+      // Default route for anyone who is not logged in, it contains a lot of information
+      // regarding the website
+      path: '/home',
+      name: 'homepage',
+      component: Home,
+      ...NotLoggedIn
+    },
+    {
+      path: '/About',
+      component: AboutIndex,
+      children: [
+        {
+          path: '',
+          name: 'aboutUs',
+          component: AboutUs,
+        },
+        {
+          path: 'Carrier',
+          name: 'aboutCarrier',
+          component: AboutCarrier,
+        },
+        {
+          path: 'Shipper',
+          name: 'aboutShipper',
+          component: AboutShipper,
+        },
+        {
+          path: 'FAQ',
+          name: 'faq',
+          component: FAQ,
+        },
+        {
+          path: 'PrivacyPolicy',
+          name: 'privacyPolicy',
+          component: PrivacyPolicy,
+        },
+      ]
     },
     {
       path: '/Login',
@@ -127,11 +233,13 @@ export default new Router({
       component: ResetPassword
     },
     {
+      // All routes for shipper only pages
       path: '/Shipper',
       component: ShipperIndex,
       ...ShipperOnly,
       children: [
         {
+          // Default shipper page, also known as 'dashboard' and 'manage my posts'
           path: '',
           name: 'shipperHome',
           component: ShipperHome,
@@ -158,11 +266,13 @@ export default new Router({
       ]
     },
     {
+      // All routes for carrier only pages
       path: '/Carrier',
       component: CarrierIndex,
       ...CarrierOnly,
       children: [
         {
+          // Default carrier page, also known as 'dashboard' and 'manage my posts'
           path: '',
           name: 'carrierHome',
           component: CarrierHome,
@@ -191,11 +301,12 @@ export default new Router({
           name: 'carrierViewBidDetails',
           component: CarrierViewBidDetails,
           ...LoggedIn,
-          params: true,
+          props: true,
         },
       ]
     },
     {
+      // All routes for viewing others posts
       path: '/Posts',
       component: PostsIndex,
       children: [
@@ -215,6 +326,32 @@ export default new Router({
           name: 'viewDetailedShipperPost',
           component: DetailedShipperPost,
           props: true,
+        },
+      ]
+    },
+    {
+      // All routes for viewing delivery information
+      path: '/Delivery',
+      component: DeliveryIndex,
+      children: [
+        {
+          path: '',
+          name: 'delivery',
+          component: DeliveryHome,
+        },
+        {
+          path: 'Carrier/:postId?/:bidId?',
+          name: 'carrierDelivery',
+          component: CarrierDelivery,
+          props: true,
+          ...LoggedIn
+        },
+        {
+          path: 'Shipper/:postId?/:bidId?',
+          name: 'shipperDelivery',
+          component: ShipperDelivery,
+          props: true,
+          ...LoggedIn
         },
       ]
     },
