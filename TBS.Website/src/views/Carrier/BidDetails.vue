@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <Back/>
     <WideCard v-if="bid" :title="'Bid from ' + bid.shipper.name">
       <div slot="card-content" class="text-center">

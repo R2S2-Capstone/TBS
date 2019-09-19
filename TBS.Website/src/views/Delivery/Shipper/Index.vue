@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5" v-if="post">
+  <div class="container pt-5 pb-5" v-if="post">
     <Back />
     <div class="row text-center">
       <div class="col-12">

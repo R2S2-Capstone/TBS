@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <div class="row" v-if="error">
       <div class="col-12 text-center">
         <h4 class="text-danger mb-5">Failed to load post...</h4>
@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row" v-if="!error && post != null">
-      <div class="col-lg-8 col-md-9 col-sm-12 mb-3 text-center">
+      <div class="col-lg-8 col-md-9 col-sm-12 mb-5 text-center">
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12">

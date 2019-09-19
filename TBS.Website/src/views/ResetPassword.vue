@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <NarrowFormCard title="Reset Password" :submit="submit">
       <div slot="card-information">
         <p v-if="emailSent" class="text-success text-center mb-3">Password reset email sent</p>
