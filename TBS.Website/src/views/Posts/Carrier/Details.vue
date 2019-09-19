@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row" v-if="post.id != null">
-      <div class="col-lg-8 col-md-9 col-sm-12 mb-3 text-center">
+      <div class="col-lg-8 col-md-9 col-sm-12 mb-5 text-center">
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12">

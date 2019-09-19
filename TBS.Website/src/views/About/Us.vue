@@ -11,7 +11,7 @@
           We are a group of College students completing a Capstone project for a Solutions Architect. This is an independent project with no ties to any businesses nor have
           we even incorporated.
         <br><br>
-          If you wish to contact us, Please send us an email at placeholder@gmail.com and we'll get back to you as soon as possible. 
+          If you wish to contact us, Please send us an email at <a href="malto:tbs@reecerose.com">tbs@reecerose.com</a> and we'll get back to you as soon as possible. 
         </p>
       </div>
     </div>
