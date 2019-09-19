@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <Back/>
     <div class="row">
       <div class="col-12">

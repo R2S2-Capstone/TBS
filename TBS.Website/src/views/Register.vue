@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <WideFormCard title="Register" :submit="submit">
       <div slot="card-information">
         <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent. Emails may take up to five minutes to send</p>

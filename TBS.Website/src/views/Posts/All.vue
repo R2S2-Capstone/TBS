@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <h5>Search coming soon...</h5>
     <Posts :posts="posts" />
     <ul class="pagination">
