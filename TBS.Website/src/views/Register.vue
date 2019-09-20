@@ -38,15 +38,21 @@
         </div>
         <h5>Company Information</h5>
         <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="col-12">
             <TextInput v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
+          <!-- <div class="col-lg-6 col-md-6 col-sm-12">
             <TextInput v-model="company.address.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.company.address.addressLine"/>
-          </div>
+          </div> -->
         </div>
         <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="col-12">
+            <div class="form-label-group">
+              <input id="CompanyAddress" v-model="company.address.addressLine"  :class="{ 'is-invalid': validCompanyAddress == false }" type="text" class="form-control" placeholder="Company address" >
+              <p v-if="validCompanyAddress == false" class="text-danger text-center">Please enter a valid company address</p>
+            </div>
+          </div>
+          <!-- <div class="col-lg-6 col-md-6 col-sm-12">
             <TextInput v-model="company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.company.address.city"/>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
@@ -59,7 +65,7 @@
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12">
             <TextInput v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.company.address.postalCode"/>
-          </div>
+          </div> -->
         </div>
         <h5>Contact Information</h5>
         <div class="row">
@@ -119,6 +125,7 @@ export default {
       isShipper: false,
       success: null,
       error: null,
+      validCompanyAddress: null,
       errorMessage: 'An error has occured, make sure your passwords match and your email is unique',
       company: {
         name: '',
@@ -212,6 +219,39 @@ export default {
             this.success = false
           })
     },
+    parseAddress(address) {
+      this.company.address.addressLine = `${address[0].long_name} ${address[1].long_name}`
+      this.company.address.city = address[2].long_name
+      this.company.address.province = address[4].short_name
+      this.company.address.country = address[5].long_name
+      this.company.address.postalCode = address[6].long_name
+      this.validCompanyAddress = true
+    }
+  },
+  mounted() {
+        let script = document.createElement('script')
+    script.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAi6v2y5oLv1ttrme5mFhNiyUIjKXLcGV0&libraries=places')
+    document.head.appendChild(script)
+
+    script.onload = () => {
+      // eslint-disable-next-line
+      var address = new google.maps.places.Autocomplete(document.getElementById('CompanyAddress'))
+      // eslint-disable-next-line
+      google.maps.event.addListener(address, 'place_changed', () => {
+        if (address.getPlace().address_components == null) {
+          this.validCompanyAddress = false
+          return
+        }
+        this.parseAddress(address.getPlace().address_components)
+      })
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+input, input::placeholder {
+  text-align: center;
+  text-align-last: center;
+}
+</style>
