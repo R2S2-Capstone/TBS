@@ -78,8 +78,7 @@
                 <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
               </div>
               <div class="col-12 pt-2" v-if="type == 'Update'">
-                <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
-                <!-- <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" /> -->
+                <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDelete">Delete</button>
               </div>
             </div>
           </div>
@@ -165,6 +164,11 @@ export default {
       if (this.type == 'Update') {
         this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Success',
+            text: `Post has successfully been updated!`,
+          })
           this.$router.push({name: 'carrierHome' })
         })
         .catch(() => {
@@ -178,6 +182,11 @@ export default {
       } else {
         this.$store.dispatch('posts/createPost', { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Success',
+            text: `Post has successfully been created!`,
+          })
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
@@ -190,9 +199,29 @@ export default {
         })
       }
     },
+    confirmDelete() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to delete this post?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete my post!'
+      }).then((result) => {
+        if (result.value) {
+          this.deletePost()
+        }
+      })
+    },
     deletePost() {
       this.$store.dispatch('posts/deletePost', { id: this.post.id })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Deleted',
+            text: 'Post has successfully been deleted!',
+          })
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {

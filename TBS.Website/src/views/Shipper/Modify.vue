@@ -162,8 +162,7 @@
           <button class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="submit" type="submit">{{ type }}</button>
         </div>
         <div class="col-12 pt-2" v-if="type == 'Update'">
-          <button type="button" class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
-            <!-- <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" /> -->
+          <button type="button" class="btn btn-main btn bg-blue fade-on-hover text-uppercase text-white" @click="confirmDelete">Delete</button>
         </div>
       </div>
     </WideFormCard>
@@ -326,6 +325,19 @@ export default {
       // Will either be 'posts/createPost' or 'posts/updatePost'
       this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, this.post)
 				.then(() => {
+          if (this.type.toLowerCase() == 'create') {
+            Swal.fire({
+              type: 'success',
+              title: 'Success',
+              text: `Post has successfully been created!`,
+            })
+          } else {
+            Swal.fire({
+              type: 'success',
+              title: 'Success',
+              text: `Post has successfully been updated!`,
+            })
+          }
           this.$router.push({ name: 'shipperHome' })
 				})
 				.catch(() => {
@@ -337,9 +349,29 @@ export default {
 					this.error = true
 				}) 
     },
+    confirmDelete() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to delete this post?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete my post!'
+      }).then((result) => {
+        if (result.value) {
+          this.deletePost()
+        }
+      })
+    },
     deletePost() {
       this.$store.dispatch('posts/deletePost',  { id: this.post.id })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Deleted',
+            text: 'Post has successfully been deleted!',
+          })
           this.$router.push({name: 'shipperHome' })
         })
         .catch(() => {
