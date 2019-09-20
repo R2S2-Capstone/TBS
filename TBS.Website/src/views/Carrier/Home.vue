@@ -79,7 +79,7 @@
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
-                  <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button>
+                  <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmCancelBid(bid.id, bid.bidAmount)">Cancel</button>
                   <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>     
                 </td>
               </tr>
@@ -143,6 +143,21 @@ export default {
       if (number <= 0 || number > this.bidPageCount) return
       this.bidPage = number
       this.fetchBids()
+    },
+    confirmCancelBid(bidId, bidAmount) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to cancel this bid for $${bidAmount}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel this bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.cancelBid(bidId)
+        }
+      })
     },
     cancelBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'cancelled' })

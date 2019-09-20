@@ -28,8 +28,8 @@
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
                   <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
-                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
-                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
+                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.carrier.name)">Accept</button>
+                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDeclineBid(bid.id, bid.bidAmount, bid.carrier.name)">Decline</button>
                   </div>
                   <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>                       
                 </td>
@@ -85,6 +85,21 @@ export default {
     }
   },
   methods: {
+      confirmAcceptBid(bidId, bidAmount, bidFrom) {
+        Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to accept this bid for $${bidAmount} from ${bidFrom}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, accept this bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.acceptBid(bidId)
+        }
+      })
+    },
     acceptBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'pendingDelivery' })
         .then(() => {
@@ -102,6 +117,21 @@ export default {
             text: 'Something went wrong! Please try again!',
           })
         })
+    },
+    confirmDeclineBid(bidId, bidAmount, bidFrom) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to decline this bid for $${bidAmount} from ${bidFrom}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, decline this bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.declineBid(bidId)
+        }
+      })
     },
     declineBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'declined' })
