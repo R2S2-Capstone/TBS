@@ -169,9 +169,6 @@ export default {
             text: 'Bid has successfully been cancelled!',
           })
         })
-        .catch((error) => {
-          console.log(error)
-        })
     },
     fetchPosts() {
       this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: 5 })

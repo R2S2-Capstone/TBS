@@ -46,26 +46,9 @@
               <hr>
             </div>
             <div class="col-12">
-              <div class="row">
-                <div class="col-12">
-                  <TextInput v-model="post.pickupLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.pickupLocation.addressLine"/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="post.pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.pickupLocation.city"/>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <ProvinceInput v-model="post.pickupLocation.province" />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <CountryInput v-model="post.pickupLocation.country" />
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="post.pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.pickupLocation.postalCode"/>
-                </div>
+              <div class="form-label-group">
+                <input id="PickupAddress" v-model="post.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" >
+                <p v-if="validPickupAddress == false" class="text-danger text-center">Please enter a valid pickup address</p>
               </div>
             </div>
             <div class="col-12">
@@ -102,23 +85,10 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-12">
-                  <TextInput v-model="post.dropoffLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.post.dropoffLocation.addressLine"/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="post.dropoffLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.post.dropoffLocation.city"/>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
-                  <ProvinceInput v-model="post.dropoffLocation.province" />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <CountryInput v-model="post.dropoffLocation.country" />
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TextInput v-model="post.dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.post.dropoffLocation.postalCode"/>
+                  <div class="form-label-group">
+                    <input id="DropoffAddress" v-model="post.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff address" >
+                    <p v-if="validDropoffAddress == false" class="text-danger text-center">Please enter a valid dropoff address</p>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -177,14 +147,11 @@ import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
 import EmailInput from '@/components/Form/Input/EmailInput.vue'
-import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
 import DateInput from '@/components/Form/Input/DateInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
-import CountryInput from '@/components/Form/Input/CountryInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
 
 import { required, helpers, email } from 'vuelidate/lib/validators'
-const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
@@ -197,10 +164,8 @@ export default {
     WideFormCard,
     TextInput,
     EmailInput,
-    ProvinceInput,
     DateInput,
     ConditionInput,
-    CountryInput,
     YearInput,
   },
   data() {
@@ -208,6 +173,8 @@ export default {
       error: false,
       deleteError: false,
       failedToLoadError: false,
+      validPickupAddress: null,
+      validDropoffAddress: null,
       post: {
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
@@ -219,8 +186,8 @@ export default {
         pickupLocation: {
           addressLine: '',
           city: '',
-          province: 'Ontario',
-          country: 'Canada',
+          province: '',
+          country: '',
           postalCode: '',
         },
         pickupDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
@@ -232,8 +199,8 @@ export default {
         dropoffLocation: {
           addressLine: '',
           city: '',
-          province: 'Ontario',
-          country: 'Canada',
+          province: '',
+          country: '',
           postalCode: '',
         },
         // TODO: Set the minimum for this date to be the same date as pickup
@@ -260,18 +227,6 @@ export default {
           required
         },
       },
-      pickupLocation: {
-        addressLine: {
-          required
-        },
-        city: {
-          required
-        },
-        postalCode: {
-          required,
-          postalCodeRegex
-        },
-      },
       pickupContact: {
         name: {
           required
@@ -284,18 +239,6 @@ export default {
           required,
           phoneNumberRegex,
         }
-      },
-      dropoffLocation: {
-        addressLine: {
-          required
-        },
-        city: {
-          required
-        },
-        postalCode: {
-          required,
-          postalCodeRegex,
-        },
       },
       dropoffContact: {
         name: {
@@ -320,7 +263,7 @@ export default {
     submit() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-				return;
+        return;
       }
       // Will either be 'posts/createPost' or 'posts/updatePost'
       this.$store.dispatch(`posts/${this.type.toLowerCase()}Post`, this.post)
@@ -382,6 +325,22 @@ export default {
           })
           this.deleteError = true
         })
+    },
+    parsePickupLocationAddress(address) {
+      this.post.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+      this.post.pickupLocation.city = address[2].long_name
+      this.post.pickupLocation.province = address[4].short_name
+      this.post.pickupLocation.country = address[5].long_name
+      this.post.pickupLocation.postalCode = address[6].long_name
+      this.validPickupAddress = true
+    },
+    parseDropoffLocationAddress(address) {
+      this.post.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+      this.post.dropoffLocation.city = address[2].long_name
+      this.post.dropoffLocation.province = address[4].short_name
+      this.post.dropoffLocation.country = address[5].long_name
+      this.post.dropoffLocation.postalCode = address[6].long_name
+      this.validDropoffAddress = true
     }
   },
   computed: {
@@ -393,10 +352,39 @@ export default {
       }
     }
   },
+  mounted() {
+    let script = document.createElement('script')
+    script.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAi6v2y5oLv1ttrme5mFhNiyUIjKXLcGV0&libraries=places')
+    document.head.appendChild(script)
+
+    script.onload = () => {
+      // eslint-disable-next-line
+      var pickupLocation = new google.maps.places.Autocomplete(document.getElementById('PickupAddress'))
+      // eslint-disable-next-line
+      google.maps.event.addListener(pickupLocation, 'place_changed', () => {
+        if (pickupLocation.getPlace().address_components == null) {
+          this.validPickupAddress = false
+          return
+        }
+        this.parsePickupLocationAddress(pickupLocation.getPlace().address_components)
+      })
+      // eslint-disable-next-line
+      var dropoffLocation = new google.maps.places.Autocomplete(document.getElementById('DropoffAddress'))
+      // eslint-disable-next-line
+      google.maps.event.addListener(dropoffLocation, 'place_changed', () => {
+        if (dropoffLocation.getPlace().address_components == null) {
+          this.validDropoffAddress = false
+          return
+        }
+        this.parseDropoffLocationAddress(dropoffLocation.getPlace().address_components)
+      })
+    }
+
+  },
   created() {
     if (this.type == 'Update') {
-        if (this.type == 'Update') {
-          this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
+      if (this.type == 'Update') {
+        this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
             .then((response) => {
               this.post = response.data.result
               this.post.vehicle.year = this.post.vehicle.year.toString() 
