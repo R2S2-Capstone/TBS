@@ -65,7 +65,7 @@
                       <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
                     </div>
                   </div>
-                  <button v-if="!showModal" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
+                  <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
                 </div>
               </div>
             </div>
@@ -193,6 +193,11 @@ export default {
     },
     convertTime(value) {
       return utilities.convertTime(value)
+    },
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.getters['authentication/getAccountType'] != '' 
     },
   },
   validations: {
