@@ -86,6 +86,12 @@ namespace TBS.Services.Bids
                 .Include(p => p.PickupLocation)
                 .Include(p => p.DropoffLocation)
                 .FirstOrDefault(p => p.Id == request.PostId);
+
+            if (request.Bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
+            {
+                throw new FailedToUpdateBidException("Post is no longer accepting bids");
+            }
+
             await _context.ShipperBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 

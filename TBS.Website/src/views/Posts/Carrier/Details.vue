@@ -305,20 +305,28 @@ export default {
       return utilities.parseTrailerType(trailerType)
     },
     parsePickupLocationAddress(address) {
-      this.bidPost.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-      this.bidPost.pickupLocation.city = address[2].long_name
-      this.bidPost.pickupLocation.province = address[4].short_name
-      this.bidPost.pickupLocation.country = address[5].long_name
-      this.bidPost.pickupLocation.postalCode = address[6].long_name
-      this.validPickupAddress = true
+      try {
+        this.bidPost.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+        this.bidPost.pickupLocation.city = address[2].long_name
+        this.bidPost.pickupLocation.province = address[4].short_name
+        this.bidPost.pickupLocation.country = address[5].long_name
+        this.bidPost.pickupLocation.postalCode = address[6].long_name
+        this.validPickupAddress = true
+      } catch {
+        this.validPickupAddress = false
+      }
     },
     parseDropoffLocationAddress(address) {
-      this.bidPost.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-      this.bidPost.dropoffLocation.city = address[2].long_name
-      this.bidPost.dropoffLocation.province = address[4].short_name
-      this.bidPost.dropoffLocation.country = address[5].long_name
-      this.bidPost.dropoffLocation.postalCode = address[6].long_name
-      this.validDropoffAddress = true
+      try {
+        this.bidPost.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+        this.bidPost.dropoffLocation.city = address[2].long_name
+        this.bidPost.dropoffLocation.province = address[4].short_name
+        this.bidPost.dropoffLocation.country = address[5].long_name
+        this.bidPost.dropoffLocation.postalCode = address[6].long_name
+        this.validDropoffAddress = true
+      } catch {
+        this.validDropoffAddress = false
+      }
     },
     showModal(value) {
       this.toShowModal = value

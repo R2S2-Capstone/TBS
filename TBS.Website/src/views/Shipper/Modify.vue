@@ -327,20 +327,28 @@ export default {
         })
     },
     parsePickupLocationAddress(address) {
-      this.post.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-      this.post.pickupLocation.city = address[2].long_name
-      this.post.pickupLocation.province = address[4].short_name
-      this.post.pickupLocation.country = address[5].long_name
-      this.post.pickupLocation.postalCode = address[6].long_name
-      this.validPickupAddress = true
+      try {
+        this.post.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+        this.post.pickupLocation.city = address[2].long_name
+        this.post.pickupLocation.province = address[4].short_name
+        this.post.pickupLocation.country = address[5].long_name
+        this.post.pickupLocation.postalCode = address[6].long_name
+        this.validPickupAddress = true
+      } catch {
+        this.validPickupAddress = false
+      }
     },
     parseDropoffLocationAddress(address) {
-      this.post.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-      this.post.dropoffLocation.city = address[2].long_name
-      this.post.dropoffLocation.province = address[4].short_name
-      this.post.dropoffLocation.country = address[5].long_name
-      this.post.dropoffLocation.postalCode = address[6].long_name
-      this.validDropoffAddress = true
+      try {
+        this.post.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+        this.post.dropoffLocation.city = address[2].long_name
+        this.post.dropoffLocation.province = address[4].short_name
+        this.post.dropoffLocation.country = address[5].long_name
+        this.post.dropoffLocation.postalCode = address[6].long_name
+        this.validDropoffAddress = true
+      } catch {
+        this.validDropoffAddress = false
+      }
     }
   },
   computed: {
@@ -395,6 +403,9 @@ export default {
               })
               this.failedToLoadError = true
             })
+        }
+        else {
+          // TODO: Load user profile information and autofill delivery address and contact information
         }
     }
   }

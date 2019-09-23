@@ -84,6 +84,11 @@ namespace TBS.Services.Bids
             request.Bid.Post = _context.CarrierPosts
                 .Include(p => p.Carrier)
                 .FirstOrDefault(p => p.Id == request.PostId);
+            if (request.Bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
+            {
+                throw new FailedToUpdateBidException("Post is no longer accepting bids");
+            }
+
             await _context.CarrierBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 

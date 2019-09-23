@@ -194,12 +194,16 @@ export default {
           })
     },
     parseAddress(address) {
-      this.company.address.addressLine = `${address[0].long_name} ${address[1].long_name}`
-      this.company.address.city = address[2].long_name
-      this.company.address.province = address[4].short_name
-      this.company.address.country = address[5].long_name
-      this.company.address.postalCode = address[6].long_name
-      this.validCompanyAddress = true
+      try {
+        this.company.address.addressLine = `${address[0].long_name} ${address[1].long_name}`
+        this.company.address.city = address[2].long_name
+        this.company.address.province = address[4].short_name
+        this.company.address.country = address[5].long_name
+        this.company.address.postalCode = address[6].long_name
+        this.validCompanyAddress = true
+      } catch {
+        this.validCompanyAddress = false
+      }
     }
   },
   mounted() {
