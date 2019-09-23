@@ -51,7 +51,7 @@
                   <p>Starting Bid: ${{ post.startingBid }}</p>
                   <p>Current highest bid: Coming soon...</p>
                   <p>Current lowest bid: Coming soon...</p>
-                  <div v-if="showModal" class ="pt-2 mb-2 border">
+                  <div v-if="toShowModal" class ="pt-2 mb-2 border">
                     <div slot="description">
                       Please enter your bid amount
                       <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
@@ -97,23 +97,10 @@
                         <div class="col-12">
                           <div class="row">
                             <div class="col-12">
-                              <TextInput v-model="bidPost.pickupLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.bidPost.pickupLocation.addressLine"/>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <TextInput v-model="bidPost.pickupLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.bidPost.pickupLocation.city"/>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <ProvinceInput v-model="bidPost.pickupLocation.province" />
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <CountryInput v-model="bidPost.pickupLocation.country" />
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <TextInput v-model="bidPost.pickupLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.bidPost.pickupLocation.postalCode"/>
+                              <div class="form-label-group">
+                                <input id="PickupAddress" v-model="bidPost.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" />
+                                <p v-if="validPickupAddress == false" class="text-danger text-center">Please enter a valid pickup address</p>
+                              </div>
                             </div>
                           </div>
                           <div class="row">
@@ -134,23 +121,10 @@
                         <div class="col-12">
                           <div class="row">
                             <div class="col-12">
-                              <TextInput v-model="bidPost.dropoffLocation.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.bidPost.dropoffLocation.addressLine"/>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <TextInput v-model="bidPost.dropoffLocation.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.bidPost.dropoffLocation.city"/>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
-                              <ProvinceInput v-model="bidPost.dropoffLocation.province" />
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <CountryInput v-model="bidPost.dropoffLocation.country" />
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                              <TextInput v-model="bidPost.dropoffLocation.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.bidPost.dropoffLocation.postalCode"/>
+                              <div class="form-label-group">
+                                <input id="DropoffAddress" v-model="bidPost.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff Address" />
+                                <p v-if="validDropoffAddress == false" class="text-danger text-center">Please enter a valid dropoff address</p>
+                              </div>
                             </div>
                           </div>
                           <div class="row">
@@ -163,11 +137,11 @@
                       </div>
                     </div>
                     <div slot="footer">
-                      <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
+                      <button @click="showModal(false)" type="button" class="btn btn-secondary m-2">Cancel</button>
                       <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
                     </div>
                   </div>
-                  <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
+                  <button v-if="!toShowModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal(true)">Bid Now!</button>
                 </div>
               </div>
             </div>
@@ -213,8 +187,6 @@
 import Swal from 'sweetalert2'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
-import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
-import CountryInput from '@/components/Form/Input/CountryInput.vue'
 import DateInput from '@/components/Form/Input/DateInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
@@ -222,14 +194,11 @@ import YearInput from '@/components/Form/Input/YearInput.vue'
 import utilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
-const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 
 export default {
   name: 'detailedCarrierPost',
   components: {
     TextInput,
-    ProvinceInput,
-    CountryInput,
     DateInput,
     ConditionInput,
     YearInput,
@@ -251,16 +220,16 @@ export default {
         pickupLocation: {
           addressLine: '',
           city: '',
-          province: 'Ontario',
-          country: 'Canada',
+          province: '',
+          country: '',
           postalCode: '',
         },
         pickupDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
         dropoffLocation: {
           addressLine: '',
           city: '',
-          province: 'Ontario',
-          country: 'Canada',
+          province: '',
+          country: '',
           postalCode: '',
         },
         dropoffDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
@@ -269,7 +238,9 @@ export default {
       error: false,
       bidError: false,
       bidSuccess: false,
-      showModal: false,
+      toShowModal: false,
+      validPickupAddress: null,
+      validDropoffAddress: null,
     }
   },
   methods: {
@@ -311,7 +282,7 @@ export default {
     submitBid() {
       this.$store.dispatch('bids/createBid', { type: 'carrier', postId: this.post.id, bid: { bidAmount: this.bidAmount, ...this.bidPost }})
         .then(() => {
-          this.showModal = false
+          this.toShowModal = false
           Swal.fire({
             type: 'success',
             title: 'Successfully bid',
@@ -319,7 +290,7 @@ export default {
           })
         })
         .catch(() => {
-          this.showModal = false
+          this.toShowModal = false
           Swal.fire({
             type: 'error',
             title: 'Oops...',
@@ -332,6 +303,50 @@ export default {
     },
     parseTrailerType(trailerType) {
       return utilities.parseTrailerType(trailerType)
+    },
+    parsePickupLocationAddress(address) {
+      this.bidPost.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+      this.bidPost.pickupLocation.city = address[2].long_name
+      this.bidPost.pickupLocation.province = address[4].short_name
+      this.bidPost.pickupLocation.country = address[5].long_name
+      this.bidPost.pickupLocation.postalCode = address[6].long_name
+      this.validPickupAddress = true
+    },
+    parseDropoffLocationAddress(address) {
+      this.bidPost.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
+      this.bidPost.dropoffLocation.city = address[2].long_name
+      this.bidPost.dropoffLocation.province = address[4].short_name
+      this.bidPost.dropoffLocation.country = address[5].long_name
+      this.bidPost.dropoffLocation.postalCode = address[6].long_name
+      this.validDropoffAddress = true
+    },
+    showModal(value) {
+      this.toShowModal = value
+      if (value) {
+        setTimeout(() => {
+          // eslint-disable-next-line
+          var pickupLocation = new google.maps.places.Autocomplete(document.getElementById('PickupAddress'))
+          // eslint-disable-next-line
+          google.maps.event.addListener(pickupLocation, 'place_changed', () => {
+            if (pickupLocation.getPlace().address_components == null) {
+              this.validPickupAddress = false
+              return
+            }
+            this.parsePickupLocationAddress(pickupLocation.getPlace().address_components)
+          })
+
+          // eslint-disable-next-line
+          var dropoffLocation = new google.maps.places.Autocomplete(document.getElementById('DropoffAddress'))
+          // eslint-disable-next-line
+          google.maps.event.addListener(dropoffLocation, 'place_changed', () => {
+            if (dropoffLocation.getPlace().address_components == null) {
+              this.validDropoffAddress = false
+              return
+            }
+            this.parseDropoffLocationAddress(dropoffLocation.getPlace().address_components)
+          })
+        }, 1) // delay for one millisecond so the DOM can be updated
+      }
     }
   },
   computed: {
@@ -354,30 +369,6 @@ export default {
         },
         vin: {
           required
-        },
-      },
-      pickupLocation: {
-        addressLine: {
-          required
-        },
-        city: {
-          required
-        },
-        postalCode: {
-          required,
-          postalCodeRegex
-        },
-      },
-      dropoffLocation: {
-        addressLine: {
-          required
-        },
-        city: {
-          required
-        },
-        postalCode: {
-          required,
-          postalCodeRegex,
         },
       },
     }
@@ -404,5 +395,9 @@ hr {
 }
 .contact {
   overflow: hidden;
+}
+input, input::placeholder {
+  text-align: center;
+  text-align-last: center;
 }
 </style>

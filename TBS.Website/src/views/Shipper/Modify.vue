@@ -47,7 +47,7 @@
             </div>
             <div class="col-12">
               <div class="form-label-group">
-                <input id="PickupAddress" v-model="post.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" >
+                <input id="PickupAddress" v-model="post.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" />
                 <p v-if="validPickupAddress == false" class="text-danger text-center">Please enter a valid pickup address</p>
               </div>
             </div>
@@ -86,7 +86,7 @@
               <div class="row">
                 <div class="col-12">
                   <div class="form-label-group">
-                    <input id="DropoffAddress" v-model="post.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff address" >
+                    <input id="DropoffAddress" v-model="post.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff Address" />
                     <p v-if="validDropoffAddress == false" class="text-danger text-center">Please enter a valid dropoff address</p>
                   </div>
                 </div>
@@ -353,33 +353,26 @@ export default {
     }
   },
   mounted() {
-    let script = document.createElement('script')
-    script.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAi6v2y5oLv1ttrme5mFhNiyUIjKXLcGV0&libraries=places')
-    document.head.appendChild(script)
-
-    script.onload = () => {
-      // eslint-disable-next-line
-      var pickupLocation = new google.maps.places.Autocomplete(document.getElementById('PickupAddress'))
-      // eslint-disable-next-line
-      google.maps.event.addListener(pickupLocation, 'place_changed', () => {
-        if (pickupLocation.getPlace().address_components == null) {
-          this.validPickupAddress = false
-          return
-        }
-        this.parsePickupLocationAddress(pickupLocation.getPlace().address_components)
-      })
-      // eslint-disable-next-line
-      var dropoffLocation = new google.maps.places.Autocomplete(document.getElementById('DropoffAddress'))
-      // eslint-disable-next-line
-      google.maps.event.addListener(dropoffLocation, 'place_changed', () => {
-        if (dropoffLocation.getPlace().address_components == null) {
-          this.validDropoffAddress = false
-          return
-        }
-        this.parseDropoffLocationAddress(dropoffLocation.getPlace().address_components)
-      })
-    }
-
+    // eslint-disable-next-line
+    var pickupLocation = new google.maps.places.Autocomplete(document.getElementById('PickupAddress'))
+    // eslint-disable-next-line
+    google.maps.event.addListener(pickupLocation, 'place_changed', () => {
+      if (pickupLocation.getPlace().address_components == null) {
+        this.validPickupAddress = false
+        return
+      }
+      this.parsePickupLocationAddress(pickupLocation.getPlace().address_components)
+    })
+    // eslint-disable-next-line
+    var dropoffLocation = new google.maps.places.Autocomplete(document.getElementById('DropoffAddress'))
+    // eslint-disable-next-line
+    google.maps.event.addListener(dropoffLocation, 'place_changed', () => {
+      if (dropoffLocation.getPlace().address_components == null) {
+        this.validDropoffAddress = false
+        return
+      }
+      this.parseDropoffLocationAddress(dropoffLocation.getPlace().address_components)
+    })
   },
   created() {
     if (this.type == 'Update') {

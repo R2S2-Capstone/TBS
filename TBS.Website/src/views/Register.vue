@@ -41,9 +41,6 @@
           <div class="col-12">
             <TextInput v-model="company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.company.name"/>
           </div>
-          <!-- <div class="col-lg-6 col-md-6 col-sm-12">
-            <TextInput v-model="company.address.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.company.address.addressLine"/>
-          </div> -->
         </div>
         <div class="row">
           <div class="col-12">
@@ -52,20 +49,6 @@
               <p v-if="validCompanyAddress == false" class="text-danger text-center">Please enter a valid company address</p>
             </div>
           </div>
-          <!-- <div class="col-lg-6 col-md-6 col-sm-12">
-            <TextInput v-model="company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.company.address.city"/>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
-            <ProvinceInput v-model="company.address.province" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <CountryInput v-model="company.address.country" />
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <TextInput v-model="company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.company.address.postalCode"/>
-          </div> -->
         </div>
         <h5>Contact Information</h5>
         <div class="row">
@@ -98,12 +81,9 @@ import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 import EmailInput from '@/components/Form/Input/EmailInput.vue'
 import PasswordInput from '@/components/Form/Input/PasswordInput.vue'
 import TextInput from '@/components/Form/Input/TextInput.vue'
-import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
-import CountryInput from '@/components/Form/Input/CountryInput.vue'
 
 import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
-const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
 
 export default {
@@ -113,8 +93,6 @@ export default {
     EmailInput,
     PasswordInput,
     TextInput,
-    ProvinceInput,
-    CountryInput,
   },
   data() {
     return {
@@ -175,10 +153,6 @@ export default {
         city: {
           required
         },
-        postalCode: {
-          required,
-          postalCodeRegex
-        },
       },
       contact: {
         name: {
@@ -229,22 +203,16 @@ export default {
     }
   },
   mounted() {
-        let script = document.createElement('script')
-    script.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAi6v2y5oLv1ttrme5mFhNiyUIjKXLcGV0&libraries=places')
-    document.head.appendChild(script)
-
-    script.onload = () => {
-      // eslint-disable-next-line
-      var address = new google.maps.places.Autocomplete(document.getElementById('CompanyAddress'))
-      // eslint-disable-next-line
-      google.maps.event.addListener(address, 'place_changed', () => {
-        if (address.getPlace().address_components == null) {
-          this.validCompanyAddress = false
-          return
-        }
-        this.parseAddress(address.getPlace().address_components)
-      })
-    }
+    // eslint-disable-next-line
+    var address = new google.maps.places.Autocomplete(document.getElementById('CompanyAddress'))
+    // eslint-disable-next-line
+    google.maps.event.addListener(address, 'place_changed', () => {
+      if (address.getPlace().address_components == null) {
+        this.validCompanyAddress = false
+        return
+      }
+      this.parseAddress(address.getPlace().address_components)
+    })
   }
 }
 </script>
