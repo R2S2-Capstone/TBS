@@ -76,7 +76,7 @@
                 <tr>
                   <!-- TODO: Generate router-link to profile page -->
                   <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
-                  <td>${{ bid.bidAmount }}</td>
+                  <td>{{ formatMoney(bid.bidAmount) }}</td>
                   <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 </tr>
               </table>
@@ -182,6 +182,9 @@ export default {
     },
     formatAddress(address) {
       return postUtilities.formatAddress(address)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
     }
   },
   created() {

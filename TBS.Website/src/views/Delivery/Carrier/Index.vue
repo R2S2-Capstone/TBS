@@ -74,7 +74,7 @@
               <tbody>
                 <!-- TODO: Generate router-link to profile page -->
                 <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
-                <td>${{ bid.bidAmount }}</td>
+                <td>{{ formatMoney(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
               </tbody>
             </table>
@@ -175,6 +175,9 @@ export default {
     },
     parseDate(time) {
       return postUtilities.parseDate(time)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
     }
   },
   created() {

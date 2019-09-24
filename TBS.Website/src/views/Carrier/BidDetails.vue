@@ -22,7 +22,7 @@
                 <hr>
                 <h5>Bid Details</h5>
                 <hr>
-                <p>Amount: ${{ bid.bidAmount }}</p>
+                <p>Amount: {{ formatMoney(bid.bidAmount) }}</p>
                 <p>Bidder Name: {{ bid.shipper.name }}</p>
                 <p>Bidder Rating: COMING SOON <i class="fas fa-star"></i></p>
               </div>
@@ -35,7 +35,7 @@
               <h5>Pickup Information</h5>
               <hr>
               <p>Pickup Location: {{ formatAddress(bid.pickupLocation) }}</p>
-              <p>Pickup Date: {{ bid.pickupDate.split('T')[0] }}</p>
+              <p>Pickup Date: {{ parseDate(bid.pickupDate) }}</p>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
               <hr>
@@ -43,7 +43,7 @@
               <hr>
               <p></p>
               <p>Dropoff Location: {{ formatAddress(bid.dropoffLocation) }}</p>
-              <p>Dropoff Date: {{ bid.dropoffDate.split('T')[0] }}</p>
+              <p>Dropoff Date: {{ parseDate(bid.dropoffDate) }}</p>
             </div>
           </div>
 
@@ -85,7 +85,7 @@ export default {
     confirmAcceptBid(bidId, bidAmount, bidFrom) {
         Swal.fire({
         title: 'Are you sure?',
-        text: `Are you sure you want to accept this bid for $${bidAmount} from ${bidFrom}?`,
+        text: `Are you sure you want to accept this bid for ${this.formatMoney(bidAmount)} from ${bidFrom}?`,
         type: 'info',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -118,7 +118,7 @@ export default {
     confirmDeclineBid(bidId, bidAmount, bidFrom) {
       Swal.fire({
         title: 'Are you sure?',
-        text: `Are you sure you want to decline this bid for $${bidAmount} from ${bidFrom}?`,
+        text: `Are you sure you want to decline this bid for ${this.formatMoney(bidAmount)} from ${bidFrom}?`,
         type: 'info',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -148,8 +148,8 @@ export default {
           })
         })
     },
-    format(number) {
-      return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    formatMoney(number) {
+      return postUtilities.formatMoney(number)
     },
     fetchBid() {
       this.$store.dispatch('bids/getBidById', { type: 'carrier', bidId: this.$route.params.id })
@@ -172,6 +172,9 @@ export default {
     },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)
+    },
+    parseDate(date) {
+      return postUtilities.parseDate(date)
     }
   },
   created() {

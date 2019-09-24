@@ -24,12 +24,12 @@
                 <tr>
                   <th>Pickup In: </th>
                   <td>{{ post.pickupLocation }}</td>
-                  <td>{{ `${parseDate(post.pickupDate)} ${parseTime(post.pickupDate.split('T')[1])}` }}</td>
+                  <td>{{ `${parseDate(post.pickupDate)} ${parseTime(post.pickupDate)}` }}</td>
                 </tr>
                 <tr>
                   <th>Dropoff To: </th>
                   <td>{{ post.dropoffLocation }}</td>
-                  <td>{{ `${parseDate(post.dropoffDate)} ${parseTime(post.dropoffDate.split('T')[1])}` }}</td>
+                  <td>{{ `${parseDate(post.dropoffDate)} ${parseTime(post.dropoffDate)}` }}</td>
                 </tr>
               </table>
             </div>
@@ -50,33 +50,35 @@
                 </tr>
                 <tr>
                   <!-- TODO: Generate profile link -->
-                  <td>{{ post.carrier.name }}</td> 
+                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
                   <td>Coming Soon..</td>
                   <td><a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a></td>
                 </tr>
               </table>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row pt-3 text-center">
-        <div class="col-12 background pt-3">
-          <h5>Vehicle Information</h5>
-          <hr>
           <div class="row pt-3">
             <div class="col-12">
-              <table class="table">
-                <tr>
-                  <th style="width: 33.3%">Carrier Vehicle</th>
-                  <th style="width: 33.3%">Spaces Available</th>
-                  <th style="width: 33.3%">Trailer Type</th>
-                </tr>
-                <tr>
-                  <td>Coming soon</td> 
-                  <td>{{ post.spacesAvailable }}</td>
-                  <td>{{ parseTrailerType(post.trailerType) }}</td>
-                </tr>
-              </table>
+              <h5>Vehicle Information</h5>
+              <hr>
+              <div class="row pt-3">
+                <div class="col-12">
+                  <table class="table">
+                    <tr>
+                      <!-- <th></th> -->
+                      <th style="width: 25%">Carrier Vehicle</th>
+                      <th style="width: 25%">Spaces Available</th>
+                      <th style="width: 25%">Trailer Type</th>
+                    </tr>
+                    <tr>
+                      <!-- <th>Vehicle: </th> -->
+                      <td>Coming soon</td> 
+                      <td>{{ post.spacesAvailable }}</td>
+                      <td>{{ parseTrailerType(post.trailerType) }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -97,7 +99,7 @@
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
                   <!-- TODO: Money formatting -->
-                  <td>${{ post.startingBid }}</td>
+                  <td>{{ formatMoney(post.startingBid) }}</td>
                   <td>Coming Soon..</td>
                   <td>Coming Soon..</td>
                 </tr>
@@ -211,7 +213,7 @@ import DateInput from '@/components/Form/Input/DateInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
 
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
@@ -319,13 +321,16 @@ export default {
         })
     },
     parseDate(value) {
-      return utilities.parseDate(value)
+      return postUtilities.parseDate(value)
     },
     parseTime(value) {
-      return utilities.parseTime(value)
+      return postUtilities.parseTime(value)
     },
     parseTrailerType(trailerType) {
-      return utilities.parseTrailerType(trailerType)
+      return postUtilities.parseTrailerType(trailerType)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
     },
     parsePickupLocationAddress(address) {
       try {

@@ -34,6 +34,9 @@ const postUtilities = {
       return 'Unknown'
     }
   },
+  parseDate(date) {
+    return new Date(date).toISOString().split('T')[0]
+  },
   parseTime(value) {
     if (value === undefined) return
     var hour = value.substring ( 0,2 )
@@ -53,9 +56,8 @@ const postUtilities = {
   formatAddress(address) {
     return `${address.addressLine}, ${address.city}, ${address.province}, ${address.country} ${address.postalCode}`
   },
-  //TODO: Remove all other occurences of the code below to use this method
-  parseDate(date) {
-    return new Date(date).toISOString().split('T')[0]
+  formatMoney(amount) {
+    return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
   }
 }
 export default postUtilities

@@ -104,7 +104,7 @@ import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
 
 export default {
   name: 'carrierCreatePost',
@@ -232,6 +232,12 @@ export default {
           })
           this.deleteError = true
         })
+    },
+    parseDate(date) {
+      return postUtilities.parseDate(date)
+    },
+    parseTime(time) {
+      return postUtilities.parseTime(time)
     }
   },
   computed: {
@@ -249,11 +255,12 @@ export default {
 				.then((response) => {
           this.post = response.data.result
           this.post.startingBid = this.post.startingBid.toString()
-          this.post.trailerType = utilities.parseTrailerType(this.post.trailerType)
-          this.post.pickupDateValue = this.post.pickupDate.split('T')[0]
-          this.post.pickupTime = this.post.pickupDate.split('T')[1].substring(0, 5)
-          this.post.dropoffDateValue = this.post.dropoffDate.split('T')[0]
-          this.post.dropoffTime = this.post.dropoffDate.split('T')[1].substring(0, 5)
+          this.post.trailerType = postUtilities.parseTrailerType(this.post.trailerType)
+          this.post.pickupDateValue = this.parseDate(this.post.pickupDate)
+          this.post.pickupTime = this.parseTime(this.post.pickupDate)
+          this.post.dropoffDateValue = this.parseDate(this.post.dropoffDate)
+          this.post.dropoffTime = this.parseTime(this.post.dropoffDate)
+          // .split('T')[1].substring(0, 5)
           this.failedToLoadError = false
 				})
 				.catch(() => {

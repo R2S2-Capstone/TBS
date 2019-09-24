@@ -5,7 +5,7 @@
       <div class="col-12">
         <div class="row pb-3" v-if="post">
           <div class="col-12 text-center">
-            <h2>Manage Bids for {{ post.pickupLocation }} ({{ post.pickupDate.split('T')[0] }}) - {{ post.dropoffLocation }} ({{ post.dropoffDate.split('T')[0] }})</h2>
+            <h2>Manage Bids for {{ post.pickupLocation }} ({{ parseDate(post.pickupDate) }}) - {{ post.dropoffLocation }} ({{ parseDate(post.dropoffDate) }})</h2>
             <p class="text-danger" v-if="error">Failed to load post details</p>
           </div>
         </div>
@@ -180,6 +180,9 @@ export default {
     },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)
+    },
+    parseDate(date) {
+      return postUtilities.parseDate(date)
     }
   },
   computed: {

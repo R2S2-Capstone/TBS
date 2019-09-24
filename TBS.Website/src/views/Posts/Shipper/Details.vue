@@ -10,13 +10,7 @@
     <div v-if="!error && post != null">
       <div class="row pt-3 text-center">
         <div class="col-12 background pt-3">
-          <h3>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h3>
-          <hr>
-        </div>
-      </div>
-      <div class="row pt-3 text-center">
-        <div class="col-12 background pt-3">
-          <h5>Pickup Details</h5>
+          <h5>Post Details</h5>
           <hr>
           <div class="row pt-3">
             <div class="col-12">
@@ -39,6 +33,30 @@
               </table>
             </div>
           </div>
+          <div class="row pt-3">
+            <div class="col-12">
+              <h5>Vehicle Information</h5>
+              <hr>
+              <div class="row pt-3">
+                <div class="col-12">
+                  <table class="table">
+                    <tr>
+                      <th style="width: 25%">Condition</th>
+                      <th style="width: 25%">Year</th>
+                      <th style="width: 25%">Make</th>
+                      <th style="width: 25%">Model</th>
+                    </tr>
+                    <tr>
+                      <td>{{ parseVehicleCondition(post.vehicle.condition) }}</td> 
+                      <td>{{ post.vehicle.year }}</td> 
+                      <td>{{ post.vehicle.make }}</td> 
+                      <td>{{ post.vehicle.model }}</td> 
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="row pt-3 text-center">
@@ -55,7 +73,7 @@
                 </tr>
                 <tr>
                   <!-- TODO: Generate profile link -->
-                  <td>{{ post.shipper.name }}</td> 
+                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
                   <td>Coming Soon..</td>
                   <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
                 </tr>
@@ -78,10 +96,9 @@
                   <th style="width: 25%">Current Bid</th>
                 </tr>
                 <tr>
-                  <!-- TODO: Use date parser -->
-                  <td>{{ post.datePosted.split('T')[0] }}</td> 
+                  <td>{{ parseDate(post.datePosted) }}</td> 
                   <!-- TODO: Money formatting -->
-                  <td>${{ post.startingBid }}</td>
+                  <td>{{ formatMoney(post.startingBid) }}</td>
                   <td>Coming Soon..</td>
                   <td>Coming Soon..</td>
                 </tr>
@@ -110,7 +127,7 @@ import Swal from 'sweetalert2'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
 
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
@@ -188,11 +205,17 @@ export default {
         })
     },
     formatAddress(address) {
-      return utilities.formatAddress(address)
+      return postUtilities.formatAddress(address)
     },
     parseDate(value) {
-      return utilities.parseDate(value)
+      return postUtilities.parseDate(value)
     },
+    parseVehicleCondition(condition) {
+      return postUtilities.parseVehicleCondition(condition)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
+    }
   },
   computed: {
     loggedIn() {

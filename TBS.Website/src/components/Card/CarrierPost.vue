@@ -10,20 +10,22 @@
       <tr>
         <th>Pickup In: </th>
         <td>{{ post.pickupLocation }}</td>
-        <td>{{ trimDate(post.pickupDate) }}</td>
+        <td>{{ parseDate(post.pickupDate) }}</td>
       </tr>
       <tr>
         <th>Dropoff To: </th>
         <td>{{ post.dropoffLocation }}</td>
-        <td>{{ trimDate(post.dropoffDate) }}</td>
+        <td>{{ parseDate(post.dropoffDate) }}</td>
       </tr>
     </table>
-    <p>Starting Bid: ${{ post.startingBid }}</p>
+    <p>Starting Bid: {{ formatMoney(post.startingBid) }}</p>
     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white ml-5 mr-5 mb-3" @click="showDetailedPost()">Details</button>
   </div>
 </template>
 
 <script>
+import postUtilities from '@/utils/postUtilities.js'
+
 export default {
   name: 'carrierPost',
   props: {
@@ -33,8 +35,11 @@ export default {
     showDetailedPost() {
       this.$router.push({ name: 'viewDetailedCarrierPost', params: { id: this.post.id.toString() } })
     },
-    trimDate(date) {
-      return new Date(date).toISOString().split('T')[0]
+    parseDate(date) {
+      return postUtilities.parseDate(date)
+    },
+    formatMoney(amount) {
+      return postUtilities.formatMoney(amount)
     }
   }
 }

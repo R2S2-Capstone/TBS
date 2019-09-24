@@ -37,7 +37,6 @@
                   <TextInput v-model="post.vehicle.vin" placeHolder="VIN" errorMessage="Please enter a valid vin" :validator="$v.post.vehicle.vin"/>
                 </div>
               </div>
-                  <!-- TODO: Add more vehicle information? -->
             </div>
           </div>
           <div class="row pt-3">
@@ -155,7 +154,7 @@ import { required, helpers, email } from 'vuelidate/lib/validators'
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
 
 export default {
   name: 'shipperCreatePost',
@@ -326,6 +325,9 @@ export default {
           this.deleteError = true
         })
     },
+    parseDate(date) {
+      return postUtilities.parseDate(date)
+    },
     parsePickupLocationAddress(address) {
       try {
         this.post.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
@@ -389,10 +391,10 @@ export default {
             .then((response) => {
               this.post = response.data.result
               this.post.vehicle.year = this.post.vehicle.year.toString() 
-              this.post.vehicle.condition = utilities.parseVehicleCondition(this.post.vehicle.condition)
+              this.post.vehicle.condition = postUtilities.parseVehicleCondition(this.post.vehicle.condition)
               this.post.startingBid = this.post.startingBid.toString()
-              this.post.pickupDate = this.post.pickupDate.split('T')[0]
-              this.post.dropoffDate = this.post.dropoffDate.split('T')[0]
+              this.post.pickupDate = this.parseDate(this.post.pickupDate)
+              this.post.dropoffDate = this.parseDate(this.post.dropoffDate)
               this.failedToLoadError = false
             })
             .catch(() => {
@@ -403,9 +405,6 @@ export default {
               })
               this.failedToLoadError = true
             })
-        }
-        else {
-          // TODO: Load user profile information and autofill delivery address and contact information
         }
     }
   }
