@@ -52,7 +52,7 @@ namespace TBS.Services.Bids
             var paginatedBids = post.Bids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize)
-                .OrderBy(p => p.BidStatus)
+                .OrderByDescending(p => p.BidStatus)
                 .ToArray();
             return new PaginatedShipperBids() { PaginationModel = model, Bids = paginatedBids };
         }
@@ -67,7 +67,7 @@ namespace TBS.Services.Bids
                 .Include(b => b.Post.PickupLocation)
                 .Include(b => b.Post.DropoffLocation)
                 .Where(b => b.Carrier.UserFirebaseId == userFirebaseId)
-                .OrderBy(p => p.BidStatus)
+                .OrderByDescending(p => p.BidStatus)
                 .ToListAsync();
             model.Count = allBids.Count();
             var paginatedBids = allBids

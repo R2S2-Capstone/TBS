@@ -17,7 +17,7 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-12">
-                  <TextInput v-model="post.pickupLocation" placeHolder="Pickup city" errorMessage="Please enter a pickup city" :validator="$v.post.pickupLocation"/>
+                  <TextInput v-model="post.pickupLocation" placeHolder="Pickup City" errorMessage="Please enter a pickup city" :validator="$v.post.pickupLocation"/>
                 </div>
               </div>
               <div class="row">

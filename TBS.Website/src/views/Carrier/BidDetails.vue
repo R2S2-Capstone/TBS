@@ -100,7 +100,7 @@ export default {
     acceptBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'pendingDelivery' })
         .then(() => {
-          this.bid.bidStatus = 3
+          this.bid.bidStatus = 4
           Swal.fire({
             type: 'success',
             title: 'Accepted',
@@ -133,7 +133,7 @@ export default {
     declineBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'declined' })
         .then(() => {
-          this.bid.bidStatus = 2
+          this.bid.bidStatus = 1
           Swal.fire({
             type: 'success',
             title: 'Declined',

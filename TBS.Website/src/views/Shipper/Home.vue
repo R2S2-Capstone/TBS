@@ -162,7 +162,7 @@ export default {
     cancelBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'cancelled' })
         .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 2
+          this.bids.find(b => b.id == bidId).bidStatus = 0
           Swal.fire({
             type: 'success',
             title: 'Cancelled',
