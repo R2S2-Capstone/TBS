@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row" v-if="!error && post != null">
-      <div class="col-lg-8 col-md-9 col-sm-12 mb-5 text-center">
+      <div class="col-12 mb-5 text-center">
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12">
@@ -20,86 +20,89 @@
             <div class="col-12">
               <h5>Pickup Details</h5>
               <hr>
-              <div class="row">
+              <div class="row pt-3">
                 <div class="col-12">
-                  <p></p>
-                  <p>Location: {{ formatAddress(post.pickupLocation) }}</p>
-                  <p>Date: {{ post.pickupDate.split('T')[0] }}</p>
-                  <p>Time: {{ convertTime(post.pickupDate.split('T')[1]) }}</p>
+                  <table class="table">
+                    <tr>
+                      <th></th>
+                      <th>City</th>
+                      <th>Date</th>
+                    </tr>
+                    <tr>
+                      <th>Pickup In: </th>
+                      <td>{{ formatAddress(post.pickupLocation) }}</td>
+                      <td>{{ parseDate(post.pickupDate) }}</td>
+                    </tr>
+                    <tr>
+                      <th>Deliver To: </th>
+                      <td>{{ formatAddress(post.dropoffLocation) }}</td>
+                      <td>{{ parseDate(post.dropoffDate) }}</td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-12">
-              <h5>Delivery Details</h5>
-              <hr>
-              <div class="row">
-                <div class="col-12">
-                  <p></p>
-                  <p>Location: {{ formatAddress(post.dropoffLocation) }}</p>
-                  <p>Date: {{ post.dropoffDate.split('T')[0] }}</p>
-                  <p>Time: {{ convertTime(post.dropoffDate.split('T')[1]) }}</p>
-                </div>
+        <div class="row pt-3">
+          <div class="col-12">
+            <h5>Shipper Information</h5>
+            <hr>
+            <div class="row pt-3">
+              <div class="col-12">
+                <table class="table">
+                  <tr>
+                    <th style="width: 33.3%">Shipper Name</th>
+                    <th style="width: 33.3%">Shipper Rating</th>
+                    <th style="width: 33.3%">Shipper Email</th>
+                  </tr>
+                  <tr>
+                    <!-- TODO: Generate profile link -->
+                    <td>{{ post.shipper.name }}</td> 
+                    <td>Coming Soon..</td>
+                    <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
+                  </tr>
+                </table>
               </div>
             </div>
           </div>
-          <div class="row pt-2 mb-3">
-            <div class="col-12">
-              <h5>Other Details</h5>
-              <hr>
-              <div class="row">
-                <div class="col-12">
-                  <p></p>
-                  <p>Date Posted: {{ post.datePosted.split('T')[0] }}</p>
-                  <p>Starting Bid: ${{ post.startingBid }}</p>
-                  <p>Current highest bid: Coming soon...</p>
-                  <p>Current lowest bid: Coming soon...</p>
-                  <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
-                    <div slot="description">
-                      Please enter your bid amount
-                      <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
-                    </div>
-                    <div slot="footer">
-                      <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
-                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
-                    </div>
+        </div>
+        <div class="row pt-2 mb-3">
+          <div class="col-12">
+            <h5>Other Details</h5>
+            <hr>
+            <div class="row pt-3">
+              <div class="col-12">
+                <table class="table">
+                  <tr>
+                    <th style="width: 25%">Date Posted</th>
+                    <th style="width: 25%">Starting Bid</th>
+                    <th style="width: 25%">Highest Bid</th>
+                    <th style="width: 25%">Current Bid</th>
+                  </tr>
+                  <tr>
+                    <!-- TODO: Use date parser -->
+                    <td>{{ post.datePosted.split('T')[0] }}</td> 
+                    <!-- TODO: Money formatting -->
+                    <td>${{ post.startingBid }}</td>
+                    <td>Coming Soon..</td>
+                    <td>Coming Soon..</td>
+                  </tr>
+                </table>
+                <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
+                  <div slot="description">
+                    Please enter your bid amount
+                    <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                   </div>
-                  <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
+                  <div slot="footer">
+                    <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
+                    <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
+                  </div>
                 </div>
+                <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-4 col-md-3 col-sm-12 text-center">
-        <div class="col-12 background mb-5 pt-3">
-          <h5>Company Information</h5>
-          <hr>
-          <div class="row">
-            <div class="col-12">
-              <p></p>
-              <p>Company Name:<br>{{ post.shipper.company.name }}</p>
-              <p class="contact">
-                Contact Name:<br>{{ post.shipper.company.contact.name }}<br>
-                Contact Phone Number:<br><a :href="'tel:' + post.shipper.company.contact.phoneNumber">{{ post.shipper.company.contact.phoneNumber }}</a><br>
-                Contact Email:<br><a :href="'mailto:' + post.shipper.company.contact.email">{{ post.shipper.company.contact.email }}</a><br>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 background mb-5 pt-3">
-          <h5>Shipper Details</h5>
-          <hr>
-          <div class="row">
-            <div class="col-12">
-              <p></p>            
-              <p>
-                Name:<br>{{ post.shipper.name }}<br>
-                Rating:<br>Coming Soon!<br>
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -191,8 +194,8 @@ export default {
     formatAddress(address) {
       return utilities.formatAddress(address)
     },
-    convertTime(value) {
-      return utilities.convertTime(value)
+    parseDate(value) {
+      return utilities.parseDate(value)
     },
   },
   computed: {

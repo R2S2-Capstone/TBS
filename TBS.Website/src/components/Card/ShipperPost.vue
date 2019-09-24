@@ -1,15 +1,31 @@
 <template>
-  <div class="card text-center pointer mb-5" @click="showDetailedPost()">
+  <div class="card text-center mb-5">
     <h4 class="title pt-3">{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h4>
-    <hr>
-    <p>{{ post.pickupLocation.city }} <i class="fas fa-arrow-right"></i> {{ post.dropoffLocation.city }}</p>
-    <p>{{ trimDate(post.pickupDate) }} <i class="fas fa-arrow-right"></i> {{ trimDate(post.dropoffDate) }}</p>
+    <table class="table">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">City</th>
+        <th scope="col">Date</th>
+      </tr>
+      <tr>
+        <th scope="row">Pickup In: </th>
+        <td>{{ formatAddress(post.pickupLocation) }}</td>
+        <td>{{ trimDate(post.pickupDate) }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Deliver To: </th>
+        <td>{{ formatAddress(post.dropoffLocation) }}</td>
+        <td>{{ trimDate(post.dropoffDate) }}</td>
+      </tr>
+    </table>
     <p>Starting Bid: ${{ post.startingBid }}</p>
-    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white ml-5 mr-5 mb-3">Details</button>
+    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white ml-5 mr-5 mb-3" @click="showDetailedPost()">Details</button>
   </div>
 </template>
 
 <script>
+import postUtilities from '@/utils/postUtilities.js'
+
 export default {
   name: 'shipperPost',
   props: {
@@ -21,7 +37,10 @@ export default {
     },
     trimDate(date) {
       return new Date(date).toISOString().split('T')[0]
-    }
+    },
+    formatAddress(address) {
+      return postUtilities.formatAddress(address)
+    },
   }
 }
 </script>

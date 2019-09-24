@@ -34,7 +34,7 @@ const postUtilities = {
       return 'Unknown'
     }
   },
-  convertTime(value) {
+  parseTime(value) {
     if (value === undefined) return
     var hour = value.substring ( 0,2 )
     var minutes = value.substring ( 3,5 )
@@ -54,7 +54,7 @@ const postUtilities = {
     return `${address.addressLine}, ${address.city}, ${address.province}, ${address.country} ${address.postalCode}`
   },
   //TODO: Remove all other occurences of the code below to use this method
-  trimDate(date) {
+  parseDate(date) {
     return new Date(date).toISOString().split('T')[0]
   }
 }

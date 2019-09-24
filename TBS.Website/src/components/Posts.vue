@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-for="(post, index) in posts" :key="index" class="col-lg-6 col-md-6 col-sm-12">
+    <div v-for="(post, index) in posts" :key="index" class="col-12">
       <Post :post="post" />
     </div>
   </div>

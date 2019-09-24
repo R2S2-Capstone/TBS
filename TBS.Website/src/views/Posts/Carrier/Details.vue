@@ -12,28 +12,28 @@
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12">
-              <h5>Pickup Details</h5>
+              <h5>Details</h5>
               <hr>
               <p></p>
               <div class="row">
                 <div class="col-12">
-                  <p>Pickup Location: {{ post.pickupLocation }}</p>
-                  <p>Pickup Date: {{ post.pickupDate.split('T')[0] }}</p>
-                  <p>Pickup Time: {{ convertTime(this.post.pickupDate.split('T')[1]) }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-12">
-              <h5>Dropoff Details</h5>
-              <hr>
-              <p></p>
-              <div class="row">
-                <div class="col-12">
-                  <p>Dropoff Location: {{ post.dropoffLocation }}</p>
-                  <p>Dropoff Date: {{ post.dropoffDate.split('T')[0] }}</p>
-                  <p>Dropoff Time: {{ convertTime(this.post.dropoffDate.split('T')[1]) }}</p>
+                  <table class="table">
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">City</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                    <tr>
+                      <th scope="row">Pickup In: </th>
+                      <td>{{ post.pickupLocation }}</td>
+                      <td>{{ convertTime(post.pickupDate.split('T')[1]) }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Deliver To: </th>
+                      <td>{{ post.dropoffLocation }}</td>
+                      <td>{{ convertTime(post.dropoffDate.split('T')[1]) }}</td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>

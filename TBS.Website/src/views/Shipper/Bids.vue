@@ -164,7 +164,6 @@ export default {
         .then((response) => {
           this.post = response.data.result
           this.bids = this.post.bids
-          console.log(this.bids)
         })
         .catch(() => {
           Swal.fire({
