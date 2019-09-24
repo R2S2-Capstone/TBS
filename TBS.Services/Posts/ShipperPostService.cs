@@ -127,6 +127,13 @@ namespace TBS.Services.Post
                 throw new InvalidShipperPostException();
             }
 
+            var bids = await _context.ShipperBids.Where(b => b.Post.Id == post.Id).ToListAsync();
+
+            foreach (var bid in bids)
+            {
+                _context.ShipperBids.Remove(bid);
+            }
+
             _context.ShipperPosts.Remove(post);
             await _context.SaveChangesAsync();
 

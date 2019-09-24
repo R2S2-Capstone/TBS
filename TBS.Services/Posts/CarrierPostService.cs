@@ -114,6 +114,13 @@ namespace TBS.Services.Posts
                 throw new InvalidCarrierPostException();
             }
 
+            var bids = await _context.CarrierBids.Where(b => b.Post.Id == post.Id).ToListAsync();
+
+            foreach (var bid in bids)
+            {
+                _context.CarrierBids.Remove(bid);
+            }
+
             _context.CarrierPosts.Remove(post);
             await _context.SaveChangesAsync();
 
