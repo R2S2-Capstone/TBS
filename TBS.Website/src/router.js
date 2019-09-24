@@ -16,6 +16,7 @@ const ShipperIndex = () => import('@/views/Shipper/Index.vue')
 const ShipperHome = () => import('@/views/Shipper/Home.vue')
 const ShipperModifyPost = () => import('@/views/Shipper/Modify.vue')
 const ShipperManageBids = () => import('@/views/Shipper/Bids.vue')
+const EditShipper = () => import('@/views/Shipper/Me.vue')
 
 // Carrier
 const CarrierIndex = () => import('@/views/Carrier/Index.vue')
@@ -23,6 +24,7 @@ const CarrierHome = () => import('@/views/Carrier/Home.vue')
 const CarrierModifyPost = () => import('@/views/Carrier/Modify.vue')
 const CarrierManageBids = () => import('@/views/Carrier/Bids.vue')
 const CarrierViewBidDetails = () => import('@/views/Carrier/BidDetails.vue')
+const EditCarrier = () => import('@/views/Carrier/Me.vue')
 
 // Posts
 const PostsIndex = () => import('@/views/Posts/Index.vue')
@@ -252,6 +254,12 @@ export default new Router({
           ...LoggedIn
         },
         {
+          path: 'Me',
+          name: 'editShipper',
+          component: EditShipper,
+          ...LoggedIn
+        },
+        {
           path: 'EditPost/:id?',
           name: 'shipperEditPost',
           component: ShipperModifyPost,
@@ -282,6 +290,12 @@ export default new Router({
           path: 'CreatePost',
           name: 'carrierCreatePost',
           component: CarrierModifyPost,
+          ...LoggedIn
+        },
+        {
+          path: 'Me',
+          name: 'editCarrier',
+          component: EditCarrier,
           ...LoggedIn
         },
         {
