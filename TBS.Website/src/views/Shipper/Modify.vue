@@ -394,28 +394,41 @@ export default {
     }
   },
   created() {
-    if (this.type == 'Update') {
-        if (this.type == 'Update') {
-          this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
-            .then((response) => {
-              this.post = response.data.result
-              this.post.vehicle.year = this.post.vehicle.year.toString() 
-              this.post.vehicle.condition = utilities.parseVehicleCondition(this.post.vehicle.condition)
-              this.post.startingBid = this.post.startingBid.toString()
-              this.post.pickupDate = this.post.pickupDate.split('T')[0]
-              this.post.dropoffDate = this.post.dropoffDate.split('T')[0]
-              this.failedToLoadError = false
+      if (this.type == 'Update') {
+        this.$store.dispatch('posts/getPostById', { postId: this.$route.params.id })
+          .then((response) => {
+            this.post = response.data.result
+            this.post.vehicle.year = this.post.vehicle.year.toString() 
+            this.post.vehicle.condition = utilities.parseVehicleCondition(this.post.vehicle.condition)
+            this.post.startingBid = this.post.startingBid.toString()
+            this.post.pickupDate = this.post.pickupDate.split('T')[0]
+            this.post.dropoffDate = this.post.dropoffDate.split('T')[0]
+            this.failedToLoadError = false
+          })
+          .catch(() => {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong! We are unable to load this post. Please try again!',
             })
-            .catch(() => {
-              Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong! We are unable to load this post. Please try again!',
-              })
-              this.failedToLoadError = true
+            this.failedToLoadError = true
+          })
+      } else {
+        this.$store.dispatch('profiles/getMyProfile')
+          .then((response) => {
+            this.post.dropoffContact = response.data.result.company.contact
+            this.post.dropoffLocation = response.data.result.company.address
+            this.failedToLoadError = false
+          })
+          .catch(() => {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong! We are unable to load this post. Please try again!',
             })
-        }
-    }
+            this.failedToLoadError = true
+          })
+      }
   }
 }
 </script>
