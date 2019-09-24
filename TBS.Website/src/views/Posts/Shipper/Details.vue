@@ -43,66 +43,66 @@
               </div>
             </div>
           </div>
-        <div class="row pt-3">
-          <div class="col-12">
-            <h5>Shipper Information</h5>
-            <hr>
-            <div class="row pt-3">
-              <div class="col-12">
-                <table class="table">
-                  <tr>
-                    <th style="width: 33.3%">Shipper Name</th>
-                    <th style="width: 33.3%">Shipper Rating</th>
-                    <th style="width: 33.3%">Shipper Email</th>
-                  </tr>
-                  <tr>
-                    <!-- TODO: Generate profile link -->
-                    <td>{{ post.shipper.name }}</td> 
-                    <td>Coming Soon..</td>
-                    <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row pt-2 mb-3">
-          <div class="col-12">
-            <h5>Other Details</h5>
-            <hr>
-            <div class="row pt-3">
-              <div class="col-12">
-                <table class="table">
-                  <tr>
-                    <th style="width: 25%">Date Posted</th>
-                    <th style="width: 25%">Starting Bid</th>
-                    <th style="width: 25%">Highest Bid</th>
-                    <th style="width: 25%">Current Bid</th>
-                  </tr>
-                  <tr>
-                    <!-- TODO: Use date parser -->
-                    <td>{{ post.datePosted.split('T')[0] }}</td> 
-                    <!-- TODO: Money formatting -->
-                    <td>${{ post.startingBid }}</td>
-                    <td>Coming Soon..</td>
-                    <td>Coming Soon..</td>
-                  </tr>
-                </table>
-                <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
-                  <div slot="description">
-                    Please enter your bid amount
-                    <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
-                  </div>
-                  <div slot="footer">
-                    <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
-                    <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
-                  </div>
+          <div class="row pt-3">
+            <div class="col-12">
+              <h5>Shipper Information</h5>
+              <hr>
+              <div class="row pt-3">
+                <div class="col-12">
+                  <table class="table">
+                    <tr>
+                      <th style="width: 33.3%">Shipper Name</th>
+                      <th style="width: 33.3%">Shipper Rating</th>
+                      <th style="width: 33.3%">Shipper Email</th>
+                    </tr>
+                    <tr>
+                      <!-- TODO: Generate profile link -->
+                      <td>{{ post.shipper.name }}</td> 
+                      <td>Coming Soon..</td>
+                      <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
+                    </tr>
+                  </table>
                 </div>
-                <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
               </div>
             </div>
           </div>
-        </div>
+          <div class="row pt-2 mb-3">
+            <div class="col-12">
+              <h5>Other Details</h5>
+              <hr>
+              <div class="row pt-3">
+                <div class="col-12">
+                  <table class="table">
+                    <tr>
+                      <th style="width: 25%">Date Posted</th>
+                      <th style="width: 25%">Starting Bid</th>
+                      <th style="width: 25%">Highest Bid</th>
+                      <th style="width: 25%">Current Bid</th>
+                    </tr>
+                    <tr>
+                      <!-- TODO: Use date parser -->
+                      <td>{{ post.datePosted.split('T')[0] }}</td> 
+                      <!-- TODO: Money formatting -->
+                      <td>${{ post.startingBid }}</td>
+                      <td>Coming Soon..</td>
+                      <td>Coming Soon..</td>
+                    </tr>
+                  </table>
+                  <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
+                    <div slot="description">
+                      Please enter your bid amount
+                      <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                    </div>
+                    <div slot="footer">
+                      <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
+                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
+                    </div>
+                  </div>
+                  <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

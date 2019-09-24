@@ -38,19 +38,19 @@
           </table>
           <ul class="pagination">
             <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(currentBidPage-1)">Previous</span>
+              <span class="page-link" @click="setBidPage(currentBidPage-1)">Previous</span>
             </li>
             <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(1)">First</span>
+              <span class="page-link" @click="setBidPage(1)">First</span>
             </li>
             <li v-for="(page, index) in  bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
-                <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
+              <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
             </li>
             <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
+              <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
             </li>
             <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
+              <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
             </li>
           </ul>
         </div>

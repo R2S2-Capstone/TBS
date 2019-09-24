@@ -34,7 +34,7 @@
           </div>
           <div class="row pt-5">
             <div class="col-12">
-              <h5>Delivery Information</h5>
+              <h5>Dropoff Information</h5>
               <hr>
             </div>
             <div class="col-12">

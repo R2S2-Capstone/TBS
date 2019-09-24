@@ -3,17 +3,17 @@
     <h4 class="title pt-3">{{ `Spaces Available: ${post.spacesAvailable}` }}</h4>
     <table class="table">
       <tr>
-        <th scope="col"></th>
-        <th scope="col">City</th>
-        <th scope="col">Date</th>
+        <th></th>
+        <th>City</th>
+        <th>Date</th>
       </tr>
       <tr>
-        <th scope="row">Pickup In: </th>
+        <th>Pickup In: </th>
         <td>{{ post.pickupLocation }}</td>
         <td>{{ trimDate(post.pickupDate) }}</td>
       </tr>
       <tr>
-        <th scope="row">Deliver To: </th>
+        <th>Dropoff To: </th>
         <td>{{ post.dropoffLocation }}</td>
         <td>{{ trimDate(post.dropoffDate) }}</td>
       </tr>

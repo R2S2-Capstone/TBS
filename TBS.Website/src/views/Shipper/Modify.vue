@@ -79,7 +79,7 @@
           </div>
           <div class="row pt-3">
             <div class="col-12">
-              <h5>Delivery</h5>
+              <h5>Dropoff</h5>
               <hr>
             </div>
             <div class="col-12">
