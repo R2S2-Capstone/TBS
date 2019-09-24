@@ -119,6 +119,8 @@ namespace TBS.Services.Posts
             foreach (var bid in bids)
             {
                 _context.CarrierBids.Remove(bid);
+                _logger.LogInformation($"Carrier Post: Successfully automatically deleted a bid {bid.Id} for ${bid.BidAmount}. ({post.Id})");
+
             }
 
             _context.CarrierPosts.Remove(post);

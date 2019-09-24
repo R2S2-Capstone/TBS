@@ -132,6 +132,8 @@ namespace TBS.Services.Post
             foreach (var bid in bids)
             {
                 _context.ShipperBids.Remove(bid);
+                _logger.LogInformation($"Shipper Post: Successfully automatically deleted a bid {bid.Id} for ${bid.BidAmount}. ({post.Id})");
+
             }
 
             _context.ShipperPosts.Remove(post);
