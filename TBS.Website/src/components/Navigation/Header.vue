@@ -29,6 +29,9 @@
 				<li class="nav-item" v-if="isAuthenticated && accountType != ''">
 					<router-link :to="{ name: `${accountType}Home` }" class="btn font-blue-on-hover">My Posts</router-link>
 				</li>
+				<li class="nav-item" v-if="isAuthenticated && accountType != ''">
+					<router-link :to="{ name: `${accountType}Edit` }" class="btn font-blue-on-hover">My Profile</router-link>
+				</li>
 				<li class="nav-item" v-if="isAuthenticated">
 					<span class="btn font-blue-on-hover pointer" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</span>
 				</li>

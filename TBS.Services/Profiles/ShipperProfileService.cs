@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Profiles;
@@ -44,6 +47,15 @@ namespace TBS.Services.Profiles
             {
                 throw new InvalidProfileException();
             }
+
+            //_context.Attach(profile);
+
+            //IEnumerable<EntityEntry> unchangedEntities = _context.ChangeTracker.Entries().Where(x => x.State == EntityState.Unchanged);
+
+            //foreach (EntityEntry ee in unchangedEntities)
+            //{
+            //    ee.State = EntityState.Modified;
+            //}
 
             _context.Shippers.Update(profile);
 

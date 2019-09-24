@@ -152,6 +152,12 @@ export default {
           .then(() => {
             this.error = false
             this.success = true
+
+            Swal.fire({
+              type: 'success',
+              title: 'Success',
+              text: `Profile has successfully been updated!`,
+            })
           })
           .catch(() => {
             this.error = true

@@ -255,7 +255,7 @@ export default new Router({
         },
         {
           path: 'Me',
-          name: 'editShipper',
+          name: 'shipperEdit',
           component: EditShipper,
           ...LoggedIn
         },
@@ -294,7 +294,7 @@ export default new Router({
         },
         {
           path: 'Me',
-          name: 'editCarrier',
+          name: 'carrierEdit',
           component: EditCarrier,
           ...LoggedIn
         },
