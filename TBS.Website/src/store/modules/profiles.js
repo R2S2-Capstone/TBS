@@ -6,7 +6,6 @@ const profiles = {
   getters: {},
   mutations: {},
   actions: {
-    
     getMyProfile({ commit, rootGetters }) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })

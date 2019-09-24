@@ -11,6 +11,5 @@ namespace TBS.Data.Interfaces.Profiles
         Task<Carrier> GetProfileByIdAsync(Guid profileId);
 
         Task<bool> UpdateProfileAsync(string userFirebaseId, Carrier profile);
-
     }
 }

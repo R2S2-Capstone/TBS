@@ -1,7 +1,6 @@
 <template>
   <div class="container pt-5 pb-5">
     <WideFormCard title="Update Information" :submit="update">
-
       <div slot="card-content" class="text-center">
         <h5>Your Information</h5>
         <TextInput v-model="profile.name" placeHolder="Name" errorMessage="Please enter your name" :validator="$v.profile.name"/>
@@ -49,7 +48,6 @@
             <TextInput v-model="profile.company.contact.phoneNumber" placeHolder="Phone Number" errorMessage="Please enter a valid phone number" :validator="$v.profile.company.contact.phoneNumber"/>
           </div>
         </div>
-
         <div class="row">
           <div class="col-12">
             <EmailInput v-model="profile.company.contact.email" :validator="$v.profile.company.contact.email"/>
@@ -155,25 +153,24 @@ export default {
   },
   methods: {
     update() {
-        this.$v.$touch()
-        if (this.$v.$invalid) {
-            return;
-        }
-        this.$store.dispatch('profiles/updateProfile', this.profile)
-          .then(() => {
-            this.error = false
-            this.success = true
-
-            Swal.fire({
-              type: 'success',
-              title: 'Success',
-              text: `Profile has successfully been updated!`,
-            })
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        return;
+      }
+      this.$store.dispatch('profiles/updateProfile', this.profile)
+        .then(() => {
+          this.error = false
+          this.success = true
+          Swal.fire({
+            type: 'success',
+            title: 'Success',
+            text: `Profile has successfully been updated!`,
           })
-          .catch(() => {
-            this.error = true
-            this.success = false
-          })
+        })
+        .catch(() => {
+          this.error = true
+          this.success = false
+        })
     },
     fetchProfile() {
       this.$store.dispatch('profiles/getMyProfile')

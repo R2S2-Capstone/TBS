@@ -413,21 +413,21 @@ export default {
             })
             this.failedToLoadError = true
           })
-      }else{
-      this.$store.dispatch('profiles/getMyProfile')
-        .then((response) => {
-          this.post.dropoffContact = response.data.result.company.contact
-          this.post.dropoffLocation = response.data.result.company.address
-          this.failedToLoadError = false
-        })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load this post. Please try again!',
+      } else {
+        this.$store.dispatch('profiles/getMyProfile')
+          .then((response) => {
+            this.post.dropoffContact = response.data.result.company.contact
+            this.post.dropoffLocation = response.data.result.company.address
+            this.failedToLoadError = false
           })
-          this.failedToLoadError = true
-        })
+          .catch(() => {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong! We are unable to load this post. Please try again!',
+            })
+            this.failedToLoadError = true
+          })
       }
   }
 }

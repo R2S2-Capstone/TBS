@@ -14,7 +14,6 @@ namespace TBS.Services.Profiles
         private readonly DatabaseContext _context;
         private readonly ILogger<CarrierProfileService> _logger;
 
-
         public CarrierProfileService(DatabaseContext databaseContext, ILogger<CarrierProfileService> logger)
         {
             _context = databaseContext;

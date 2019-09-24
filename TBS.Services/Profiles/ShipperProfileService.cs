@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Database;
 using TBS.Data.Exceptions.Profiles;
@@ -16,7 +13,6 @@ namespace TBS.Services.Profiles
     {
         private readonly DatabaseContext _context;
         private readonly ILogger<ShipperProfileService> _logger;
-
 
         public ShipperProfileService(DatabaseContext databaseContext, ILogger<ShipperProfileService> logger)
         {
@@ -31,7 +27,6 @@ namespace TBS.Services.Profiles
                 .Include(s => s.Company.Contact)
                 .FirstOrDefaultAsync(c => c.UserFirebaseId == userFirebaseId);
         }
-
 
         public async Task<Shipper> GetProfileByIdAsync(Guid profileId)
         {
