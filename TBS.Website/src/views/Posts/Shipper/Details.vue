@@ -17,7 +17,7 @@
               <table class="table">
                 <tr>
                   <th></th>
-                  <th>City</th>
+                  <th>Address</th>
                   <th>Date</th>
                 </tr>
                 <tr>

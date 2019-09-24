@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" v-if="posts != null">
     <div v-for="(post, index) in posts" :key="index" class="col-12">
       <Post :post="post" />
     </div>

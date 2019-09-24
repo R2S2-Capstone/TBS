@@ -174,7 +174,7 @@
                     <hr>
                     <p></p>
                   </div>
-                  <div class="col-12">
+                  <div class="col-12 pb-5">
                     <div class="row">
                       <div class="col-12">
                         <div class="form-label-group">
@@ -198,7 +198,7 @@
               </div>
             </div>
           </div>
-          <button v-if="!toShowModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="showModal(true)">Bid Now!</button>
+          <button v-if="!toShowModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mt-0 mb-3" @click="showModal(true)">Bid Now!</button>
         </div>
       </div>
     </div>
