@@ -1,11 +1,25 @@
 <template>
-  <div class="card text-center pointer mb-5" @click="showDetailedPost()">
+  <div class="card text-center mb-5">
     <h4 class="title pt-3">{{ `Spaces Available: ${post.spacesAvailable}` }}</h4>
-    <hr>
-    <p>{{ post.pickupLocation }} <i class="fas fa-arrow-right"></i> {{ post.dropoffLocation }}</p>
-    <p>{{ trimDate(post.pickupDate) }} <i class="fas fa-arrow-right"></i> {{ trimDate(post.dropoffDate) }}</p>
+    <table class="table">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">City</th>
+        <th scope="col">Date</th>
+      </tr>
+      <tr>
+        <th scope="row">Pickup In: </th>
+        <td>{{ post.pickupLocation }}</td>
+        <td>{{ trimDate(post.pickupDate) }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Deliver To: </th>
+        <td>{{ post.dropoffLocation }}</td>
+        <td>{{ trimDate(post.dropoffDate) }}</td>
+      </tr>
+    </table>
     <p>Starting Bid: ${{ post.startingBid }}</p>
-    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white ml-5 mr-5 mb-3">Details</button>
+    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white ml-5 mr-5 mb-3" @click="showDetailedPost()">Details</button>
   </div>
 </template>
 
