@@ -7,100 +7,96 @@
         <h6 @click="$router.go(-1)" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Click here to return</h6>
       </div>
     </div>
-    <div class="row" v-if="!error && post != null">
-      <div class="col-12 mb-5 text-center">
-        <div class="col-12 background">
+    <div v-if="!error && post != null">
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h3>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h3>
+          <hr>
+        </div>
+      </div>
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h5>Pickup Details</h5>
+          <hr>
           <div class="row pt-3">
             <div class="col-12">
-              <h3>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h3>
-              <hr>
+              <table class="table">
+                <tr>
+                  <th></th>
+                  <th>City</th>
+                  <th>Date</th>
+                </tr>
+                <tr>
+                  <th>Pickup In: </th>
+                  <td>{{ formatAddress(post.pickupLocation) }}</td>
+                  <td>{{ parseDate(post.pickupDate) }}</td>
+                </tr>
+                <tr>
+                  <th>Deliver To: </th>
+                  <td>{{ formatAddress(post.dropoffLocation) }}</td>
+                  <td>{{ parseDate(post.dropoffDate) }}</td>
+                </tr>
+              </table>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h5>Shipper Information</h5>
+          <hr>
           <div class="row pt-3">
             <div class="col-12">
-              <h5>Pickup Details</h5>
-              <hr>
-              <div class="row pt-3">
-                <div class="col-12">
-                  <table class="table">
-                    <tr>
-                      <th></th>
-                      <th>City</th>
-                      <th>Date</th>
-                    </tr>
-                    <tr>
-                      <th>Pickup In: </th>
-                      <td>{{ formatAddress(post.pickupLocation) }}</td>
-                      <td>{{ parseDate(post.pickupDate) }}</td>
-                    </tr>
-                    <tr>
-                      <th>Deliver To: </th>
-                      <td>{{ formatAddress(post.dropoffLocation) }}</td>
-                      <td>{{ parseDate(post.dropoffDate) }}</td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
+              <table class="table">
+                <tr>
+                  <th style="width: 33.3%">Shipper Name</th>
+                  <th style="width: 33.3%">Shipper Rating</th>
+                  <th style="width: 33.3%">Shipper Email</th>
+                </tr>
+                <tr>
+                  <!-- TODO: Generate profile link -->
+                  <td>{{ post.shipper.name }}</td> 
+                  <td>Coming Soon..</td>
+                  <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
+                </tr>
+              </table>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h5>Other Details</h5>
+          <hr>
           <div class="row pt-3">
             <div class="col-12">
-              <h5>Shipper Information</h5>
-              <hr>
-              <div class="row pt-3">
-                <div class="col-12">
-                  <table class="table">
-                    <tr>
-                      <th style="width: 33.3%">Shipper Name</th>
-                      <th style="width: 33.3%">Shipper Rating</th>
-                      <th style="width: 33.3%">Shipper Email</th>
-                    </tr>
-                    <tr>
-                      <!-- TODO: Generate profile link -->
-                      <td>{{ post.shipper.name }}</td> 
-                      <td>Coming Soon..</td>
-                      <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
-                    </tr>
-                  </table>
+              <table class="table">
+                <tr>
+                  <th style="width: 25%">Date Posted</th>
+                  <th style="width: 25%">Starting Bid</th>
+                  <th style="width: 25%">Highest Bid</th>
+                  <th style="width: 25%">Current Bid</th>
+                </tr>
+                <tr>
+                  <!-- TODO: Use date parser -->
+                  <td>{{ post.datePosted.split('T')[0] }}</td> 
+                  <!-- TODO: Money formatting -->
+                  <td>${{ post.startingBid }}</td>
+                  <td>Coming Soon..</td>
+                  <td>Coming Soon..</td>
+                </tr>
+              </table>
+              <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3">
+                <div slot="description">
+                  Please enter your bid amount
+                  <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                </div>
+                <div slot="footer">
+                  <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
+                  <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="row pt-2 mb-3">
-            <div class="col-12">
-              <h5>Other Details</h5>
-              <hr>
-              <div class="row pt-3">
-                <div class="col-12">
-                  <table class="table">
-                    <tr>
-                      <th style="width: 25%">Date Posted</th>
-                      <th style="width: 25%">Starting Bid</th>
-                      <th style="width: 25%">Highest Bid</th>
-                      <th style="width: 25%">Current Bid</th>
-                    </tr>
-                    <tr>
-                      <!-- TODO: Use date parser -->
-                      <td>{{ post.datePosted.split('T')[0] }}</td> 
-                      <!-- TODO: Money formatting -->
-                      <td>${{ post.startingBid }}</td>
-                      <td>Coming Soon..</td>
-                      <td>Coming Soon..</td>
-                    </tr>
-                  </table>
-                  <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
-                    <div slot="description">
-                      Please enter your bid amount
-                      <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
-                    </div>
-                    <div slot="footer">
-                      <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
-                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
-                    </div>
-                  </div>
-                  <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
-                </div>
-              </div>
+              <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="showModal = true">Bid Now!</button>
             </div>
           </div>
         </div>
