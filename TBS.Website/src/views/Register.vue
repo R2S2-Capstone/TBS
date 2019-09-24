@@ -95,7 +95,7 @@ import TextInput from '@/components/Form/Input/TextInput.vue'
 import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
 import CountryInput from '@/components/Form/Input/CountryInput.vue'
 
-import { required, minLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
+import { required, minLength, maxLength, email, sameAs, helpers } from 'vuelidate/lib/validators'
 const passwordRegex = helpers.regex('passwordRegex', /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/)
 const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
