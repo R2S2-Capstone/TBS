@@ -9,27 +9,16 @@
         </div>
         <h5>Company Information</h5>
         <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="col-12">
             <TextInput v-model="profile.company.name" placeHolder="Name" errorMessage="Please enter a company name" :validator="$v.profile.company.name"/>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <TextInput v-model="profile.company.address.addressLine" placeHolder="Address Line" errorMessage="Please enter an address" :validator="$v.profile.company.address.addressLine"/>
-          </div>
         </div>
         <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <TextInput v-model="profile.company.address.city" placeHolder="City" errorMessage="Please enter a city" :validator="$v.profile.company.address.city"/>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12 form-label-group">
-            <ProvinceInput v-model="profile.company.address.province" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <CountryInput v-model="profile.company.address.country" />
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <TextInput v-model="profile.company.address.postalCode" placeHolder="Postal/Zip code" errorMessage="Please enter a valid postal/zip code" :validator="$v.profile.company.address.postalCode"/>
+          <div class="col-12">
+            <div class="form-label-group">
+              <input id="Address" v-model="profile.company.address.addressLine"  :class="{ 'is-invalid': validCompanyAddress == false }" type="text" class="form-control" placeholder="Company Address" >
+              <p v-if="validCompanyAddress == false" class="text-danger text-center">Please enter a valid company address</p>
+            </div>
           </div>
         </div>
         <h5>Contact Information</h5>
@@ -58,11 +47,8 @@ import Swal from 'sweetalert2'
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 import EmailInput from '@/components/Form/Input/EmailInput.vue'
 import TextInput from '@/components/Form/Input/TextInput.vue'
-import ProvinceInput from '@/components/Form/Input/ProvinceInput.vue'
-import CountryInput from '@/components/Form/Input/CountryInput.vue'
 
 import { required, email, helpers } from 'vuelidate/lib/validators'
-const postalCodeRegex = helpers.regex('postalCodeRegex', /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
 
 export default {
@@ -71,13 +57,12 @@ export default {
     WideFormCard,
     EmailInput,
     TextInput,
-    ProvinceInput,
-    CountryInput,
   },
   data() {
     return {
       success: null,
       error: null,
+      validCompanyAddress: null,
       profile: {
         name: '',
         email: '',
@@ -86,8 +71,8 @@ export default {
           address: {
             addressLine: '',
             city: '',
-            province: 'Ontario',
-            country: 'Canada',
+            province: '',
+            country: '',
             postalCode: '',
           },
           contact: {
@@ -108,18 +93,6 @@ export default {
       company: {
         name: {
           required
-        },
-        address: {
-          addressLine: {
-            required
-          },
-          city: {
-            required
-          },
-          postalCode: {
-            required,
-            postalCodeRegex
-          },
         },
         contact: {
           name: {
@@ -176,9 +149,40 @@ export default {
           this.error = true
         })
     },
+    parseAddress(address) {
+      try {
+        this.profile.company.address.addressLine = `${address[0].long_name} ${address[1].long_name}`
+        this.profile.company.address.city = address[2].long_name
+        this.profile.company.address.province = address[4].short_name
+        this.profile.company.address.country = address[5].long_name
+        this.profile.company.address.postalCode = address[6].long_name
+        this.validCompanyAddress = true
+      } catch {
+        this.validCompanyAddress = false
+      }
+    }
+  },
+  mounted() {
+    // eslint-disable-next-line
+    var address = new google.maps.places.Autocomplete(document.getElementById('Address'))
+    // eslint-disable-next-line
+    google.maps.event.addListener(address, 'place_changed', () => {
+      if (address.getPlace().address_components == null) {
+        this.validCompanyAddress = false
+        return
+      }
+      this.parseAddress(address.getPlace().address_components)
+    })
   },
   created() {
     this.fetchProfile()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+input, input::placeholder {
+  text-align: center;
+  text-align-last: center;
+}
+</style>

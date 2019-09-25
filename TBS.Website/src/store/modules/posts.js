@@ -8,8 +8,8 @@ const posts = {
   actions: {
     getPosts({ rootGetters, commit }, payload) {            
       return new Promise((resolve, reject) => {
-        commit('global/setLoading', true, { root: true })
         const apiCall = () => {
+          commit('global/setLoading', true, { root: true })
           let oppositeAccountType = rootGetters['authentication/getAccountType'].toLowerCase() == 'carrier' ? 'shipper' : 'carrier';
           axios({
             method: 'GET',
@@ -25,7 +25,6 @@ const posts = {
             commit('global/setLoading', false, { root: true })
           })
         }
-
         if (rootGetters['authentication/isRefreshing']) {
           this.watch(() => rootGetters['authentication/isRefreshing'],
             () => {

@@ -75,6 +75,7 @@ const global = {
     login({ commit }, payload) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
+        commit('authentication/refresh', true, { root: true })
         firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
           .then((response) => {
             if (!response.user.emailVerified) {
@@ -86,11 +87,12 @@ const global = {
           })
           .catch((error) => {
             commit('logout')
+            commit('global/setLoading', false, { root: true })
+            commit('authentication/refresh', false, { root: true })
             reject(error)
           })
           .finally(() => {
-            commit('global/setLoading', false, { root: true })
-            commit('authentication/refresh', false, { root: true })
+            // commit('global/setLoading', false, { root: true })
           })
       })
     },
@@ -111,7 +113,7 @@ const global = {
     },
     refreshToken({ commit }) {
       return new Promise((resolve, reject) => {
-        commit('authentication/refresh', true, { root: true })
+        // commit('authentication/refresh', true, { root: true })
         firebase.auth().onAuthStateChanged(user => {
           if (user) {
             if (!user.emailVerified) {

@@ -238,6 +238,9 @@ export default {
     },
     parseTime(time) {
       return postUtilities.parseTime(time)
+    },
+    parseTrailerType(trailer) {
+      return postUtilities.parseTrailerType(trailer)
     }
   },
   computed: {
@@ -255,7 +258,7 @@ export default {
 				.then((response) => {
           this.post = response.data.result
           this.post.startingBid = this.post.startingBid.toString()
-          this.post.trailerType = postUtilities.parseTrailerType(this.post.trailerType)
+          this.post.trailerType = this.parseTrailerType(this.post.trailerType)
           this.post.pickupDateValue = this.parseDate(this.post.pickupDate)
           this.post.pickupTime = this.parseTime(this.post.pickupDate)
           this.post.dropoffDateValue = this.parseDate(this.post.dropoffDate)
