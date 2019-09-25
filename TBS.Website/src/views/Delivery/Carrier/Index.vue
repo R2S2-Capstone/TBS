@@ -31,8 +31,8 @@
                   <th>Vehicle Information</th>
                 </thead>
                 <tbody>
-                  <td>{{ post.pickupLocation }} - {{ trimDate(post.pickupDate) }}</td>
-                  <td>{{ post.dropoffLocation }} - {{ trimDate(post.dropoffDate) }}</td>
+                  <td>{{ post.pickupLocation }} - {{ parseDate(post.pickupDate) }}</td>
+                  <td>{{ post.dropoffLocation }} - {{ parseDate(post.dropoffDate) }}</td>
                   <td v-if="post.carrier.vehicle">{{ `${post.carrier.vehicle.year} ${post.carrier.vehicle.make} ${post.carrier.vehicle.model} (${parseTrailerType(post.carrier.vehicle.trailerType)})` }}</td>
                   <td v-else>Carrier vehicle not specified. <br>Trailer type: {{ `${parseTrailerType(post.trailerType)}` }}</td>
                 </tbody>
@@ -74,7 +74,7 @@
               <tbody>
                 <!-- TODO: Generate router-link to profile page -->
                 <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
-                <td>${{ bid.bidAmount }}</td>
+                <td>{{ formatMoney(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
               </tbody>
             </table>
@@ -82,11 +82,18 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3 pb-5 text-center">
-      <div class="col-12 pt-3">
-        <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
-        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
-        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+    <div class="row pt-3 text-center">
+      <div class="col-12 background pt-3 pb-3">
+        <h4>Delivery Options</h4>
+        <hr>
+        <div class="row">
+          <div class="col-12">
+            <p></p>
+            <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
+            <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
+            <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -166,8 +173,11 @@ export default {
     parseTrailerType(type) {
       return postUtilities.parseTrailerType(type)
     },
-    trimDate(time) {
-      return postUtilities.trimDate(time)
+    parseDate(time) {
+      return postUtilities.parseDate(time)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
     }
   },
   created() {

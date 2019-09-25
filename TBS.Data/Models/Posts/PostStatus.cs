@@ -2,8 +2,8 @@
 {
     public enum PostStatus
     {
-        Open,
         Closed,
+        Open,
         PendingDelivery,
         PendingDeliveryApproval
     }

@@ -16,7 +16,7 @@
               <th>Bids</th>
               <th>Management</th>
             </thead>
-            <tbody>
+            <tbody v-if="posts">
               <tr v-for="post in posts" :key="post.id">
                 <td>
                   {{ `${post.pickupLocation} -> ${post.dropoffLocation}` }} <br>
@@ -79,7 +79,7 @@
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
-                  <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="cancelBid(bid.id)">Cancel</button>
+                  <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmCancelBid(bid.id, bid.bidAmount)">Cancel</button>
                   <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>     
                 </td>
               </tr>
@@ -87,19 +87,19 @@
           </table>
           <ul class="pagination">
             <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(currentBidPage-1)">Previous</span>
+              <span class="page-link" @click="setBidPage(currentBidPage-1)">Previous</span>
             </li>
             <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(1)">First</span>
+              <span class="page-link" @click="setBidPage(1)">First</span>
             </li>
             <li v-for="(page, index) in  bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
-                <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
+              <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
             </li>
             <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
+              <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
             </li>
             <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
-                <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
+              <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
             </li>
           </ul>
         </div>
@@ -144,10 +144,25 @@ export default {
       this.bidPage = number
       this.fetchBids()
     },
+    confirmCancelBid(bidId, bidAmount) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to cancel this bid for $${bidAmount}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel this bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.cancelBid(bidId)
+        }
+      })
+    },
     cancelBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'shipper', bidId: bidId, bidStatus: 'cancelled' })
         .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 2
+          this.bids.find(b => b.id == bidId).bidStatus = 0
           Swal.fire({
             type: 'success',
             title: 'Cancelled',

@@ -1,6 +1,6 @@
 <template>
   <div class="container pt-5 pb-5">
-    <h5>Search coming soon...</h5>
+    <h5 class="text-center">Search coming soon...</h5>
     <Posts :posts="posts" />
     <ul class="pagination">
       <li class="page-item" :class="currentPage == 1 ? 'disabled' : ''">

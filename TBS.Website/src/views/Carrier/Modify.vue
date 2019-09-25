@@ -17,7 +17,7 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-12">
-                  <TextInput v-model="post.pickupLocation" placeHolder="Pickup city" errorMessage="Please enter a pickup city" :validator="$v.post.pickupLocation"/>
+                  <TextInput v-model="post.pickupLocation" placeHolder="Pickup City" errorMessage="Please enter a pickup city" :validator="$v.post.pickupLocation"/>
                 </div>
               </div>
               <div class="row">
@@ -34,7 +34,7 @@
           </div>
           <div class="row pt-5">
             <div class="col-12">
-              <h5>Delivery Information</h5>
+              <h5>Dropoff Information</h5>
               <hr>
             </div>
             <div class="col-12">
@@ -78,8 +78,7 @@
                 <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" type="submit">{{ type }}</button>
               </div>
               <div class="col-12 pt-2" v-if="type == 'Update'">
-                <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Delete</button>
-                <!-- <Modal v-if="showModal" title="Delete post confirmation" description="Are you sure you want to delete this post?" submitText="Yes" :submit="deletePost" :cancel="() => { showModal = false}" /> -->
+                <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDelete">Delete</button>
               </div>
             </div>
           </div>
@@ -105,7 +104,7 @@ import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
 
 export default {
   name: 'carrierCreatePost',
@@ -165,6 +164,11 @@ export default {
       if (this.type == 'Update') {
         this.$store.dispatch('posts/updatePost', { id: this.post.id, pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Success',
+            text: `Post has successfully been updated!`,
+          })
           this.$router.push({name: 'carrierHome' })
         })
         .catch(() => {
@@ -178,6 +182,11 @@ export default {
       } else {
         this.$store.dispatch('posts/createPost', { pickupLocation: this.post.pickupLocation, pickupDate: this.post.pickupDate, dropoffLocation: this.post.dropoffLocation, dropoffDate: this.post.dropoffDate, spacesAvailable: this.post.spacesAvailable, startingBid: this.post.startingBid })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Success',
+            text: `Post has successfully been created!`,
+          })
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
@@ -190,9 +199,29 @@ export default {
         })
       }
     },
+    confirmDelete() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to delete this post?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete my post!'
+      }).then((result) => {
+        if (result.value) {
+          this.deletePost()
+        }
+      })
+    },
     deletePost() {
       this.$store.dispatch('posts/deletePost', { id: this.post.id })
         .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Deleted',
+            text: 'Post has successfully been deleted!',
+          })
           this.$router.push({ name: 'carrierHome' })
         })
         .catch(() => {
@@ -203,6 +232,12 @@ export default {
           })
           this.deleteError = true
         })
+    },
+    parseDate(date) {
+      return postUtilities.parseDate(date)
+    },
+    parseTime(time) {
+      return postUtilities.parseTime(time)
     }
   },
   computed: {
@@ -220,11 +255,12 @@ export default {
 				.then((response) => {
           this.post = response.data.result
           this.post.startingBid = this.post.startingBid.toString()
-          this.post.trailerType = utilities.parseTrailerType(this.post.trailerType)
-          this.post.pickupDateValue = this.post.pickupDate.split('T')[0]
-          this.post.pickupTime = this.post.pickupDate.split('T')[1].substring(0, 5)
-          this.post.dropoffDateValue = this.post.dropoffDate.split('T')[0]
-          this.post.dropoffTime = this.post.dropoffDate.split('T')[1].substring(0, 5)
+          this.post.trailerType = postUtilities.parseTrailerType(this.post.trailerType)
+          this.post.pickupDateValue = this.parseDate(this.post.pickupDate)
+          this.post.pickupTime = this.parseTime(this.post.pickupDate)
+          this.post.dropoffDateValue = this.parseDate(this.post.dropoffDate)
+          this.post.dropoffTime = this.parseTime(this.post.dropoffDate)
+          // .split('T')[1].substring(0, 5)
           this.failedToLoadError = false
 				})
 				.catch(() => {

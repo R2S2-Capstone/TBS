@@ -1,17 +1,17 @@
 import axios from '@/axios.js'
 
-const bids = {
+const profiles = {
   namespaced: true,
   state: {},
   getters: {},
   mutations: {},
   actions: {
-    getBidById({ commit, rootGetters }, payload) {
+    getMyProfile({ commit, rootGetters }) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `bids/${payload.type}/${payload.bidId}`,
+          url: `profiles/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {
@@ -25,32 +25,12 @@ const bids = {
         })
       })
     },
-    getMyBids({ commit, rootGetters }, payload) {
-      return new Promise((resolve, reject) => {
-        commit('global/setLoading', true, { root: true })
-        axios({
-          method: 'GET',
-          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.count}`,
-          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
-        })
-        .then((response) => {
-          resolve(response)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-        .finally(() => {
-          commit('global/setLoading', false, { root: true })
-        })
-      })
-    },
-    createBid({ commit, rootGetters}, payload) {
+    getProfileById({ commit, rootGetters }, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
         axios({
-          method: 'POST',
-          url: `bids/${payload.type}`,
-          data: { postId: payload.postId, bid: payload.bid },
+          method: 'GET',
+          url: `profiles/${payload.type || rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.profileId}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {
@@ -64,13 +44,13 @@ const bids = {
         })
       })
     },
-    updateBid({ commit, rootGetters}, payload) {
+    updateProfile({ commit, rootGetters }, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
         axios({
-          method: 'PUT',
-          url: `bids/${payload.type}`,
-          data: { bidId: payload.bidId, status: payload.bidStatus },
+          method: 'POST',
+          url: `profiles/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
+          data: payload,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {
@@ -87,4 +67,4 @@ const bids = {
   }
 }
 
-export default bids
+export default profiles
