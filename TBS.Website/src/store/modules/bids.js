@@ -44,26 +44,6 @@ const bids = {
         })
       })
     },
-    //TODO: Remove if no longer required
-    // getBidsByPostId({ commit, rootGetters }, payload) {
-    //   commit('global/setLoading', true, { root: true })
-    //   return new Promise((resolve, reject) => {
-    //     axios({
-    //       method: 'GET',
-    //       url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.postId}/${payload.currentPage}/${payload.pageSize}`,
-    //       headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
-    //     })
-    //     .then((response) => {
-    //       resolve(response)
-    //     })
-    //     .catch((error) => {
-    //       reject(error)
-    //     })
-    //     .finally(() => {
-    //       commit('global/setLoading', false, { root: true })
-    //     })
-    //   })
-    // },
     createBid({ commit, rootGetters}, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {

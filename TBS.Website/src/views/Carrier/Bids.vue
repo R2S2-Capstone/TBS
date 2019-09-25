@@ -5,7 +5,7 @@
       <div class="col-12">
         <div class="row pb-3" v-if="post">
           <div class="col-12 text-center">
-            <h2>Manage Bids for {{ post.pickupLocation }} ({{ post.pickupDate.split('T')[0] }}) - {{ post.dropoffLocation }} ({{ post.dropoffDate.split('T')[0] }})</h2>
+            <h2>Manage Bids for {{ post.pickupLocation }} ({{ parseDate(post.pickupDate) }}) - {{ post.dropoffLocation }} ({{ parseDate(post.dropoffDate) }})</h2>
             <p class="text-danger" v-if="error">Failed to load post details</p>
           </div>
         </div>
@@ -28,8 +28,8 @@
                 <td v-if="bid.id"><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
                   <div v-if="parsePostStatus(post.postStatus) == 'Open' && parseBidStatus(bid.bidStatus) == 'Open'">
-                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="acceptBid(bid.id)">Accept</button>
-                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="declineBid(bid.id)">Decline</button>
+                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.shipper.name)">Accept</button>
+                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.shipper.name)">Decline</button>
                   </div>
                   <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'carrierDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>                       
                 </td>
@@ -86,10 +86,25 @@ export default {
     }
   },
   methods: {
+    confirmAcceptBid(bidId, bidAmount, bidFrom) {
+        Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to accept this bid for $${bidAmount} from ${bidFrom}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, accept this bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.acceptBid(bidId)
+        }
+      })
+    },
     acceptBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'pendingDelivery' })
         .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 3
+          this.bids.find(b => b.id == bidId).bidStatus = 4
           Swal.fire({
             type: 'success',
             title: 'Accepted',
@@ -104,10 +119,25 @@ export default {
           })
         })
     },
+    confirmDeclineBid(bidId, bidAmount, bidFrom) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure you want to decline this bid for $${bidAmount} from ${bidFrom}?`,
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, decline this bid!'
+      }).then((result) => {
+        if (result.value) {
+          this.declineBid(bidId)
+        }
+      })
+    },
     declineBid(bidId) {
       this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: bidId, bidStatus: 'declined' })
         .then(() => {
-          this.bids.find(b => b.id == bidId).bidStatus = 2
+          this.bids.find(b => b.id == bidId).bidStatus = 1
           Swal.fire({
             type: 'success',
             title: 'Declined',
@@ -150,6 +180,9 @@ export default {
     },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)
+    },
+    parseDate(date) {
+      return postUtilities.parseDate(date)
     }
   },
   computed: {

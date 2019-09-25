@@ -25,6 +25,7 @@ const global = {
     logout(state) {
       state.email = null
       state.token = null
+      state.accountType = ''
       firebase.auth().signOut()
     },
     refresh(state, refreshing) {
