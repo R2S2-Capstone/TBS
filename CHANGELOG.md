@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.0.5 (September 24, 2019)
+## v0.0.6 (September 24, 2019)
 #### Features:
 - Using Google's AutoComplete Places API for all address inputs
 #### Enhancements:
@@ -12,7 +12,8 @@
  - Can no longer submit bid once post is no longer accepting bids
  - Now deleting all bids once a post has been deleted
 
-## v0.0.4 (September 18, 2019)
+---
+## v0.0.5 (September 18, 2019)
 #### Features:
 - Vehicle delivery
 - Delivery confirmation
@@ -24,6 +25,7 @@
 #### Bug Fixes:
  - Fixed cancel bid issue
 
+---
 ## v0.0.4 (August 21, 2019)
 #### Features:
 - Created bid classes
