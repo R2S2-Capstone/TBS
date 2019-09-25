@@ -113,7 +113,7 @@ const global = {
     },
     refreshToken({ commit }) {
       return new Promise((resolve, reject) => {
-        // commit('authentication/refresh', true, { root: true })
+        commit('authentication/refresh', true, { root: true })
         firebase.auth().onAuthStateChanged(user => {
           if (user) {
             if (!user.emailVerified) {

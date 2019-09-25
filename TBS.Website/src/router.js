@@ -97,7 +97,7 @@ const NotLoggedIn = {
 }
 
 // This will redirect to either the home page or view posts depending on if the user is logged in or not
-const CustomeHomePage = {
+const CustomHomePage = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
       const token = store.getters['authentication/getToken']
@@ -177,7 +177,7 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Index,
-      ...CustomeHomePage
+      ...CustomHomePage
     },
     {
       // Default route for anyone who is not logged in, it contains a lot of information
