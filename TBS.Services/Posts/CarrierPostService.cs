@@ -68,6 +68,23 @@ namespace TBS.Services.Posts
             return carrierPost;
         }
 
+          public async Task<PaginatedCarrierPosts> SearchAllActivePostsAsync(SearchModel request, PaginationModel model)
+        {
+            var filteredPosts = await _context.CarrierPosts
+                .Where(p => p.PostStatus == PostStatus.Open)
+                .Where(p => p.PickupDate == DateTime.Parse("10/10/1000") || p.PickupDate == request.PickupDate)
+                .Where(p => p.DropoffDate == DateTime.Parse("10/10/1000") || p.DropoffDate == request.dropOffDate)
+                .Where(p => p.PickupLocation == null || p.PickupLocation == request.PickupLocation)
+                .Where(p => p.DropoffLocation == null || p.DropoffLocation == request.dropOffLocation)
+                .ToListAsync();
+            model.Count = filteredPosts.Count();
+            var paginatedPosts = filteredPosts
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize).ToArray();
+            return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
+
+        }
+
         public async Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post)
         {
             post.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
