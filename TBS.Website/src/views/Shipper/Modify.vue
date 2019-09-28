@@ -179,7 +179,7 @@ export default {
           year: new Date().getUTCFullYear().toString(),
           make: '',
           model: '',
-          VIN: '',
+          vin: '',
           condition: 'New',
         },
         pickupLocation: {
@@ -411,7 +411,9 @@ export default {
       this.$store.dispatch('profiles/getMyProfile')
         .then((response) => {
           this.post.dropoffContact = response.data.result.company.contact
+          this.post.dropoffContact.id = undefined
           this.post.dropoffLocation = response.data.result.company.address
+          this.post.dropoffLocation.id = undefined
           this.failedToLoadError = false
         })
         .catch(() => {

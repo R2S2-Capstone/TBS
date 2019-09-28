@@ -6,7 +6,7 @@ const global = {
   namespaced: true,
   state: {
     email: '',
-    token: '',
+    token: null,
     accountType: '',
     refreshing: false,
   },
@@ -72,7 +72,7 @@ const global = {
         })
       })
     },
-    login({ commit }, payload) {
+    login({ rootGetters, commit }, payload) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
         commit('authentication/refresh', true, { root: true })
@@ -86,13 +86,12 @@ const global = {
             resolve()
           })
           .catch((error) => {
-            commit('logout')
+            if (rootGetters['authetncation/getToken'] != null) { // this shouldn't be the case but just in case
+              commit('logout')
+            }
             commit('global/setLoading', false, { root: true })
             commit('authentication/refresh', false, { root: true })
             reject(error)
-          })
-          .finally(() => {
-            // commit('global/setLoading', false, { root: true })
           })
       })
     },
