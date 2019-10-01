@@ -2,7 +2,7 @@
   <div class="container pt-5 pb-5">
     <WideFormCard title="Register" :submit="submit">
       <div slot="card-information">
-        <p v-if="success" class="text-success text-center mb-3">A confirmation email has been sent. Emails may take up to five minutes to send</p>
+        
         <p v-if="error" class="text-danger text-center mb-3">{{ errorMessage }}</p>
       </div>
 
@@ -186,11 +186,11 @@ export default {
         this.$store.dispatch('authentication/register', { email: this.email, password: this.password, name: this.name, company: this.company, accountType: this.isShipper ? 'Shipper' : 'Carrier', dealerNumber: this.dealerNumber, rin: this.rin, driversLicense: this.driversLicense })
           .then(() => {
             this.error = false
-            this.success = true
+            this.$router.push({ name: 'registerConfirm' })
           })
           .catch(() => {
             this.error = true
-            this.success = false
+            
           })
     },
     parseAddress(address) {

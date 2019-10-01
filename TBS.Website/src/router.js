@@ -8,7 +8,9 @@ const Error401 = () => import('@/views/Error/401.vue')
 const Error404 = () => import('@/views/Error/404.vue')
 
 const Login = () => import('@/views/Login.vue')
-const Register = () => import('@/views/Register.vue')
+const RegisterIndex = () => import('@/views/Register/Index.vue')
+const Register = () => import('@/views/Register/Register.vue')
+const RegisterConfirm = () => import('@/views/Register/Confirm.vue')
 const ResetPassword = () => import('@/views/ResetPassword.vue')
 
 // Shipper
@@ -226,8 +228,19 @@ export default new Router({
     },
     {
       path: '/Register',
-      name: 'register',
-      component: Register,
+      component: RegisterIndex,
+      children: [
+        {     
+          path: '',
+          name: 'register',
+          component: Register,
+        },
+        {     
+          path: 'Confirm',
+          name: 'registerConfirm',
+          component: RegisterConfirm,
+        },
+      ]
     },
     {
       path: '/ResetPassword/',
