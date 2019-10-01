@@ -49,8 +49,7 @@
                   <th style="width: 33.3%">Carrier Email</th>
                 </tr>
                 <tr>
-                  <!-- TODO: Generate profile link -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'carrierProfile', params: {id:post.carrier.id}}" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
                   <td>Coming Soon..</td>
                   <td><a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a></td>
                 </tr>

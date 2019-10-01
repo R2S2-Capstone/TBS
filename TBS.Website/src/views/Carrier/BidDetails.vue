@@ -69,8 +69,7 @@
                 <tr>
                   <td>{{ parseDate(bid.dateBidPlaced) }}</td>
                   <td>{{ formatMoney(bid.bidAmount) }}</td>
-                  <!-- TODO: Generate profile link -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'shipperProfile', params: {id:bid.shipper.id}}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                   <td>Coming soon</td>
                 </tr>
               </table>

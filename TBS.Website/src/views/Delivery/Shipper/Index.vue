@@ -43,12 +43,12 @@
                 </thead>
                 <tbody>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.pickupContact.name }}</router-link><br>
+                    Name: {{ post.pickupContact.name }}<br>
                     Phone Number: <a :href="'tel:' + post.pickupContact.phoneNumber">{{ post.pickupContact.phoneNumber }}</a><br>
                     Email: <a :href="'mailto:' + post.pickupContact.email">{{ post.pickupContact.email }}</a><br>
                   </td>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.dropoffContact.name }}</router-link><br>
+                    Name: {{ post.dropoffContact.name }}<br>
                     Phone Number: <a :href="'tel:' + post.dropoffContact.phoneNumber">{{ post.dropoffContact.phoneNumber }}</a><br>
                     Email: <a :href="'mailto:' + post.dropoffContact.email">{{ post.dropoffContact.email }}</a><br>
                   </td>
@@ -74,8 +74,7 @@
                   <th>Status</th>
                 </tr>
                 <tr>
-                  <!-- TODO: Generate router-link to profile page -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'carrierProfile', params: {id:bid.carrier.id}}" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
                   <td>{{ formatMoney(bid.bidAmount) }}</td>
                   <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 </tr>
