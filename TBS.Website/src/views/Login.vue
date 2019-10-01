@@ -68,7 +68,7 @@ export default {
 			}
 			this.$store.dispatch('authentication/login', { email: this.email, password: this.password })
 				.then(() => {
-					this.$router.push({ name: 'home', params: { viewPosts: true } })
+					this.$router.push({ name: 'home'})
 				})
 				.catch(() => {
 					this.error = true
