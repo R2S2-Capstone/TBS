@@ -33,7 +33,7 @@ namespace TBS.API.Controllers.v1.Profiles
 
         // GET: api/v1/Profiles/Carrier/{profileId}
         [HttpGet("{profileId}")]
-        public async Task<IActionResult> GetCarriersProfileAsync(string id) => Ok(new { result = await _service.GetProfileByIdAsync(Guid.Parse(id))});
+        public async Task<IActionResult> GetCarriersProfileAsync(string profileId) => Ok(new { result = await _service.GetProfileByIdAsync(Guid.Parse(profileId))});
 
         // POST: api/v1/Profiles/Carrier
         [HttpPost]

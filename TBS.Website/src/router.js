@@ -50,6 +50,11 @@ const FAQ = () => import('@/views/About/FAQ.vue')
 const AboutCarrier = () => import('@/views/About/Carrier.vue')
 const AboutShipper = () => import('@/views/About/Shipper.vue')
 
+//Profile
+const ProfileIndex = () => import('@/views/Profile/Index.vue')
+const CarrierProfile = () => import('@/views/Profile/Carrier.vue')
+const ShipperProfile = () => import('@/views/Profile/Shipper.vue')
+
 Vue.use(Router)
 
 // Add when it is required to be logged in to view this page
@@ -224,7 +229,6 @@ export default new Router({
       path: '/Login',
       name: 'login',
       component: Login,
-      props: true,
     },
     {
       path: '/Register',
@@ -246,6 +250,24 @@ export default new Router({
       path: '/ResetPassword/',
       name: 'resetPassword',
       component: ResetPassword
+    },
+    {
+      path: '/Profile',
+      component: ProfileIndex,
+      children: [
+        {
+          path: 'Carrier/:id?',
+          name: 'carrierProfile',
+          component: CarrierProfile,
+          props: true,
+        },
+        {
+          path: 'Shipper/:id?',
+          name: 'shipperProfile',
+          component: ShipperProfile,
+          props: true,
+        },
+      ]
     },
     {
       // All routes for shipper only pages
@@ -282,6 +304,7 @@ export default new Router({
           path: 'Bids/:id?',
           name: 'shipperManageBids',
           component: ShipperManageBids,
+          props: true,
           ...LoggedIn
         },
       ]
@@ -315,20 +338,22 @@ export default new Router({
           path: 'EditPost/:id?',
           name: 'carrierEditPost',
           component: CarrierModifyPost,
+          props: true,
           ...LoggedIn
         },
         {
           path: 'Bids/:id?',
           name: 'carrierManageBids',
           component: CarrierManageBids,
+          props: true,
           ...LoggedIn
         },
         {
           path: 'ViewBid/:id?',
           name: 'carrierViewBidDetails',
           component: CarrierViewBidDetails,
-          ...LoggedIn,
           props: true,
+          ...LoggedIn,
         },
       ]
     },

@@ -44,12 +44,12 @@
                 </thead>
                 <tbody>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link><br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a>
+                    Name: {{ post.pickupContact.name }}<br>
+                    Email: <a :href="'mailto:' + post.carrier.email">{{ post.pickupContact.email }}</a>
                   </td>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link><br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{post.carrier.email }}</a>
+                    Name: {{ post.dropoffContact.name }}<br>
+                    Email: <a :href="'mailto:' + post.carrier.email">{{post.dropoffContact.email }}</a>
                   </td>
                 </tbody>
               </table>
@@ -72,8 +72,7 @@
                 <th>Status</th>
               </thead>
               <tbody>
-                <!-- TODO: Generate router-link to profile page -->
-                <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
+                <td><router-link :to="{ name: 'shipperProfile', params: {id:bid.shipper.id}}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                 <td>{{ formatMoney(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
               </tbody>
