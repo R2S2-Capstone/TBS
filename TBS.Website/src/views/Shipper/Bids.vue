@@ -14,11 +14,11 @@
         <div class="row">
           <table class="table table-bordered table-hover text-center">
             <thead>
-              <th>Bidder</th>
-              <th>Amount</th>
-              <th>Rating</th>
-              <th>Status</th>
-              <th>Management</th>
+              <th style="width: 20%">Bidder</th>
+              <th style="width: 20%">Amount</th>
+              <th style="width: 20%">Rating</th>
+              <th style="width: 20%">Status</th>
+              <th style="width: 20%">Management</th>
             </thead>
             <tbody v-if="bids">
               <tr v-for="bid in bids" :key="bid.id">
@@ -28,7 +28,7 @@
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
                   <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
-                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.carrier.name)">Accept</button>
+                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white m-3" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.carrier.name)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDeclineBid(bid.id, bid.bidAmount, bid.carrier.name)">Decline</button>
                   </div>
                   <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>                       

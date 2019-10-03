@@ -26,31 +26,15 @@
             <div>
               <table class="table">
                 <thead>
-                  <th>Departure</th>
-                  <th>Destination</th>
-                  <th>Vehicle Information</th>
+                  <th style="width: 33.3%">Pickup</th>
+                  <th style="width: 33.3%">Dropoff</th>
+                  <th style="width: 33.3%">Vehicle Information</th>
                 </thead>
                 <tbody>
                   <td>{{ post.pickupLocation }} - {{ parseDate(post.pickupDate) }}</td>
                   <td>{{ post.dropoffLocation }} - {{ parseDate(post.dropoffDate) }}</td>
                   <td v-if="post.carrier.vehicle">{{ `${post.carrier.vehicle.year} ${post.carrier.vehicle.make} ${post.carrier.vehicle.model} (${parseTrailerType(post.carrier.vehicle.trailerType)})` }}</td>
                   <td v-else>Carrier vehicle not specified. <br>Trailer type: {{ `${parseTrailerType(post.trailerType)}` }}</td>
-                </tbody>
-              </table>
-              <table class="table">
-                <thead>
-                  <th>Pickup Contact</th>
-                  <th>Dropoff Contact</th>
-                </thead>
-                <tbody>
-                  <td>
-                    Name: {{ post.pickupContact.name }}<br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{ post.pickupContact.email }}</a>
-                  </td>
-                  <td>
-                    Name: {{ post.dropoffContact.name }}<br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{post.dropoffContact.email }}</a>
-                  </td>
                 </tbody>
               </table>
             </div>
@@ -67,9 +51,9 @@
             <p></p>
             <table class="table">
               <thead>
-                <th>Carrier</th>
-                <th>Bid Amount</th>
-                <th>Status</th>
+                <th style="width: 33.3%">Carrier</th>
+                <th style="width: 33.3%">Bid Amount</th>
+                <th style="width: 33.3%">Status</th>
               </thead>
               <tbody>
                 <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id }}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>

@@ -26,20 +26,20 @@
             <div>
               <table class="table">
                 <thead>
-                  <th>Departure</th>
-                  <th>Destination</th>
-                  <th>Vehicle Information</th>
+                  <th style="width: 33.3%">Departure</th>
+                  <th style="width: 33.3%">Destination</th>
+                  <th style="width: 33.3%">Vehicle Information</th>
                 </thead>
                 <tbody>
-                  <td>{{ formatAddress(post.pickupLocation) }} - {{ trimDate(post.pickupDate) }}</td>
-                  <td>{{ formatAddress(post.dropoffLocation) }} - {{ trimDate(post.dropoffDate) }}</td>
+                  <td>{{ formatAddress(post.pickupLocation) }} - {{ parseDate(post.pickupDate) }}</td>
+                  <td>{{ formatAddress(post.dropoffLocation) }} - {{ parseDate(post.dropoffDate) }}</td>
                   <td>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</td>
                 </tbody>
               </table>
               <table class="table">
                 <thead>
-                  <th>Pickup Contact</th>
-                  <th>Dropoff Contact</th>
+                  <th style="width: 50%">Pickup Contact</th>
+                  <th style="width: 50%">Dropoff Contact</th>
                 </thead>
                 <tbody>
                   <td>
@@ -69,12 +69,12 @@
             <div>
               <table class="table">
                 <tr>
-                  <th>Carrier</th>
-                  <th>Bid Amount</th>
-                  <th>Status</th>
+                  <th style="width: 33.3%">Carrier</th>
+                  <th style="width: 33.3%">Bid Amount</th>
+                  <th style="width: 33.3%">Status</th>
                 </tr>
                 <tr>
-                  <td><router-link :to="{ name: 'carrierProfile', params: {id:bid.carrier.id}}" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'carrierProfile', params: { id:bid.carrier.id }}" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
                   <td>{{ formatMoney(bid.bidAmount) }}</td>
                   <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 </tr>
@@ -176,8 +176,8 @@ export default {
     parseTrailerType(type) {
       return postUtilities.parseTrailerType(type)
     },
-    trimDate(time) {
-      return postUtilities.trimDate(time)
+    parseDate(time) {
+      return postUtilities.parseDate(time)
     },
     formatAddress(address) {
       return postUtilities.formatAddress(address)

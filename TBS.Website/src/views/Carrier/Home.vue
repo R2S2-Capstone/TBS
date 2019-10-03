@@ -11,10 +11,10 @@
         <div class="row">
           <table class="table table-bordered table-hover text-center">
             <thead>
-              <th>Details</th>
-              <th>Status</th>
-              <th>Bids</th>
-              <th>Management</th>
+              <th style="width: 25%">Details</th>
+              <th style="width: 25%">Status</th>
+              <th style="width: 25%">Bids</th>
+              <th style="width: 25%">Management</th>
             </thead>
             <tbody v-if="posts">
               <tr v-for="post in posts" :key="post.id">

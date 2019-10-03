@@ -16,9 +16,9 @@
             <div class="col-12">
               <table class="table">
                 <tr>
-                  <th></th>
-                  <th>Address</th>
-                  <th>Date</th>
+                  <th style="width: 33.3%"></th>
+                  <th style="width: 33.3%">Address</th>
+                  <th style="width: 33.3%">Date</th>
                 </tr>
                 <tr>
                   <th>Pickup In: </th>
