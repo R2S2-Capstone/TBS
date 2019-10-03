@@ -72,7 +72,7 @@
                   <th style="width: 33.3%">Shipper Email</th>
                 </tr>
                 <tr>
-                  <td><router-link :to="{ name: 'shipperProfile', params: {id:post.shipper.id}}" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
                   <td>Coming Soon..</td>
                   <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
                 </tr>
@@ -96,7 +96,6 @@
                 </tr>
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
-                  <!-- TODO: Money formatting -->
                   <td>{{ formatMoney(post.startingBid) }}</td>
                   <td>Coming Soon..</td>
                   <td>Coming Soon..</td>

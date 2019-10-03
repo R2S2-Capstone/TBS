@@ -72,7 +72,7 @@
                 <th>Status</th>
               </thead>
               <tbody>
-                <td><router-link :to="{ name: 'shipperProfile', params: {id:bid.shipper.id}}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
+                <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id }}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                 <td>{{ formatMoney(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
               </tbody>

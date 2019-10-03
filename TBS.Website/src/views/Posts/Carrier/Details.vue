@@ -64,13 +64,11 @@
                 <div class="col-12">
                   <table class="table">
                     <tr>
-                      <!-- <th></th> -->
                       <th style="width: 25%">Carrier Vehicle</th>
                       <th style="width: 25%">Spaces Available</th>
                       <th style="width: 25%">Trailer Type</th>
                     </tr>
                     <tr>
-                      <!-- <th>Vehicle: </th> -->
                       <td>Coming soon</td> 
                       <td>{{ post.spacesAvailable }}</td>
                       <td>{{ parseTrailerType(post.trailerType) }}</td>
@@ -97,7 +95,6 @@
                 </tr>
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
-                  <!-- TODO: Money formatting -->
                   <td>{{ formatMoney(post.startingBid) }}</td>
                   <td>Coming Soon..</td>
                   <td>Coming Soon..</td>
@@ -381,6 +378,11 @@ export default {
             this.parseDropoffLocationAddress(dropoffLocation.getPlace().address_components)
           })
         }, 1) // delay for one millisecond so the DOM can be updated
+        this.$store.dispatch('profiles/getMyProfile')
+        .then((response) => {
+          this.bidPost.dropoffLocation = response.data.result.company.address
+          this.bidPost.dropoffLocation.id = undefined
+        })
       }
     }
   },

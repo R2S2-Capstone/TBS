@@ -7,70 +7,67 @@
         <h6 @click="$router.go(-1)" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Click here to return</h6>
       </div>
     </div>
-    <div>
-      <div class="row pt-3 text-center">
-        <div class="col-12">
-          <h3>{{profile.name}}</h3>
-        </div>
+    <div class="row pt-3 text-center">
+      <div class="col-12">
+        <h3>{{profile.name}}</h3>
       </div>
-      <div class="row pt-3 text-center">
-        <div class="col-12 background">
-          <div class="row pt-3">
-            <div class="col-12">
-              <table class="table">
-                <tr>
-                  <th style="width: 50%">Email</th>
-                  <th style="width: 50%">Dealer Number</th>
-                </tr>
-                <tr>
-                  <td><a :href="'mailto:' + profile.email">{{profile.email}}</a></td> 
-                  <td>{{profile.dealerNumber}}</td>
-                </tr>
-              </table>
-            </div>
+    </div>
+    <div class="row pt-3 text-center">
+      <div class="col-12 background">
+        <div class="row pt-3">
+          <div class="col-12">
+            <table class="table">
+              <tr>
+                <th style="width: 50%">Email</th>
+                <th style="width: 50%">Dealer Number</th>
+              </tr>
+              <tr>
+                <td><a :href="'mailto:' + profile.email">{{ profile.email }}</a></td> 
+                <td>{{ profile.dealerNumber }}</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
-      <div class="row pt-3 text-center">
-        <div class="col-12">
-          <h3>{{profile.company.name}}</h3>
-          <h6>{{formatAddress(profile.company.address)}}</h6>
-        </div>
+    </div>
+    <div class="row pt-3 text-center">
+      <div class="col-12">
+        <h3>{{ profile.company.name }}</h3>
+        <h6>{{ formatAddress(profile.company.address) }}</h6>
       </div>
-      <div class="row pt-3 text-center">
-            <div class="col-12 background">
-              <div class="row pt-3">
-                <div class="col-12">
-                  <table class="table">
-                    <tr>
-                      <!-- <th></th> -->
-                      <th style="width: 33.3%"></th>
-                      <th style="width: 33.3%">Company Email</th>
-                      <th style="width: 33.3%">Company Phone</th>
-                    </tr>
-                    <tr>
-                      <td>{{profile.company.contact.name}}</td> 
-                      <td><a :href="'mailto:' + profile.company.contact.email">{{profile.company.contact.email}}</a></td> 
-                      <td><a :href="'tel:' + profile.company.contact.phoneNumber">{{profile.company.contact.phoneNumber}}</a></td> 
-                    </tr>
-                  </table>
-                </div>
+    </div>
+    <div class="row pt-3 text-center">
+      <div class="col-12 background">
+        <div class="row pt-3">
+          <div class="col-12">
+            <table class="table">
+              <tr>
+                <th style="width: 33.3%"></th>
+                <th style="width: 33.3%">Company Email</th>
+                <th style="width: 33.3%">Company Phone</th>
+              </tr>
+              <tr>
+                <td>{{ profile.company.contact.name }}</td> 
+                <td><a :href="'mailto:' + profile.company.contact.email">{{ profile.company.contact.email }}</a></td> 
+                <td><a :href="'tel:' + profile.company.contact.phoneNumber">{{ profile.company.contact.phoneNumber }}</a></td> 
+              </tr>
+            </table>
           </div>
         </div>
       </div>
-      <div class="row pt-3 text-center">
-        <div class="col-12">
-          <h3>Reviews</h3>
-        </div>     
-      </div>
-      <div class="row pt-3">
-        <div class="col-12 background">
-          <div class="row pt-3">
-            <div class="col-12" v-for="(review, index) in reviews" :key="index">
-              <p>{{review.rating}}</p>
-              <p>{{review.carrier.name}} | {{review.date}}</p>
-              <p>{{review.comment}}</p>
-            </div>
+    </div>
+    <div class="row pt-3 text-center">
+      <div class="col-12">
+        <h3>Reviews</h3>
+      </div>     
+    </div>
+    <div class="row pt-3">
+      <div class="col-12 background">
+        <div class="row pt-3">
+          <div class="col-12" v-for="(review, index) in reviews" :key="index">
+            <p>{{ review.rating }}</p>
+            <p>{{ review.carrier.name }} | {{ review.date }}</p>
+            <p>{{ review.comment }}</p>
           </div>
         </div>
       </div>

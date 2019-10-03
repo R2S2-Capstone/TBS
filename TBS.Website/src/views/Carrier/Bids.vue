@@ -21,7 +21,7 @@
             </thead>
             <tbody v-if="bids">
               <tr v-for="bid in bids" :key="bid.id">
-                <td>{{ bid.shipper.name }}</td>
+                <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
                 <td>{{ format(bid.bidAmount) }}</td>
                 <td>COMING SOON <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>

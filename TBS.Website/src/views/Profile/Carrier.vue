@@ -38,23 +38,22 @@
         </div>
       </div>
       <div class="row pt-3 text-center">
-            <div class="col-12 background">
-              <div class="row pt-3">
-                <div class="col-12">
-                  <table class="table">
-                    <tr>
-                      <!-- <th></th> -->
-                      <th style="width: 33.3%"></th>
-                      <th style="width: 33.3%">Company Email</th>
-                      <th style="width: 33.3%">Company Phone</th>
-                    </tr>
-                    <tr>
-                      <td>{{profile.company.contact.name}}</td> 
-                      <td><a :href="'mailto:' + profile.company.contact.email">{{profile.company.contact.email}}</a></td> 
-                      <td><a :href="'tel:' + profile.company.contact.phoneNumber">{{profile.company.contact.phoneNumber}}</a></td> 
-                    </tr>
-                  </table>
-                </div>
+        <div class="col-12 background">
+          <div class="row pt-3">
+            <div class="col-12">
+              <table class="table">
+                <tr>
+                  <th style="width: 33.3%"></th>
+                  <th style="width: 33.3%">Company Email</th>
+                  <th style="width: 33.3%">Company Phone</th>
+                </tr>
+                <tr>
+                  <td>{{ profile.company.contact.name }}</td> 
+                  <td><a :href="'mailto:' + profile.company.contact.email">{{profile.company.contact.email}}</a></td> 
+                  <td><a :href="'tel:' + profile.company.contact.phoneNumber">{{profile.company.contact.phoneNumber}}</a></td> 
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -67,9 +66,9 @@
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12" v-for="(review, index) in reviews" :key="index">
-              <p>{{review.rating}}</p>
-              <p>{{review.shipper.name}} | {{review.date}}</p>
-              <p>{{review.comment}}</p>
+              <p>{{ review.rating }}</p>
+              <p>{{ review.shipper.name }} | {{ review.date }}</p>
+              <p>{{ review.comment }}</p>
             </div>
           </div>
         </div>
