@@ -18,6 +18,7 @@ namespace TBS.Services.Posts
     {
         private readonly DatabaseContext _context;
         private readonly ILogger<CarrierPostService> _logger;
+        
 
 
         public CarrierPostService(DatabaseContext databaseContext, ILogger<CarrierPostService> logger)
@@ -68,19 +69,23 @@ namespace TBS.Services.Posts
             return carrierPost;
         }
 
-          public async Task<PaginatedCarrierPosts> SearchAllActivePostsAsync(SearchModel request, PaginationModel model)
+       
+
+        public async Task<PaginatedCarrierPosts> SearchAllActivePostsAsync(SearchModel request, PaginationModel model)
         {
             var filteredPosts = await _context.CarrierPosts
                 .Where(p => p.PostStatus == PostStatus.Open)
-                .Where(p => p.PickupDate == DateTime.Parse("10/10/1000") || p.PickupDate == request.PickupDate)
-                .Where(p => p.DropoffDate == DateTime.Parse("10/10/1000") || p.DropoffDate == request.dropOffDate)
-                .Where(p => p.PickupLocation == null || p.PickupLocation == request.PickupLocation)
-                .Where(p => p.DropoffLocation == null || p.DropoffLocation == request.dropOffLocation)
+                .Where(p => request.pickupDate == DateTime.Parse("10/10/1000") || DateTime.Compare(p.PickupDate, request.pickupDate) >= 0)
+                .Where(p => request.dropOffDate == DateTime.Parse("10/10/1000") || DateTime.Compare(p.DropoffDate, request.dropOffDate) <= 0)
+                .Where(p => request.pickupCity == "" || (p.PickupLocation.Contains(request.pickupCity)))
+                .Where(p => request.dropoffCity == "" || p.DropoffLocation.Contains(request.dropoffCity))
                 .ToListAsync();
             model.Count = filteredPosts.Count();
+            Console.WriteLine(model.Count);
             var paginatedPosts = filteredPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
+         
             return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
 
         }

@@ -11,6 +11,7 @@ using TBS.Data.Models;
 using TBS.Data.Models.Posts;
 using TBS.Data.Models.Posts.Response;
 using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Models.Posts.Carrier;
 
 namespace TBS.Services.Post
 {
@@ -79,6 +80,28 @@ namespace TBS.Services.Post
             }
 
             return shipperPost;
+        }
+
+        public async Task<PaginatedShipperPosts> SearchAllActivePostsAsync(SearchModel request, PaginationModel model)
+        {
+            var filteredPosts = await _context.ShipperPosts
+                .Include(p => p.Vehicle)
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
+                .Where(p => p.PostStatus == PostStatus.Open)
+                .Where(p => request.pickupDate == DateTime.Parse("10/10/1000") || DateTime.Compare(p.PickupDate, request.pickupDate) >= 0)
+                .Where(p => request.dropOffDate == DateTime.Parse("10/10/1000") || DateTime.Compare(p.DropoffDate, request.dropOffDate) <= 0)
+                .Where(p => request.pickupCity == "" || p.PickupLocation.City == request.pickupCity)
+                .Where(p => request.dropoffCity == "" ||  p.DropoffLocation.City == request.dropoffCity)
+                .ToListAsync();
+            model.Count = filteredPosts.Count();
+            Console.WriteLine(model.Count);
+            var paginatedPosts = filteredPosts
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize).ToArray();
+
+            return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
+
         }
 
         public async Task<bool> CreatePostAsync(string userFirebaseId, ShipperPost post)

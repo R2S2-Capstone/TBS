@@ -14,6 +14,10 @@ namespace TBS.Data.Interfaces.Posts
 
         Task<CarrierPost> GetPostByIdAsync(Guid postId);
 
+       
+
+        Task<PaginatedCarrierPosts> SearchAllActivePostsAsync(SearchModel request, PaginationModel model);
+
         Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post);
 
         Task<bool> UpdatePostAsync(Guid id, CarrierPost post);
