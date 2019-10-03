@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.0.7 (October 03, 2019)
+#### Features:
+- Carrier/Shipper Profiles
+#### Enhancements:
+ - Redirects to new page after registration
+#### Bug Fixes:
+ - No longer redirects to homepage after invalid login
+
+---
 ## v0.0.6 (September 24, 2019)
 #### Features:
 - Using Google's AutoComplete Places API for all address inputs
