@@ -24,12 +24,12 @@
                 <tr>
                   <th>Pickup In: </th>
                   <td>{{ post.pickupLocation }}</td>
-                  <td>{{ `${parseDate(post.pickupDate)} ${parseTime(post.pickupDate)}` }}</td>
+                  <td>{{ `${parseDate(post.pickupDate)}` }}</td>
                 </tr>
                 <tr>
                   <th>Dropoff To: </th>
                   <td>{{ post.dropoffLocation }}</td>
-                  <td>{{ `${parseDate(post.dropoffDate)} ${parseTime(post.dropoffDate)}` }}</td>
+                  <td>{{ `${parseDate(post.dropoffDate)}` }}</td>
                 </tr>
               </table>
             </div>
@@ -106,7 +106,7 @@
             <div v-if="toShowModal" class ="col-12">
               <div slot="description">
                 Please enter your bid amount
-                <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                <TextInput v-model="bidAmount" placeHolder="Bid Amount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                 
                 <div class="row">
                   <div class="col-12 pt-2">
