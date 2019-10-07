@@ -189,7 +189,7 @@ export default new Router({
     {
       // Default route for anyone who is not logged in, it contains a lot of information
       // regarding the website
-      path: '/home',
+      path: '/Home',
       name: 'homepage',
       component: Home,
       ...NotLoggedIn

@@ -65,16 +65,16 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3 text-center">
-      <div class="col-12 background pt-3 pb-3">
-        <h4>Delivery Options</h4>
-        <hr>
-        <div class="row">
-          <div class="col-12">
-            <p></p>
-            <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
-            <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
-            <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
+      <div class="col-12 pt-3 pb-3">
+        <div class="fixed-bottom pb-btn text-center">
+          <div v-if="accountType == 'carrier'">
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="sendReminder()">Send Reminder</button>
+          </div>
+          <div v-else>
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
           </div>
         </div>
       </div>
@@ -134,6 +134,23 @@ export default {
             type: 'success',
             title: 'Updated',
             text: 'Bid has successfully been updated!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
+    },
+    sendReminder() {
+      this.$store.dispatch('bids/sendReminder', { type: 'carrier', bidId: this.bid.id })
+        .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Completed',
+            text: 'A reminder has been sent!',
           })
         })
         .catch(() => {
@@ -244,6 +261,18 @@ hr {
     &:after {
       background-color: colour(colourPrimary);
     }
+  }
+}
+
+.pb-btn {
+  @include  mobile {
+    padding-bottom: 125px;
+  }
+  @include tablet {
+    padding-bottom: 115px;
+  }
+  @include desktop {
+    padding-bottom: 115px;
   }
 }
 </style>

@@ -89,16 +89,14 @@
             <div class="col-12">
               <table class="table">
                 <tr>
-                  <th style="width: 25%">Date Posted</th>
-                  <th style="width: 25%">Starting Bid</th>
-                  <th style="width: 25%">Highest Bid</th>
-                  <th style="width: 25%">Current Bid</th>
+                  <th style="width: 33.3%">Date Posted</th>
+                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Lowest Bid</th>
                 </tr>
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
                   <td>{{ formatMoney(post.startingBid) }}</td>
-                  <td>Coming Soon..</td>
-                  <td>Coming Soon..</td>
+                  <td>{{ lowestBid == null ? 'No bids' : formatMoney(lowestBid) }}</td>
                 </tr>
               </table>
               <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3">
@@ -140,6 +138,7 @@ export default {
   data() {
     return {
       post: null,
+      lowestBid: null,
       bidAmount: '',
       error: false,
       bidError: false,
@@ -154,6 +153,15 @@ export default {
           this.error = false
           this.post = response.data.result
           this.bidAmount = this.post.startingBid.toString()
+          if (this.post.bids.length != 0) {
+            let min = this.post.bids[0].bidAmount, max = this.post.bids[0].bidAmount;
+            for (let i = 1, len = this.post.bids.length; i < len; i++) {
+              let v = this.post.bids[i].bidAmount;
+              min = (v < min) ? v : min;
+              max = (v > max) ? v : max;
+            }
+            this.lowestBid = min
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -192,6 +200,7 @@ export default {
             title: 'Successfully bid',
             text: 'Bid has successfully been posted!',
           })
+          this.getPostById()
         })
         .catch(() => {
           this.showModal = false

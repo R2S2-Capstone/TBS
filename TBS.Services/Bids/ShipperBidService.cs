@@ -230,5 +230,22 @@ namespace TBS.Services.Bids
                 return await Task.FromResult(true);
             }
         }
+
+        public async Task<bool> SendReminderAsync(Guid id)
+        {
+            var bid = await GetBidByIdAsync(id);
+            await _emailService.SendEmailAsync(
+                bid.Post.Shipper.Name,
+                bid.Post.Shipper.Email,
+                $"REMINDER: Please confirm your delivery ({bid.Post.Vehicle.Year} {bid.Post.Vehicle.Make} {bid.Post.Vehicle.Model})",
+                $"Your vehicle has been delivered. Please confirm your delivery!<br>" +
+                $"Click <a href='{_configuration["URL"]}/Delivery/Shipper/{bid.Post.Id}/{bid.Id}'>here</a> to confirm delivery<br>" +
+                "Thanks,<br>" +
+                "TBS Inc."
+            );
+            _logger.LogInformation($"Shipper Bid: Reminder has been sent for bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}).");
+
+            return await Task.FromResult(true);
+        }
     }
 }
