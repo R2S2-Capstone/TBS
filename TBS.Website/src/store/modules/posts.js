@@ -41,7 +41,7 @@ const posts = {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.count}`,
+          url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.pageSize}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {

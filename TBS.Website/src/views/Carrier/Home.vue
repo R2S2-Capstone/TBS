@@ -171,7 +171,7 @@ export default {
         })
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: 5 })
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, pageSize: 5 })
         .then((response) => {
           this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts
@@ -186,7 +186,7 @@ export default {
         })
     },
     fetchBids() {
-      this.$store.dispatch('bids/getMyBids', { type: 'shipper', currentPage: this.bidPage, count: 5 })
+      this.$store.dispatch('bids/getMyBids', { type: 'shipper', currentPage: this.bidPage, pageSize: 5 })
         .then((response) => {
           this.bidPageCount = response.data.result.paginationModel.totalPages
           this.bids = response.data.result.bids

@@ -46,10 +46,10 @@
               <li v-for="(page, index) in  postPageCount" :key="index" class="page-item" :class="page == currentPostPage ? 'active' : ''">
                 <span class="page-link" @click="setPostPage(page)">{{ page }}</span>
               </li>
-              <li class="page-item" :class="currentPostPage == postPageCount || bidPageCount <= 1 ? 'disabled' : ''">
+              <li class="page-item" :class="currentPostPage == postPageCount || postPageCount <= 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(postPageCount)">Last</span>
               </li>
-              <li class="page-item" :class="currentPostPage == postPageCount || bidPageCount <= 1 ? 'disabled' : ''">
+              <li class="page-item" :class="currentPostPage == postPageCount || postPageCount <= 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(currentPostPage+1)">Next</span>
               </li>
             </ul>
@@ -171,8 +171,9 @@ export default {
         })
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: 5 })
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, pageSize: 5 })
         .then((response) => {
+          console.log(response)
           this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts
         })
@@ -186,7 +187,7 @@ export default {
         })
     },
     fetchBids() {
-      this.$store.dispatch('bids/getMyBids', { type: 'carrier', currentPage: this.bidPage, count: 5 })
+      this.$store.dispatch('bids/getMyBids', { type: 'carrier', currentPage: this.bidPage, pageSize: 5 })
         .then((response) => {
           this.bidPageCount = response.data.result.paginationModel.totalPages
           this.bids = response.data.result.bids
