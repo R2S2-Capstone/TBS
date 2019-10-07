@@ -84,7 +84,7 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3 text-center">
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
       <div class="col-12 pt-3 pb-3">
         <div class="fixed-bottom pb-btn text-center">
           <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>

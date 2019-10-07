@@ -88,16 +88,14 @@
             <div class="col-12">
               <table class="table">
                 <tr>
-                  <th style="width: 25%">Date Posted</th>
-                  <th style="width: 25%">Starting Bid</th>
-                  <th style="width: 25%">Highest Bid</th>
-                  <th style="width: 25%">Current Bid</th>
+                  <th style="width: 33.3%">Date Posted</th>
+                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Highest Bid</th>
                 </tr>
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
                   <td>{{ formatMoney(post.startingBid) }}</td>
-                  <td>Coming Soon..</td>
-                  <td>Coming Soon..</td>
+                  <td>{{ highestBid == null ? 'No bids' : formatMoney(highestBid) }}</td>
                 </tr>
               </table>
             </div>
@@ -227,6 +225,7 @@ export default {
   data() {
     return {
       post: {},
+      highestBid: null,
       bidPost: {
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
@@ -268,6 +267,15 @@ export default {
           this.error = false
           this.post = response.data.result
           this.bidAmount = this.post.startingBid.toString()
+          if (this.post.bids.length != 0) {
+            let min = this.post.bids[0].bidAmount, max = this.post.bids[0].bidAmount;
+            for (let i = 1, len = this.post.bids.length; i < len; i++) {
+              let v = this.post.bids[i].bidAmount;
+              min = (v < min) ? v : min;
+              max = (v > max) ? v : max;
+            }
+            this.highestBid = max
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -306,6 +314,7 @@ export default {
             title: 'Successfully bid',
             text: 'Bid has successfully been posted!',
           })
+          this.getPostById()
         })
         .catch(() => {
           this.toShowModal = false
