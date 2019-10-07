@@ -28,7 +28,7 @@
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
                   <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
-                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white m-3" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.carrier.name)">Accept</button>
+                    <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white m-1" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.carrier.name)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDeclineBid(bid.id, bid.bidAmount, bid.carrier.name)">Decline</button>
                   </div>
                   <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Delivery</router-link>                       
@@ -36,23 +36,6 @@
               </tr>
             </tbody>
           </table>
-          <ul class="pagination">
-            <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
-              <span class="page-link" @click="setBidPage(currentBidPage-1)">Previous</span>
-            </li>
-            <li class="page-item" :class="currentBidPage == 1 ? 'disabled' : ''">
-              <span class="page-link" @click="setBidPage(1)">First</span>
-            </li>
-            <li v-for="(page, index) in  bidPageCount" :key="index" class="page-item" :class="page == currentBidPage ? 'active' : ''">
-              <span class="page-link" @click="setBidPage(page)">{{ page }}</span>
-            </li>
-            <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
-              <span class="page-link" @click="setBidPage(bidPageCount)">Last</span>
-            </li>
-            <li class="page-item" :class="currentBidPage == bidPageCount || bidPageCount <= 1 ? 'disabled' : ''">
-              <span class="page-link" @click="setBidPage(currentBidPage+1)">Next</span>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -85,8 +68,8 @@ export default {
     }
   },
   methods: {
-      confirmAcceptBid(bidId, bidAmount, bidFrom) {
-        Swal.fire({
+    confirmAcceptBid(bidId, bidAmount, bidFrom) {
+      Swal.fire({
         title: 'Are you sure?',
         text: `Are you sure you want to accept this bid for $${bidAmount} from ${bidFrom}?`,
         type: 'info',
@@ -109,6 +92,7 @@ export default {
             title: 'Accepted',
             text: 'Bid has successfully been accepted!',
           })
+          this.fetchPost() // force refresh the page
         })
         .catch(() => {
           Swal.fire({
@@ -142,6 +126,7 @@ export default {
             title: 'Declined',
             text: 'Bid has successfully been declined!',
           })
+          this.fetchPost() // force refresh the page
         })
         .catch(() => {
           Swal.fire({
