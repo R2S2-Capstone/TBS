@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -18,12 +19,14 @@ namespace TBS.Services.Bids
     {
         private readonly DatabaseContext _context;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<ShipperBidService> _logger;
 
-        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService, ILogger<ShipperBidService> logger)
+        public ShipperBidService(DatabaseContext databaseContext, IEmailService emailService, IConfiguration configuration, ILogger<ShipperBidService> logger)
         {
             _context = databaseContext;
             _emailService = emailService;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -86,12 +89,13 @@ namespace TBS.Services.Bids
             await _context.ShipperBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 
-            //TODO: Add a link and make email prettier
+            //TODO: Make email prettier
             await _emailService.SendEmailAsync(
                 request.Bid.Post.Shipper.Name,
                 request.Bid.Post.Shipper.Email,
                 $"New bid placed on {request.Bid.Post.PickupLocation.City} -> {request.Bid.Post.DropoffLocation.City}",
-                $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Carrier.Name}<br>" +
+                $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Carrier.Name}.<br>" +
+                $"To view it click <a href='{_configuration["URL"]}/Shipper/Bids/{request.Bid.Post.Id}'>here</a>" +
                 "Thanks,<br>" +
                 "TBS Inc."
             );
@@ -106,12 +110,15 @@ namespace TBS.Services.Bids
         {
             var bid = _context.ShipperBids
                 .Include(b => b.Post)
-                .ThenInclude(p => p.PickupLocation)
-                .Include(b => b.Post)
-                .ThenInclude(p => p.DropoffLocation)
+                .Include(b => b.Post.PickupLocation)
+                .Include(b => b.Post.DropoffLocation)
+                .Include(b => b.Post.Shipper)
+                .Include(b => b.Post.Vehicle)
                 .Include(b => b.Carrier)
                 .First(p => p.Id == request.BidId);
-            if (bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
+
+            // Make sure the post is not closed
+            if (bid.Post.PostStatus == Data.Models.Posts.PostStatus.Closed)
             {
                 throw new FailedToUpdateBidException("Post is no longer accepting bids");
             }
@@ -119,30 +126,92 @@ namespace TBS.Services.Bids
             {
                 bid.BidStatus = request.Status;
 
+                _context.ShipperBids.Update(bid);
+
                 // A shipper post can only have one accepted bid so make sure it is moved into the next state
-                if (bid.BidStatus == Data.Models.Bids.BidStatus.Approved)
+                if (request.Status == Data.Models.Bids.BidStatus.PendingDelivery)
                 {
                     bid.Post.PostStatus = Data.Models.Posts.PostStatus.PendingDelivery;
-                    //TODO: Add a link and make email prettier
+                    //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         bid.Carrier.Name,
                         bid.Carrier.Email,
                         $"Bid has been accepted on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
                         $"Your bid has been accepted!<br>" +
+                        $"View the delivery page <a href='{_configuration["URL"]}/Delivery/Shipper/{bid.Post.Id}/{bid.Id}'>here</a>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
 
+                    // Save the changes so it's not considered a pending bid
+                    await _context.SaveChangesAsync();
+
+                    // Cancel all other bids
+                    var pendingBids = _context.ShipperBids
+                        .Include(b => b.Post)
+                        .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Open);
+
+                    foreach (var pendingBid in pendingBids)
+                    {
+                        pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
+                        _context.ShipperBids.Update(pendingBid);
+
+                        //TODO: Make email prettier
+                        await _emailService.SendEmailAsync(
+                            pendingBid.Carrier.Name,
+                            pendingBid.Carrier.Email,
+                            $"Bid automatically cancelled on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
+                            $"Your bid has automatically been cancelled as the shipper has accepted another bid.<br>" +
+                            "Thanks,<br>" +
+                            "TBS Inc."
+                        );
+
+                        _logger.LogInformation($"Shipper Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation.City} -> {pendingBid.Post.DropoffLocation.City} ({bid.Id}). From {pendingBid.Carrier.Name} for ${pendingBid.BidAmount}");
+                    }
+
                     _logger.LogInformation($"Shipper Bid: Successfully accepted a bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
                 }
+                else if (request.Status == Data.Models.Bids.BidStatus.PendingDeliveryApproval)
+                {
+                    //TODO: Make email prettier
+                    await _emailService.SendEmailAsync(
+                        bid.Post.Shipper.Name,
+                        bid.Post.Shipper.Email,
+                        $"{bid.Post.Vehicle.Year} {bid.Post.Vehicle.Make} {bid.Post.Vehicle.Model} has been delivered!",
+                        $"Your vehicle has been delivered.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Delivery/Shipper/{bid.Post.Id}/{bid.Id}'>here</a> to confirm delivery<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
+                    _logger.LogInformation($"Shipper Bid: Vehicle has been delivered for bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
+
+                }
+                else if (request.Status == Data.Models.Bids.BidStatus.Completed)
+                {
+                    bid.Post.PostStatus = Data.Models.Posts.PostStatus.Closed;
+                    //TODO: Make email prettier
+                    await _emailService.SendEmailAsync(
+                        bid.Carrier.Name,
+                        bid.Carrier.Email,
+                        $"{bid.Post.Vehicle.Year} {bid.Post.Vehicle.Make} {bid.Post.Vehicle.Model} delivery has been confirmed!",
+                        $"Your delivery has been confirmed.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Delivery/Shipper/{bid.Post.Id}/{bid.Id}'>here</a> to add a rating<br>" +
+                        "Thanks,<br>" +
+                        "TBS Inc."
+                    );
+                    _logger.LogInformation($"Shipper Bid: Delivery has been confirmed for bid on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Post.Shipper.Name} for ${bid.BidAmount}");
+
+                }
+                // Any other bid updates
                 else
                 {
-                    //TODO: Add a link and make email prettier
+                    //TODO: Make email prettier
                     await _emailService.SendEmailAsync(
                         bid.Carrier.Name,
                         bid.Carrier.Email,
                         $"Bid updated on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
                         $"Your bid has been updated to {bid.BidStatus.ToString().ToLower()}.<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Carrier'>here</a> and look under the 'Manage My Bids' section" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
@@ -150,41 +219,7 @@ namespace TBS.Services.Bids
                     _logger.LogInformation($"Shipper Bid: Updated bid to {bid.BidStatus} for {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City} ({bid.Id}). From {bid.Carrier.Name} for ${bid.BidAmount}");
                 }
 
-                _context.ShipperBids.Update(bid);
-
                 await _context.SaveChangesAsync();
-
-                // Cancel all other bids
-                var pendingBids = _context.ShipperBids
-                    .Include(b => b.Post)
-                    .Where(b => b.Post.Id == bid.Post.Id && b.BidStatus == Data.Models.Bids.BidStatus.Open);
-
-                foreach (var pendingBid in pendingBids)
-                {
-                    pendingBid.BidStatus = Data.Models.Bids.BidStatus.Declined;
-                    _context.ShipperBids.Update(pendingBid);
-
-                    //TODO: Add a link and make email prettier
-                    await _emailService.SendEmailAsync(
-                        pendingBid.Carrier.Name,
-                        pendingBid.Carrier.Email,
-                        $"Bid automatically cancelled on {bid.Post.PickupLocation.City} -> {bid.Post.DropoffLocation.City}",
-                        $"Your bid has automatically been cancelled as the shipper has accepted another bid.<br>" +
-                        "Thanks,<br>" +
-                        "TBS Inc."
-                    );
-
-                    _logger.LogInformation($"Shipper Bid: Automatically cancelled bid on {pendingBid.Post.PickupLocation.City} -> {pendingBid.Post.DropoffLocation.City} ({bid.Id}). From {pendingBid.Carrier.Name} for ${pendingBid.BidAmount}");
-                }
-
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw new FailedToUpdateBidException();
-                }
 
                 return await Task.FromResult(true);
             }

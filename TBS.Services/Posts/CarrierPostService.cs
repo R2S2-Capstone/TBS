@@ -59,6 +59,8 @@ namespace TBS.Services.Posts
                 .Include(p => p.Carrier)
                 .Include(p => p.Carrier.Company)
                 .Include(p => p.Carrier.Company.Contact)
+                .Include(p => p.Bids)
+                .ThenInclude(b => b.Shipper)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (carrierPost == null)

@@ -67,6 +67,8 @@ namespace TBS.Services.Post
                 .Include(p => p.Shipper.Company)
                 .Include(p => p.Shipper.Company.Address)
                 .Include(p => p.Shipper.Company.Contact)
+                .Include(p => p.Bids)
+                    .ThenInclude(b => b.Carrier)
                 .Include(p => p.Vehicle)
                 .Include(p => p.PickupLocation)
                 .Include(p => p.PickupContact)
