@@ -101,8 +101,7 @@
               </table>
               <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3">
                 <div slot="description">
-                  Please enter your bid amount
-                  <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                  <TextInput v-model="bidAmount" placeHolder="Bid Amount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                 </div>
                 <div slot="footer">
                   <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>

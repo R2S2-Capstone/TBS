@@ -22,10 +22,10 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <DateInput v-model="post.pickupDateValue" />
+                  <DateInput v-model="pickupDateValue" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TimeInput v-model="post.pickupTime" />
+                  <TimeInput v-model="pickupTime" />
                 </div>
               </div>
             </div>
@@ -43,10 +43,10 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <DateInput v-model="post.dropoffDateValue" />
+                  <DateInput v-model="dropoffDateValue" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <TimeInput v-model="post.dropoffTime" />
+                  <TimeInput v-model="dropoffTime" />
                 </div>
               </div>
             </div>
@@ -116,15 +116,15 @@ export default {
       error: false,
       deleteError: false,
       failedToLoadError: false,
+      pickupTime: new Date().getHours() + ":" + new Date().getMinutes(),
+      pickupDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
+      dropoffDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
+      dropoffTime: new Date().getHours() + ":" + new Date().getMinutes(),
       post: {
         pickupLocation: '',
         pickupDate: '', 
-        pickupDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
-        pickupTime: new Date().getHours() + ":" + new Date().getMinutes(),
         dropoffLocation: '',
         dropoffDate: '',
-        dropoffDateValue: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0],
-        dropoffTime: new Date().getHours() + ":" + new Date().getMinutes(),
         trailerType: 'Car Carrier',
         spacesAvailable: 1,
         startingBid: '',
@@ -151,8 +151,8 @@ export default {
       if (this.$v.$invalid) {
 				return
       }
-      this.post.pickupDate = `${this.post.pickupDateValue} ${this.post.pickupTime}`
-      this.post.dropoffDate = `${this.post.dropoffDateValue} ${this.post.dropoffTime}`
+      this.post.pickupDate = `${this.pickupDateValue} ${this.pickupTime}`
+      this.post.dropoffDate = `${this.dropoffDateValue} ${this.dropoffTime}`
       this.post.trailerType = this.post.trailerType.replace(' ', '')
       // Required as create post cannot have a postId
       if (this.type == 'Update') {
