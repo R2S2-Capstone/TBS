@@ -24,12 +24,12 @@
                 <tr>
                   <th>Pickup In: </th>
                   <td>{{ post.pickupLocation }}</td>
-                  <td>{{ `${parseDate(post.pickupDate)} ${parseTime(post.pickupDate)}` }}</td>
+                  <td>{{ `${parseDate(post.pickupDate)}` }}</td>
                 </tr>
                 <tr>
                   <th>Dropoff To: </th>
                   <td>{{ post.dropoffLocation }}</td>
-                  <td>{{ `${parseDate(post.dropoffDate)} ${parseTime(post.dropoffDate)}` }}</td>
+                  <td>{{ `${parseDate(post.dropoffDate)}` }}</td>
                 </tr>
               </table>
             </div>
@@ -49,8 +49,7 @@
                   <th style="width: 33.3%">Carrier Email</th>
                 </tr>
                 <tr>
-                  <!-- TODO: Generate profile link -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'carrierProfile', params: {id:post.carrier.id}}" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
                   <td>Coming Soon..</td>
                   <td><a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a></td>
                 </tr>
@@ -65,13 +64,11 @@
                 <div class="col-12">
                   <table class="table">
                     <tr>
-                      <!-- <th></th> -->
                       <th style="width: 25%">Carrier Vehicle</th>
                       <th style="width: 25%">Spaces Available</th>
                       <th style="width: 25%">Trailer Type</th>
                     </tr>
                     <tr>
-                      <!-- <th>Vehicle: </th> -->
                       <td>Coming soon</td> 
                       <td>{{ post.spacesAvailable }}</td>
                       <td>{{ parseTrailerType(post.trailerType) }}</td>
@@ -91,17 +88,14 @@
             <div class="col-12">
               <table class="table">
                 <tr>
-                  <th style="width: 25%">Date Posted</th>
-                  <th style="width: 25%">Starting Bid</th>
-                  <th style="width: 25%">Highest Bid</th>
-                  <th style="width: 25%">Current Bid</th>
+                  <th style="width: 33.3%">Date Posted</th>
+                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Highest Bid</th>
                 </tr>
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
-                  <!-- TODO: Money formatting -->
                   <td>{{ formatMoney(post.startingBid) }}</td>
-                  <td>Coming Soon..</td>
-                  <td>Coming Soon..</td>
+                  <td>{{ highestBid == null ? 'No bids' : formatMoney(highestBid) }}</td>
                 </tr>
               </table>
             </div>
@@ -109,8 +103,7 @@
           <div class="row pt-3 text-center">
             <div v-if="toShowModal" class ="col-12">
               <div slot="description">
-                Please enter your bid amount
-                <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                <TextInput v-model="bidAmount" placeHolder="Bid Amount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                 
                 <div class="row">
                   <div class="col-12 pt-2">
@@ -120,24 +113,23 @@
                   </div>
                   <div class="col-12">
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <TextInput v-model="bidPost.vehicle.make" placeHolder="Make" errorMessage="Please enter a vehicle make" :validator="$v.bidPost.vehicle.make"/>
                       </div>
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <TextInput v-model="bidPost.vehicle.model" placeHolder="Model" errorMessage="Please enter a vehicle model" :validator="$v.bidPost.vehicle.model"/>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                        <label>Year</label>
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <YearInput v-model="bidPost.vehicle.year" />
                       </div>
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <ConditionInput v-model="bidPost.vehicle.condition"/>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <TextInput v-model="bidPost.vehicle.vin" placeHolder="VIN" errorMessage="Please enter a valid vin" :validator="$v.bidPost.vehicle.vin"/>
                       </div>
                     </div>
@@ -153,7 +145,8 @@
                   <div class="col-12">
                     <div class="row">
                       <div class="col-12">
-                        <div class="form-label-group">
+                        <div class="form-label-group pt-2">
+                          <label>Address</label>
                           <input id="PickupAddress" v-model="bidPost.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" />
                           <p v-if="validPickupAddress == false" class="text-danger text-center">Please enter a valid pickup address</p>
                         </div>
@@ -161,8 +154,7 @@
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <label>Date</label>
-                        <DateInput v-model="bidPost.pickupDate" />
+                        <DateInput v-model="bidPost.pickupDate" class="pt-2" />
                       </div>
                     </div>
                   </div>
@@ -174,10 +166,11 @@
                     <hr>
                     <p></p>
                   </div>
-                  <div class="col-12 pb-5">
+                  <div class="col-12 pb-2">
                     <div class="row">
                       <div class="col-12">
-                        <div class="form-label-group">
+                        <div class="form-label-group pt-2">
+                          <label>Address</label>
                           <input id="DropoffAddress" v-model="bidPost.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff Address" />
                           <p v-if="validDropoffAddress == false" class="text-danger text-center">Please enter a valid dropoff address</p>
                         </div>
@@ -185,8 +178,7 @@
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <label>Date</label>
-                        <DateInput v-model="bidPost.dropoffDate" />
+                        <DateInput v-model="bidPost.dropoffDate" class="pt-2" />
                       </div>
                     </div>
                   </div>
@@ -231,6 +223,7 @@ export default {
   data() {
     return {
       post: {},
+      highestBid: null,
       bidPost: {
         vehicle: {
           year: new Date().getUTCFullYear().toString(),
@@ -272,6 +265,15 @@ export default {
           this.error = false
           this.post = response.data.result
           this.bidAmount = this.post.startingBid.toString()
+          if (this.post.bids.length != 0) {
+            let min = this.post.bids[0].bidAmount, max = this.post.bids[0].bidAmount;
+            for (let i = 1, len = this.post.bids.length; i < len; i++) {
+              let v = this.post.bids[i].bidAmount;
+              min = (v < min) ? v : min;
+              max = (v > max) ? v : max;
+            }
+            this.highestBid = max
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -310,6 +312,7 @@ export default {
             title: 'Successfully bid',
             text: 'Bid has successfully been posted!',
           })
+          this.getPostById()
         })
         .catch(() => {
           this.toShowModal = false
@@ -382,6 +385,11 @@ export default {
             this.parseDropoffLocationAddress(dropoffLocation.getPlace().address_components)
           })
         }, 1) // delay for one millisecond so the DOM can be updated
+        this.$store.dispatch('profiles/getMyProfile')
+        .then((response) => {
+          this.bidPost.dropoffLocation = response.data.result.company.address
+          this.bidPost.dropoffLocation.id = undefined
+        })
       }
     }
   },

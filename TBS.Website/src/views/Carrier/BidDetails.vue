@@ -69,8 +69,7 @@
                 <tr>
                   <td>{{ parseDate(bid.dateBidPlaced) }}</td>
                   <td>{{ formatMoney(bid.bidAmount) }}</td>
-                  <!-- TODO: Generate profile link -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id }}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                   <td>Coming soon</td>
                 </tr>
               </table>
@@ -83,50 +82,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-12">
-          <div class="row">
-            <div class="col-12">
-              <h4>Bid Status: {{ parseBidStatus(bid.bidStatus) }}</h4>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <hr>
-              <h5>Vehicle Information</h5>
-              <hr>
-              <p>Vehicle Make: {{ bid.vehicle.make }}</p>
-              <p>Vehicle Model: {{ bid.vehicle.model }}</p>
-              <p>Vehicle Year: {{ bid.vehicle.year }}</p>
-              <p>Vehicle Condition: {{ parseVehicleCondition(bid.vehicle.condition) }}</p>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12">
-              <hr>
-              <h5>Bid Details</h5>
-              <hr>
-              <p>Amount: {{ formatMoney(bid.bidAmount) }}</p>
-              <p>Bidder Name: {{ bid.shipper.name }}</p>
-              <p>Bidder Rating: COMING SOON <i class="fas fa-star"></i></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <hr>
-            <h5>Pickup Information</h5>
-            <hr>
-            <p>Pickup Location: {{ formatAddress(bid.pickupLocation) }}</p>
-            <p>Pickup Date: {{ parseDate(bid.pickupDate) }}</p>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-12">
-            <hr>
-            <h5>Dropoff Information</h5>
-            <hr>
-            <p></p>
-            <p>Dropoff Location: {{ formatAddress(bid.dropoffLocation) }}</p>
-            <p>Dropoff Date: {{ parseDate(bid.dropoffDate) }}</p>
-          </div>
-        </div> -->
-
-        <!--  -->
       </div>
     </div>
   </div>

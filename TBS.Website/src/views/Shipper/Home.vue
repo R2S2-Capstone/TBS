@@ -11,10 +11,10 @@
         <div class="row">
           <table class="table table-bordered table-hover text-center">
             <thead>
-              <th>Details</th>
-              <th>Status</th>
-              <th>Bids</th>
-              <th>Management</th>
+              <th style="width: 25%">Details</th>
+              <th style="width: 25%">Status</th>
+              <th style="width: 25%">Bids</th>
+              <th style="width: 25%">Management</th>
             </thead>
             <tbody>
               <tr v-for="post in posts" :key="post.id">
@@ -46,10 +46,10 @@
               <li v-for="(page, index) in  postPageCount" :key="index" class="page-item" :class="page == currentPostPage ? 'active' : ''">
                 <span class="page-link" @click="setPostPage(page)">{{ page }}</span>
               </li>
-              <li class="page-item" :class="currentPostPage == postPageCount || bidPageCount <= 1 ? 'disabled' : ''">
+              <li class="page-item" :class="currentPostPage == postPageCount || postPageCount <= 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(postPageCount)">Last</span>
               </li>
-              <li class="page-item" :class="currentPostPage == postPageCount || bidPageCount <= 1 ? 'disabled' : ''">
+              <li class="page-item" :class="currentPostPage == postPageCount || postPageCount <= 1 ? 'disabled' : ''">
                 <span class="page-link" @click="setPostPage(currentPostPage+1)">Next</span>
               </li>
             </ul>
@@ -68,10 +68,10 @@
         <div class="row">
           <table class="table table-bordered table-hover text-center">
             <thead>
-              <th>Address</th>
-              <th>Amount</th>
-              <th>Bid Status</th>
-              <th>Management</th>
+              <th style="width: 25%">Address</th>
+              <th style="width: 25%">Amount</th>
+              <th style="width: 25%">Bid Status</th>
+              <th style="width: 25%">Management</th>
             </thead>
             <tbody>
               <tr v-for="bid in bids" :key="bid.id">
@@ -80,7 +80,7 @@
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
                   <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmCancelBid(bid.id, bid.bidAmount)">Cancel</button>
-                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'carrierDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View</router-link>
+                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'carrierDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Delivery</router-link>
                 </td>
               </tr>
             </tbody>
@@ -171,7 +171,7 @@ export default {
         })
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, count: 5 })
+      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, pageSize: 5 })
         .then((response) => {
           this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts
@@ -186,7 +186,7 @@ export default {
         })
     },
     fetchBids() {
-      this.$store.dispatch('bids/getMyBids', { type: 'carrier', currentPage: this.bidPage, count: 5 })
+      this.$store.dispatch('bids/getMyBids', { type: 'carrier', currentPage: this.bidPage, pageSize: 5 })
         .then((response) => {
           this.bidPageCount = response.data.result.paginationModel.totalPages
           this.bids = response.data.result.bids

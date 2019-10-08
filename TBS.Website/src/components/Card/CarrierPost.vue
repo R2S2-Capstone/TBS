@@ -3,9 +3,9 @@
     <h4 class="title pt-3">{{ `Spaces Available: ${post.spacesAvailable}` }}</h4>
     <table class="table">
       <tr>
-        <th></th>
-        <th>City</th>
-        <th>Date</th>
+        <th style="width: 33.3%"></th>
+        <th style="width: 33.3%">City</th>
+        <th style="width: 33.3%">Date</th>
       </tr>
       <tr>
         <th>Pickup In: </th>

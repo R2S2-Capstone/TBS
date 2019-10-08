@@ -1,5 +1,6 @@
 <template>
   <div class="form-label-group text-center">
+    <label>Time</label>
     <input
       v-model="input"
       type="time" 

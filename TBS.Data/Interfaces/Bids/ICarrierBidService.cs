@@ -18,5 +18,7 @@ namespace TBS.Data.Interfaces.Bids
         Task<bool> UpdateBidAsync(UpdateBidRequest request);
 
         Task<bool> CreateBidAsync(string userFirebaseId, CarrierCreateBidRequest request);
+
+        Task<bool> SendReminderAsync(Guid id);
     }
 }

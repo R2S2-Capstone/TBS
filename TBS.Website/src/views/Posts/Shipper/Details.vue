@@ -16,9 +16,9 @@
             <div class="col-12">
               <table class="table">
                 <tr>
-                  <th></th>
-                  <th>Address</th>
-                  <th>Date</th>
+                  <th style="width: 33.3%"></th>
+                  <th style="width: 33.3%">Address</th>
+                  <th style="width: 33.3%">Date</th>
                 </tr>
                 <tr>
                   <th>Pickup In: </th>
@@ -72,8 +72,7 @@
                   <th style="width: 33.3%">Shipper Email</th>
                 </tr>
                 <tr>
-                  <!-- TODO: Generate profile link -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
+                  <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
                   <td>Coming Soon..</td>
                   <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
                 </tr>
@@ -90,23 +89,19 @@
             <div class="col-12">
               <table class="table">
                 <tr>
-                  <th style="width: 25%">Date Posted</th>
-                  <th style="width: 25%">Starting Bid</th>
-                  <th style="width: 25%">Highest Bid</th>
-                  <th style="width: 25%">Current Bid</th>
+                  <th style="width: 33.3%">Date Posted</th>
+                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Lowest Bid</th>
                 </tr>
                 <tr>
                   <td>{{ parseDate(post.datePosted) }}</td> 
-                  <!-- TODO: Money formatting -->
                   <td>{{ formatMoney(post.startingBid) }}</td>
-                  <td>Coming Soon..</td>
-                  <td>Coming Soon..</td>
+                  <td>{{ lowestBid == null ? 'No bids' : formatMoney(lowestBid) }}</td>
                 </tr>
               </table>
               <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3">
                 <div slot="description">
-                  Please enter your bid amount
-                  <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                  <TextInput v-model="bidAmount" placeHolder="Bid Amount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                 </div>
                 <div slot="footer">
                   <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
@@ -142,6 +137,7 @@ export default {
   data() {
     return {
       post: null,
+      lowestBid: null,
       bidAmount: '',
       error: false,
       bidError: false,
@@ -156,6 +152,15 @@ export default {
           this.error = false
           this.post = response.data.result
           this.bidAmount = this.post.startingBid.toString()
+          if (this.post.bids.length != 0) {
+            let min = this.post.bids[0].bidAmount, max = this.post.bids[0].bidAmount;
+            for (let i = 1, len = this.post.bids.length; i < len; i++) {
+              let v = this.post.bids[i].bidAmount;
+              min = (v < min) ? v : min;
+              max = (v > max) ? v : max;
+            }
+            this.lowestBid = min
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -194,6 +199,7 @@ export default {
             title: 'Successfully bid',
             text: 'Bid has successfully been posted!',
           })
+          this.getPostById()
         })
         .catch(() => {
           this.showModal = false

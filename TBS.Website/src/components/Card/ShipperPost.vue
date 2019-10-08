@@ -3,17 +3,17 @@
     <h4 class="title pt-3">{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h4>
     <table class="table">
       <tr>
-        <th scope="col"></th>
-        <th scope="col">City</th>
-        <th scope="col">Date</th>
+        <th style="width: 33.3%"></th>
+        <th style="width: 33.3%">City</th>
+        <th style="width: 33.3%">Date</th>
       </tr>
       <tr>
-        <th scope="row">Pickup In: </th>
+        <th>Pickup In: </th>
         <td>{{ formatAddress(post.pickupLocation) }}</td>
         <td>{{ parseDate(post.pickupDate) }}</td>
       </tr>
       <tr>
-        <th scope="row">Deliver To: </th>
+        <th>Deliver To: </th>
         <td>{{ formatAddress(post.dropoffLocation) }}</td>
         <td>{{ parseDate(post.dropoffDate) }}</td>
       </tr>

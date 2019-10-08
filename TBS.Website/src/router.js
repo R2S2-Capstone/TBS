@@ -8,7 +8,9 @@ const Error401 = () => import('@/views/Error/401.vue')
 const Error404 = () => import('@/views/Error/404.vue')
 
 const Login = () => import('@/views/Login.vue')
-const Register = () => import('@/views/Register.vue')
+const RegisterIndex = () => import('@/views/Register/Index.vue')
+const Register = () => import('@/views/Register/Register.vue')
+const RegisterConfirm = () => import('@/views/Register/Confirm.vue')
 const ResetPassword = () => import('@/views/ResetPassword.vue')
 
 // Shipper
@@ -47,6 +49,11 @@ const PrivacyPolicy = () => import('@/views/About/PrivacyPolicy.vue')
 const FAQ = () => import('@/views/About/FAQ.vue')
 const AboutCarrier = () => import('@/views/About/Carrier.vue')
 const AboutShipper = () => import('@/views/About/Shipper.vue')
+
+//Profile
+const ProfileIndex = () => import('@/views/Profile/Index.vue')
+const CarrierProfile = () => import('@/views/Profile/Carrier.vue')
+const ShipperProfile = () => import('@/views/Profile/Shipper.vue')
 
 Vue.use(Router)
 
@@ -97,7 +104,7 @@ const NotLoggedIn = {
 }
 
 // This will redirect to either the home page or view posts depending on if the user is logged in or not
-const CustomeHomePage = {
+const CustomHomePage = {
   beforeEnter: (to, from, next) => {
     const redirect = () => {
       const token = store.getters['authentication/getToken']
@@ -177,12 +184,12 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Index,
-      ...CustomeHomePage
+      ...CustomHomePage
     },
     {
       // Default route for anyone who is not logged in, it contains a lot of information
       // regarding the website
-      path: '/home',
+      path: '/Home',
       name: 'homepage',
       component: Home,
       ...NotLoggedIn
@@ -222,17 +229,45 @@ export default new Router({
       path: '/Login',
       name: 'login',
       component: Login,
-      props: true,
     },
     {
       path: '/Register',
-      name: 'register',
-      component: Register,
+      component: RegisterIndex,
+      children: [
+        {     
+          path: '',
+          name: 'register',
+          component: Register,
+        },
+        {     
+          path: 'Confirm',
+          name: 'registerConfirm',
+          component: RegisterConfirm,
+        },
+      ]
     },
     {
       path: '/ResetPassword/',
       name: 'resetPassword',
       component: ResetPassword
+    },
+    {
+      path: '/Profile',
+      component: ProfileIndex,
+      children: [
+        {
+          path: 'Carrier/:id?',
+          name: 'carrierProfile',
+          component: CarrierProfile,
+          props: true,
+        },
+        {
+          path: 'Shipper/:id?',
+          name: 'shipperProfile',
+          component: ShipperProfile,
+          props: true,
+        },
+      ]
     },
     {
       // All routes for shipper only pages
@@ -269,6 +304,7 @@ export default new Router({
           path: 'Bids/:id?',
           name: 'shipperManageBids',
           component: ShipperManageBids,
+          props: true,
           ...LoggedIn
         },
       ]
@@ -302,20 +338,22 @@ export default new Router({
           path: 'EditPost/:id?',
           name: 'carrierEditPost',
           component: CarrierModifyPost,
+          props: true,
           ...LoggedIn
         },
         {
           path: 'Bids/:id?',
           name: 'carrierManageBids',
           component: CarrierManageBids,
+          props: true,
           ...LoggedIn
         },
         {
           path: 'ViewBid/:id?',
           name: 'carrierViewBidDetails',
           component: CarrierViewBidDetails,
-          ...LoggedIn,
           props: true,
+          ...LoggedIn,
         },
       ]
     },

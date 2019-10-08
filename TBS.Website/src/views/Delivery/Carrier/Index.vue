@@ -26,31 +26,15 @@
             <div>
               <table class="table">
                 <thead>
-                  <th>Departure</th>
-                  <th>Destination</th>
-                  <th>Vehicle Information</th>
+                  <th style="width: 33.3%">Pickup</th>
+                  <th style="width: 33.3%">Dropoff</th>
+                  <th style="width: 33.3%">Vehicle Information</th>
                 </thead>
                 <tbody>
                   <td>{{ post.pickupLocation }} - {{ parseDate(post.pickupDate) }}</td>
                   <td>{{ post.dropoffLocation }} - {{ parseDate(post.dropoffDate) }}</td>
                   <td v-if="post.carrier.vehicle">{{ `${post.carrier.vehicle.year} ${post.carrier.vehicle.make} ${post.carrier.vehicle.model} (${parseTrailerType(post.carrier.vehicle.trailerType)})` }}</td>
                   <td v-else>Carrier vehicle not specified. <br>Trailer type: {{ `${parseTrailerType(post.trailerType)}` }}</td>
-                </tbody>
-              </table>
-              <table class="table">
-                <thead>
-                  <th>Pickup Contact</th>
-                  <th>Dropoff Contact</th>
-                </thead>
-                <tbody>
-                  <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link><br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a>
-                  </td>
-                  <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link><br>
-                    Email: <a :href="'mailto:' + post.carrier.email">{{post.carrier.email }}</a>
-                  </td>
                 </tbody>
               </table>
             </div>
@@ -67,13 +51,12 @@
             <p></p>
             <table class="table">
               <thead>
-                <th>Carrier</th>
-                <th>Bid Amount</th>
-                <th>Status</th>
+                <th style="width: 33.3%">Carrier</th>
+                <th style="width: 33.3%">Bid Amount</th>
+                <th style="width: 33.3%">Status</th>
               </thead>
               <tbody>
-                <!-- TODO: Generate router-link to profile page -->
-                <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
+                <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id }}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                 <td>{{ formatMoney(bid.bidAmount) }}</td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
               </tbody>
@@ -82,16 +65,16 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3 text-center">
-      <div class="col-12 background pt-3 pb-3">
-        <h4>Delivery Options</h4>
-        <hr>
-        <div class="row">
-          <div class="col-12">
-            <p></p>
-            <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
-            <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
-            <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
+      <div class="col-12 pt-3 pb-3">
+        <div class="fixed-bottom pb-btn text-center">
+          <div v-if="accountType == 'carrier'">
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="sendReminder()">Send Reminder</button>
+          </div>
+          <div v-else>
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
           </div>
         </div>
       </div>
@@ -151,6 +134,23 @@ export default {
             type: 'success',
             title: 'Updated',
             text: 'Bid has successfully been updated!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
+    },
+    sendReminder() {
+      this.$store.dispatch('bids/sendReminder', { type: 'carrier', bidId: this.bid.id })
+        .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Completed',
+            text: 'A reminder has been sent!',
           })
         })
         .catch(() => {
@@ -261,6 +261,18 @@ hr {
     &:after {
       background-color: colour(colourPrimary);
     }
+  }
+}
+
+.pb-btn {
+  @include  mobile {
+    padding-bottom: 125px;
+  }
+  @include tablet {
+    padding-bottom: 115px;
+  }
+  @include desktop {
+    padding-bottom: 115px;
   }
 }
 </style>
