@@ -279,7 +279,7 @@ namespace TBS.Services.Bids
                 bid.Shipper.Email,
                 $"REMINDER: Please confirm your delivery ({bid.Vehicle.Year} {bid.Vehicle.Make} {bid.Vehicle.Model})",
                 $"Your delivery has been confirmed. Please confirm your delivery!<br>" +
-                $"Click <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a> to add a rating<br>" +
+                $"Click <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a> confirm delivery<br>" +
                 "Thanks,<br>" +
                 "TBS Inc."
             );
