@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.0.8 (October 08, 2019)
+#### Features:
+ - Send reminder button for delivery
+#### Enhancements:
+ - Now showing highest/lowest bid
+ - Added labels to all inputs
+#### Bug Fixes:
+ - Fixed decline button
+ - Fixed pagination on 'My Board'
+ - Fixed autoloading of time on modify page
+
+---
+
 ## v0.0.7 (October 03, 2019)
 #### Features:
 - Carrier/Shipper Profiles
