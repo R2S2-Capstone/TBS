@@ -25,7 +25,6 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                  <label>Year</label>
                   <YearInput v-model="post.vehicle.year" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
@@ -46,6 +45,7 @@
             </div>
             <div class="col-12">
               <div class="form-label-group">
+                <label>Address</label>
                 <input id="PickupAddress" v-model="post.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" />
                 <p v-if="validPickupAddress == false" class="text-danger text-center">Please enter a valid pickup address</p>
               </div>
@@ -53,7 +53,6 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-12">
-                  <label>Date</label>
                   <DateInput v-model="post.pickupDate" />
                 </div>
               </div>
@@ -85,6 +84,7 @@
               <div class="row">
                 <div class="col-12">
                   <div class="form-label-group">
+                    <label>Address</label>
                     <input id="DropoffAddress" v-model="post.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff Address" />
                     <p v-if="validDropoffAddress == false" class="text-danger text-center">Please enter a valid dropoff address</p>
                   </div>
@@ -92,7 +92,6 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <label>Date</label>
                   <DateInput v-model="post.dropoffDate" />
                 </div>
               </div>

@@ -23,6 +23,7 @@
         <div class="row">
           <div class="col-12">
             <div class="form-label-group">
+              <label>Address</label>
               <input id="Address" v-model="profile.company.address.addressLine"  :class="{ 'is-invalid': validCompanyAddress == false }" type="text" class="form-control" placeholder="Company Address" >
               <p v-if="validCompanyAddress == false" class="text-danger text-center">Please enter a valid company address</p>
             </div>

@@ -1,5 +1,6 @@
 <template>
   <div class="form-label-group">
+    <label>Email Address</label>
     <input 
       v-model="input"
       @blur="validator.$touch()"
@@ -7,7 +8,7 @@
       type="text" 
       id="inputEmail" 
       class="form-control"
-      placeholder="Email address" 
+      placeholder="Email Address" 
       autofocus
     >
     <p v-if="validator.$error" class="text-danger text-center">Not a valid email address</p>

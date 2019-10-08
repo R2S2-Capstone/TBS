@@ -45,6 +45,7 @@
         <div class="row">
           <div class="col-12">
             <div class="form-label-group">
+              <label>Address</label>
               <input id="CompanyAddress" v-model="company.address.addressLine"  :class="{ 'is-invalid': validCompanyAddress == false }" type="text" class="form-control" placeholder="Company address" >
               <p v-if="validCompanyAddress == false" class="text-danger text-center">Please enter a valid company address</p>
             </div>

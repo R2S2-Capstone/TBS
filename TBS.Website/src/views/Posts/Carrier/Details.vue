@@ -103,7 +103,6 @@
           <div class="row pt-3 text-center">
             <div v-if="toShowModal" class ="col-12">
               <div slot="description">
-                Please enter your bid amount
                 <TextInput v-model="bidAmount" placeHolder="Bid Amount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
                 
                 <div class="row">
@@ -114,24 +113,23 @@
                   </div>
                   <div class="col-12">
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <TextInput v-model="bidPost.vehicle.make" placeHolder="Make" errorMessage="Please enter a vehicle make" :validator="$v.bidPost.vehicle.make"/>
                       </div>
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <TextInput v-model="bidPost.vehicle.model" placeHolder="Model" errorMessage="Please enter a vehicle model" :validator="$v.bidPost.vehicle.model"/>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12 form-group">
-                        <label>Year</label>
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <YearInput v-model="bidPost.vehicle.year" />
                       </div>
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <ConditionInput v-model="bidPost.vehicle.condition"/>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="col-lg-6 col-md-6 col-sm-12 pt-2">
                         <TextInput v-model="bidPost.vehicle.vin" placeHolder="VIN" errorMessage="Please enter a valid vin" :validator="$v.bidPost.vehicle.vin"/>
                       </div>
                     </div>
@@ -147,7 +145,8 @@
                   <div class="col-12">
                     <div class="row">
                       <div class="col-12">
-                        <div class="form-label-group">
+                        <div class="form-label-group pt-2">
+                          <label>Address</label>
                           <input id="PickupAddress" v-model="bidPost.pickupLocation.addressLine" :class="{ 'is-invalid': validPickupAddress == false }" type="text" class="form-control" placeholder="Pickup Address" />
                           <p v-if="validPickupAddress == false" class="text-danger text-center">Please enter a valid pickup address</p>
                         </div>
@@ -155,8 +154,7 @@
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <label>Date</label>
-                        <DateInput v-model="bidPost.pickupDate" />
+                        <DateInput v-model="bidPost.pickupDate" class="pt-2" />
                       </div>
                     </div>
                   </div>
@@ -168,10 +166,11 @@
                     <hr>
                     <p></p>
                   </div>
-                  <div class="col-12 pb-5">
+                  <div class="col-12 pb-2">
                     <div class="row">
                       <div class="col-12">
-                        <div class="form-label-group">
+                        <div class="form-label-group pt-2">
+                          <label>Address</label>
                           <input id="DropoffAddress" v-model="bidPost.dropoffLocation.addressLine"  :class="{ 'is-invalid': validDropoffAddress == false }" type="text" class="form-control" placeholder="Dropoff Address" />
                           <p v-if="validDropoffAddress == false" class="text-danger text-center">Please enter a valid dropoff address</p>
                         </div>
@@ -179,8 +178,7 @@
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <label>Date</label>
-                        <DateInput v-model="bidPost.dropoffDate" />
+                        <DateInput v-model="bidPost.dropoffDate" class="pt-2" />
                       </div>
                     </div>
                   </div>

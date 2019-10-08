@@ -22,11 +22,9 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label>Date</label>
                   <DateInput v-model="post.pickupDateValue" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label>Time</label>
                   <TimeInput v-model="post.pickupTime" />
                 </div>
               </div>
@@ -45,11 +43,9 @@
               </div>
               <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label>Date</label>
                   <DateInput v-model="post.dropoffDateValue" />
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label>Time</label>
                   <TimeInput v-model="post.dropoffTime" />
                 </div>
               </div>
@@ -65,11 +61,9 @@
               <div class="col-12">
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-12">
-                    <label>Trailer Type</label>
                     <TrailerInput v-model="post.trailerType" />
                   </div>
                   <div class="col-lg-6 col-md-6 col-sm-12">
-                    <label>Spaces Available</label>
                     <CapacityInput v-model="post.spacesAvailable" />
                   </div>
                 </div>

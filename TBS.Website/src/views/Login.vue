@@ -9,7 +9,6 @@
       <div slot="card-content" class="text-center">
         <EmailInput v-model="email" :validator="$v.email"/>
         <PasswordInput v-model="password" :validator="$v.password"/>
-
         <div class="mb-3">
           <router-link :to="{ name: 'register' }">Don't have an account? Register here</router-link>
         </div>
