@@ -104,6 +104,26 @@ const bids = {
         })
       })
     },
+    createReview({ commit, rootGetters}, payload) {
+      commit('global/setLoading', true, { root: true })
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'POST',
+          url: `reviews/${payload.type}`,
+          data: {review: payload.review, isCarrierBid: payload.bidType},
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
   }
 }
 
