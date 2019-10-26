@@ -37,5 +37,7 @@ namespace TBS.Data.Models.Bids.Carrier
         public DateTime DateBidPlaced { get; set; } = DateTime.Now;
 
         public BidStatus BidStatus { get; set; } = BidStatus.Open;
+        public Reviews.CarrierReviews carrierReview { get; set; }
+        public Reviews.ShipperReview shipperReview { get; set; }
     }
 }
