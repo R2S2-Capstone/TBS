@@ -110,7 +110,7 @@ const bids = {
         axios({
           method: 'POST',
           url: `reviews/${payload.type}`,
-          data: {review: payload.review, isCarrierBid: payload.bidType},
+          data: {review: payload.review, isCarrierBid: payload.bidType, bidId: payload.bidId},
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {

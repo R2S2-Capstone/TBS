@@ -53,6 +53,8 @@ namespace TBS.Services.Reviews
                     .Include(b => b.carrierReview)
                     .FirstOrDefault(b => b.Id == request.bidId));
                 request.review.date = DateTime.Now;
+                request.review.Carrier = bid.Post.Carrier;
+                request.review.reviewer = bid.Shipper.Name;
                 await _context.CarrierReview.AddAsync(request.review);
                 await _context.SaveChangesAsync();
                 bid.carrierReview = await _context.CarrierReview
@@ -72,6 +74,8 @@ namespace TBS.Services.Reviews
                     .Include(b => b.carrierReview)
                     .FirstOrDefault(b => b.Id == request.bidId));
             request.review.date = DateTime.Now;
+            request.review.Carrier = secondaryBid.Carrier;
+            request.review.reviewer = secondaryBid.Post.Shipper.Name;
             await _context.CarrierReview.AddAsync(request.review);
             await _context.SaveChangesAsync();
             secondaryBid.carrierReview = await _context.CarrierReview

@@ -10,6 +10,7 @@ namespace TBS.Data.Models.Reviews
         public Guid ID { get; set; } 
         public Users.Carrier Carrier { get; set; }
         [Required(ErrorMessage = "Rating required")]
+        public String reviewer { get; set; }
         public int rating { get; set; }
         public string review { get; set; }
         public DateTime date { get; set; }

@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                   <td><a :href="'mailto:' + profile.email">{{profile.email}}</a></td> 
-                  <td>Comming Soon</td>
+                  <td>Coming Soon</td>
                 </tr>
               </table>
             </div>
@@ -67,7 +67,7 @@
           <div class="row pt-3">
             <div class="col-12" v-for="(review, index) in reviews" :key="index">
               <p>{{ review.rating }}</p>
-              <p>{{ review.shipper.name }} | {{ review.date }}</p>
+              <p>{{ review.reviewer }} | {{ review.date }}</p>
               <p>{{ review.comment }}</p>
             </div>
           </div>
@@ -105,9 +105,7 @@ export default {
             rating: '3.5',
             comment: "This is a test comment",
             date: "10-20-2018",
-            shipper: {
-              name: "Testing person"
-            },
+            reviewer: "Testing",
           }
         ],
       error: false,
@@ -133,6 +131,18 @@ export default {
           })
           this.error = true
         })
+        this.$store.dispatch('profiles/getReviewsById', {profileId: this.id, type: 'carrier'})
+          .then((response) => {
+            this.reviews = response.data.result
+          })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
+          this.error = true
+        })  
     },
   },
   created() {

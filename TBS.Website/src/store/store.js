@@ -14,5 +14,6 @@ export default new Vuex.Store({
     bids,
     global,
     posts,
+    profiles,
   },
 })
