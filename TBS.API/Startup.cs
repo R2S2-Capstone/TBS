@@ -61,7 +61,7 @@ namespace TBS.API
             services.AddDbContext<DatabaseContext>(options =>
               options.UseMySQL(
                   //Use dev database if in development or use the prod database if not
-                  _environment.IsDevelopment() == true ? Configuration["ConnectionStrings:DevMySQL"] : Configuration["ConnectionStrings:MySQL"],
+                  _environment.IsDevelopment() == true ? Configuration["ConnectionStrings:DevMySQL"] : Configuration["ConnectionStrings:DevMySQL"],
                   optionsBuilder => { optionsBuilder.MigrationsAssembly("TBS.Data"); }
                   )
               );

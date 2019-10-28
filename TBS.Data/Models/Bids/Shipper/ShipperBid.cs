@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Models.Reviews;
 
 namespace TBS.Data.Models.Bids.Shipper
 {
@@ -20,5 +21,14 @@ namespace TBS.Data.Models.Bids.Shipper
         public DateTime DateBidPlaced { get; set; } = DateTime.Now;
 
         public BidStatus BidStatus { get; set; } = BidStatus.Open;
+
+        public Reviews.CarrierReviews carrierReview { get; set; }
+
+        public Reviews.ShipperReview shipperReview { get; set; }
+
+        public static implicit operator ShipperBid(ShipperReview v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
