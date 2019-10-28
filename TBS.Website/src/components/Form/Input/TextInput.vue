@@ -1,5 +1,6 @@
 <template>
   <div class="form-label-group">
+    <label>{{ placeHolder }}</label>
     <input 
       v-model="input"
       @blur="validator.$touch()"

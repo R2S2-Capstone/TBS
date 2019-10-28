@@ -27,6 +27,11 @@ namespace TBS.API.Controllers.v1.Bids
         [Authorize]
         public async Task<IActionResult> GetBidByIdAsync(string bidId) => Ok(new { result = await _service.GetBidByIdAsync(Guid.Parse(bidId)) });
 
+        // GET: api/v1/Bids/Carrier/{bidId}/SendReminder
+        [HttpGet("{bidId}/SendReminder")]
+        [Authorize]
+        public async Task<IActionResult> GetSendReminderByBidIdAsync(string bidId) => Ok(new { result = await _service.SendReminderAsync(Guid.Parse(bidId)) });
+
         // GET: api/v1/Bids/Carrier/{userFirebaseId}/{bidId}/{currentPage}/{pageSize}
         [HttpGet("{userFirebaseId}/{postId}/{currentPage}/{pageSize}")]
         [Authorize]

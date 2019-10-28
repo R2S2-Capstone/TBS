@@ -23,9 +23,9 @@ namespace TBS.API.Controllers.v1.Reviews
             _service = service;
         }
 
-        // GET: api/v1/Reviews/Carrier/{currentPage}/{pageSize}
-        [HttpGet("{currentPage}/{pageSize}")]
-        public async Task<IActionResult> GetReviewsAsync(int currentPage, int pageSize, Guid carrier) => Ok(new { result = await _service.GetAllReviewsByCarrierIdAsync(carrier, new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
+        // GET: api/v1/Reviews/Carrier/{carrier}/
+        [HttpGet("{carrier}/{currentPage}/{pageSize}")]
+        public async Task<IActionResult> GetReviewsAsync(Guid carrier) => Ok(new { result = await _service.GetAllReviewsByCarrierIdAsync(carrier) });
 
         // POST: api/v1/Reviews/Carrier
         [HttpPost]

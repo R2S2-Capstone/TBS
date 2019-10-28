@@ -23,7 +23,7 @@ namespace TBS.Services.Reviews
         }
 
 
-        public async Task<PaginatedCarrierReviews> GetAllReviewsByCarrierIdAsync(Guid carrierId, PaginationModel model)
+        public async Task<Array> GetAllReviewsByCarrierIdAsync(Guid carrierId)
         {
 
             var reviews = await Task.FromResult(
@@ -32,14 +32,8 @@ namespace TBS.Services.Reviews
                .Include(b => b.review)
                .Include(b => b.ID)
                .Where(b => b.Carrier.Id == carrierId));
-
-            model.Count = reviews.Count();
-            var paginatedReviews = reviews
-                .Skip((model.CurrentPage - 1) * model.PageSize)
-                .Take(model.PageSize)
-                .ToArray();
-
-            return new PaginatedCarrierReviews() { PaginationModel = model, CarrierReviews = paginatedReviews };
+            var ArrayReviews = reviews.ToArray();
+            return ArrayReviews;
 
         }
         public async Task<bool> CreateReviewAsync(CarrierCreateReviewRequest request)

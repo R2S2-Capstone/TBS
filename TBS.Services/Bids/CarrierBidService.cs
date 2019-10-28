@@ -55,7 +55,7 @@ namespace TBS.Services.Bids
             var paginatedBids = post.Bids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize)
-                .OrderBy(b => b.BidStatus)
+                .OrderByDescending(b => b.BidStatus)
                 .ToArray();
             return new PaginatedCarrierBids() { PaginationModel = model, Bids = paginatedBids };
         }
@@ -68,7 +68,7 @@ namespace TBS.Services.Bids
                 .Include(b => b.Shipper)
                 .Include(b => b.Post)
                 .Where(b => b.Shipper.UserFirebaseId == userFirebaseId)
-                .OrderBy(p => p.BidStatus)
+                .OrderByDescending(p => p.BidStatus)
                 .ToListAsync();
             model.Count = allBids.Count();
             var paginatedBids = allBids
@@ -84,6 +84,11 @@ namespace TBS.Services.Bids
             request.Bid.Post = _context.CarrierPosts
                 .Include(p => p.Carrier)
                 .FirstOrDefault(p => p.Id == request.PostId);
+            if (request.Bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
+            {
+                throw new FailedToUpdateBidException("Post is no longer accepting bids");
+            }
+
             await _context.CarrierBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 
@@ -93,7 +98,7 @@ namespace TBS.Services.Bids
                 request.Bid.Post.Carrier.Email,
                 $"New bid placed on {request.Bid.Post.PickupLocation} -> {request.Bid.Post.DropoffLocation}",
                 $"A new bid has been placed on your post for ${request.Bid.BidAmount} from {request.Bid.Shipper.Name}<br>" +
-                $"To view it click <a href='{_configuration["URL"]}/Carrier/ViewBid/{request.Bid.Id}'>here</a>" +
+                $"To view it click <a href='{_configuration["URL"]}/Carrier/ViewBid/{request.Bid.Id}'>here</a><br>" +
                 "Thanks,<br>" + 
                 "TBS Inc."
             );
@@ -145,7 +150,7 @@ namespace TBS.Services.Bids
                             bid.Shipper.Email,
                             $"Bid has been accepted on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation}",
                             $"Your bid has been accepted!<br>" +
-                            $"View the delivery page <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a>" +
+                            $"View the delivery page <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a><br>" +
                             "Thanks,<br>" +
                             "TBS Inc."
                         );
@@ -204,7 +209,7 @@ namespace TBS.Services.Bids
                         bid.Shipper.Name,
                         bid.Shipper.Email,
                         $"{bid.Vehicle.Year} {bid.Vehicle.Make} {bid.Vehicle.Model} has been delivered!",
-                        $"Your vehicle has been delivered.<br>" +
+                        $"Your vehicle has been delivered!<br>" +
                         $"Click <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a> to confirm delivery<br>" +
                         "Thanks,<br>" +
                         "TBS Inc."
@@ -219,7 +224,7 @@ namespace TBS.Services.Bids
                         bid.Shipper.Name,
                         bid.Shipper.Email,
                         $"{bid.Vehicle.Year} {bid.Vehicle.Make} {bid.Vehicle.Model} delivery has been confirmed!",
-                        $"Your delivery has been confirmed.<br>" +
+                        $"Your delivery has been confirmed!<br>" +
                         $"Click <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a> to add a rating<br>" +
                         "Thanks,<br>" +
                         "TBS Inc."
@@ -249,8 +254,8 @@ namespace TBS.Services.Bids
                         bid.Shipper.Name,
                         bid.Shipper.Email,
                         $"Bid updated on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation}",
-                        $"Your bid has been updated to {bid.BidStatus.ToString().ToLower()}.<br>" +
-                        $"Click <a href='{_configuration["URL"]}/Shipper'>here</a> and look under the 'Manage My Bids' section" +
+                        $"Your bid has been updated to {bid.BidStatus.ToString().ToLower()}<br>" +
+                        $"Click <a href='{_configuration["URL"]}/Shipper'>here</a> and look under the 'Manage My Bids' section<br>" +
                         "Thanks,<br>" +
                         "TBS Inc."
                     );
@@ -264,6 +269,23 @@ namespace TBS.Services.Bids
 
                 return await Task.FromResult(true);
             }
+        }
+
+        public async Task<bool> SendReminderAsync(Guid id)
+        {
+            var bid = await GetBidByIdAsync(id);
+            await _emailService.SendEmailAsync(
+                bid.Shipper.Name,
+                bid.Shipper.Email,
+                $"REMINDER: Please confirm your delivery ({bid.Vehicle.Year} {bid.Vehicle.Make} {bid.Vehicle.Model})",
+                $"Your delivery has been confirmed. Please confirm your delivery!<br>" +
+                $"Click <a href='{_configuration["URL"]}/Delivery/Carrier/{bid.Post.Id}/{bid.Id}'>here</a> confirm delivery!<br>" +
+                "Thanks,<br>" +
+                "TBS Inc."
+            );
+            _logger.LogInformation($"Carrier Bid: Reminders has been sent for bid on {bid.Post.PickupLocation} -> {bid.Post.DropoffLocation} ({bid.Id}).");
+
+            return await Task.FromResult(true);
         }
     }
 }

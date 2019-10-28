@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="row pt-5 pb-5 mb-5">
+  <div class="container pt-5 pb-5">
+    <div class="row">
       <div class="col">            
         <h3 class="heading">What We Do For Our Shippers</h3>
         <p class="sub-heading pt-2">Transportation Bidding System</p>

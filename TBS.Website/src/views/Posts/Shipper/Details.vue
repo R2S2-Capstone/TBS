@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <div class="row" v-if="error">
       <div class="col-12 text-center">
         <h4 class="text-danger mb-5">Failed to load post...</h4>
@@ -7,97 +7,108 @@
         <h6 @click="$router.go(-1)" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Click here to return</h6>
       </div>
     </div>
-    <div class="row" v-if="!error && post != null">
-      <div class="col-lg-8 col-md-9 col-sm-12 mb-3 text-center">
-        <div class="col-12 background">
+    <div v-if="!error && post != null">
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h5>Post Details</h5>
+          <hr>
           <div class="row pt-3">
             <div class="col-12">
-              <h3>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</h3>
-              <hr>
+              <table class="table">
+                <tr>
+                  <th style="width: 33.3%"></th>
+                  <th style="width: 33.3%">Address</th>
+                  <th style="width: 33.3%">Date</th>
+                </tr>
+                <tr>
+                  <th>Pickup In: </th>
+                  <td>{{ formatAddress(post.pickupLocation) }}</td>
+                  <td>{{ parseDate(post.pickupDate) }}</td>
+                </tr>
+                <tr>
+                  <th>Deliver To: </th>
+                  <td>{{ formatAddress(post.dropoffLocation) }}</td>
+                  <td>{{ parseDate(post.dropoffDate) }}</td>
+                </tr>
+              </table>
             </div>
           </div>
           <div class="row pt-3">
             <div class="col-12">
-              <h5>Pickup Details</h5>
+              <h5>Vehicle Information</h5>
               <hr>
-              <div class="row">
+              <div class="row pt-3">
                 <div class="col-12">
-                  <p></p>
-                  <p>Location: {{ formatAddress(post.pickupLocation) }}</p>
-                  <p>Date: {{ post.pickupDate.split('T')[0] }}</p>
-                  <p>Time: {{ convertTime(post.pickupDate.split('T')[1]) }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-12">
-              <h5>Delivery Details</h5>
-              <hr>
-              <div class="row">
-                <div class="col-12">
-                  <p></p>
-                  <p>Location: {{ formatAddress(post.dropoffLocation) }}</p>
-                  <p>Date: {{ post.dropoffDate.split('T')[0] }}</p>
-                  <p>Time: {{ convertTime(post.dropoffDate.split('T')[1]) }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row pt-2 mb-3">
-            <div class="col-12">
-              <h5>Other Details</h5>
-              <hr>
-              <div class="row">
-                <div class="col-12">
-                  <p></p>
-                  <p>Date Posted: {{ post.datePosted.split('T')[0] }}</p>
-                  <p>Starting Bid: ${{ post.startingBid }}</p>
-                  <p>Current highest bid: Coming soon...</p>
-                  <p>Current lowest bid: Coming soon...</p>
-                  <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3 border">
-                    <div slot="description">
-                      Please enter your bid amount
-                      <TextInput v-model="bidAmount" placeHolder="bidAmount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
-                    </div>
-                    <div slot="footer">
-                      <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
-                      <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
-                    </div>
-                  </div>
-                  <button v-if="!showModal" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="showModal = true">Bid Now!</button>
+                  <table class="table">
+                    <tr>
+                      <th style="width: 25%">Condition</th>
+                      <th style="width: 25%">Year</th>
+                      <th style="width: 25%">Make</th>
+                      <th style="width: 25%">Model</th>
+                    </tr>
+                    <tr>
+                      <td>{{ parseVehicleCondition(post.vehicle.condition) }}</td> 
+                      <td>{{ post.vehicle.year }}</td> 
+                      <td>{{ post.vehicle.make }}</td> 
+                      <td>{{ post.vehicle.model }}</td> 
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-3 col-sm-12 text-center">
-        <div class="col-12 background mb-5 pt-3">
-          <h5>Company Information</h5>
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h5>Shipper Information</h5>
           <hr>
-          <div class="row">
+          <div class="row pt-3">
             <div class="col-12">
-              <p></p>
-              <p>Company Name:<br>{{ post.shipper.company.name }}</p>
-              <p class="contact">
-                Contact Name:<br>{{ post.shipper.company.contact.name }}<br>
-                Contact Phone Number:<br><a :href="'tel:' + post.shipper.company.contact.phoneNumber">{{ post.shipper.company.contact.phoneNumber }}</a><br>
-                Contact Email:<br><a :href="'mailto:' + post.shipper.company.contact.email">{{ post.shipper.company.contact.email }}</a><br>
-              </p>
+              <table class="table">
+                <tr>
+                  <th style="width: 33.3%">Shipper Name</th>
+                  <th style="width: 33.3%">Shipper Rating</th>
+                  <th style="width: 33.3%">Shipper Email</th>
+                </tr>
+                <tr>
+                  <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
+                  <td>Coming Soon..</td>
+                  <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
+                </tr>
+              </table>
             </div>
           </div>
         </div>
-        <div class="col-12 background mb-5 pt-3">
-          <h5>Shipper Details</h5>
+      </div>
+      <div class="row pt-3 text-center">
+        <div class="col-12 background pt-3">
+          <h5>Other Details</h5>
           <hr>
-          <div class="row">
+          <div class="row pt-3">
             <div class="col-12">
-              <p></p>            
-              <p>
-                Name:<br>{{ post.shipper.name }}<br>
-                Rating:<br>Coming Soon!<br>
-              </p>
+              <table class="table">
+                <tr>
+                  <th style="width: 33.3%">Date Posted</th>
+                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Lowest Bid</th>
+                </tr>
+                <tr>
+                  <td>{{ parseDate(post.datePosted) }}</td> 
+                  <td>{{ formatMoney(post.startingBid) }}</td>
+                  <td>{{ lowestBid == null ? 'No bids' : formatMoney(lowestBid) }}</td>
+                </tr>
+              </table>
+              <div v-if="showModal" class ="pt-2 mb-2 col-6 offset-3">
+                <div slot="description">
+                  <TextInput v-model="bidAmount" placeHolder="Bid Amount" errorMessage="Please enter a valid bid amount" :validator="$v.bidAmount" />
+                </div>
+                <div slot="footer">
+                  <button @click="showModal = false" type="button" class="btn btn-secondary m-2">Cancel</button>
+                  <button :disabled="$v.bidAmount.$error" type="button" class="btn btn-primary" @click="confirmBid">Bid</button>
+                </div>
+              </div>
+              <button v-if="!showModal && loggedIn" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="showModal = true">Bid Now!</button>
             </div>
           </div>
         </div>
@@ -111,7 +122,7 @@ import Swal from 'sweetalert2'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
 
-import utilities from '@/utils/postUtilities.js'
+import postUtilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
 
@@ -126,6 +137,7 @@ export default {
   data() {
     return {
       post: null,
+      lowestBid: null,
       bidAmount: '',
       error: false,
       bidError: false,
@@ -140,6 +152,15 @@ export default {
           this.error = false
           this.post = response.data.result
           this.bidAmount = this.post.startingBid.toString()
+          if (this.post.bids.length != 0) {
+            let min = this.post.bids[0].bidAmount, max = this.post.bids[0].bidAmount;
+            for (let i = 1, len = this.post.bids.length; i < len; i++) {
+              let v = this.post.bids[i].bidAmount;
+              min = (v < min) ? v : min;
+              max = (v > max) ? v : max;
+            }
+            this.lowestBid = min
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -178,6 +199,7 @@ export default {
             title: 'Successfully bid',
             text: 'Bid has successfully been posted!',
           })
+          this.getPostById()
         })
         .catch(() => {
           this.showModal = false
@@ -189,10 +211,21 @@ export default {
         })
     },
     formatAddress(address) {
-      return utilities.formatAddress(address)
+      return postUtilities.formatAddress(address)
     },
-    convertTime(value) {
-      return utilities.convertTime(value)
+    parseDate(value) {
+      return postUtilities.parseDate(value)
+    },
+    parseVehicleCondition(condition) {
+      return postUtilities.parseVehicleCondition(condition)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
+    }
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.getters['authentication/getAccountType'] != '' 
     },
   },
   validations: {

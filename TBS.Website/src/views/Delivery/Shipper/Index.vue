@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5" v-if="post">
+  <div class="container pt-5 pb-5" v-if="post">
     <Back />
     <div class="row text-center">
       <div class="col-12">
@@ -26,29 +26,29 @@
             <div>
               <table class="table">
                 <thead>
-                  <th>Departure</th>
-                  <th>Destination</th>
-                  <th>Vehicle Information</th>
+                  <th style="width: 33.3%">Departure</th>
+                  <th style="width: 33.3%">Destination</th>
+                  <th style="width: 33.3%">Vehicle Information</th>
                 </thead>
                 <tbody>
-                  <td>{{ formatAddress(post.pickupLocation) }} - {{ trimDate(post.pickupDate) }}</td>
-                  <td>{{ formatAddress(post.dropoffLocation) }} - {{ trimDate(post.dropoffDate) }}</td>
+                  <td>{{ formatAddress(post.pickupLocation) }} - {{ parseDate(post.pickupDate) }}</td>
+                  <td>{{ formatAddress(post.dropoffLocation) }} - {{ parseDate(post.dropoffDate) }}</td>
                   <td>{{ `${post.vehicle.year} ${post.vehicle.make} ${post.vehicle.model}` }}</td>
                 </tbody>
               </table>
               <table class="table">
                 <thead>
-                  <th>Pickup Contact</th>
-                  <th>Dropoff Contact</th>
+                  <th style="width: 50%">Pickup Contact</th>
+                  <th style="width: 50%">Dropoff Contact</th>
                 </thead>
                 <tbody>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.pickupContact.name }}</router-link><br>
+                    Name: {{ post.pickupContact.name }}<br>
                     Phone Number: <a :href="'tel:' + post.pickupContact.phoneNumber">{{ post.pickupContact.phoneNumber }}</a><br>
                     Email: <a :href="'mailto:' + post.pickupContact.email">{{ post.pickupContact.email }}</a><br>
                   </td>
                   <td>
-                    Name: <router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ post.dropoffContact.name }}</router-link><br>
+                    Name: {{ post.dropoffContact.name }}<br>
                     Phone Number: <a :href="'tel:' + post.dropoffContact.phoneNumber">{{ post.dropoffContact.phoneNumber }}</a><br>
                     Email: <a :href="'mailto:' + post.dropoffContact.email">{{ post.dropoffContact.email }}</a><br>
                   </td>
@@ -69,14 +69,13 @@
             <div>
               <table class="table">
                 <tr>
-                  <th>Carrier</th>
-                  <th>Bid Amount</th>
-                  <th>Status</th>
+                  <th style="width: 33.3%">Carrier</th>
+                  <th style="width: 33.3%">Bid Amount</th>
+                  <th style="width: 33.3%">Status</th>
                 </tr>
                 <tr>
-                  <!-- TODO: Generate router-link to profile page -->
-                  <td><router-link :to="{ name: 'home' }" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
-                  <td>${{ bid.bidAmount }}</td>
+                  <td><router-link :to="{ name: 'carrierProfile', params: { id:bid.carrier.id }}" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
+                  <td>{{ formatMoney(bid.bidAmount) }}</td>
                   <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 </tr>
               </table>
@@ -85,11 +84,18 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3 pb-5 text-center">
-      <div class="col-12 pt-3">
-        <button v-if="accountType == 'carrier' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
-        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
-        <button v-if="accountType == 'shipper' && convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
+      <div class="col-12 pt-3 pb-3">
+        <div class="fixed-bottom pb-btn text-center">
+          <div v-if="accountType == 'carrier'">
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="sendReminder()">Send Reminder</button>
+          </div>
+          <div v-else>
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -158,6 +164,23 @@ export default {
           })
         })
     },
+    sendReminder() {
+      this.$store.dispatch('bids/sendReminder', { type: 'shipper', bidId: this.bid.id })
+        .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Completed',
+            text: 'A reminder has been sent!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
+    },
     parsePostStatus(status) {
       return postUtilities.parsePostStatus(status)
     },
@@ -170,11 +193,14 @@ export default {
     parseTrailerType(type) {
       return postUtilities.parseTrailerType(type)
     },
-    trimDate(time) {
-      return postUtilities.trimDate(time)
+    parseDate(time) {
+      return postUtilities.parseDate(time)
     },
     formatAddress(address) {
       return postUtilities.formatAddress(address)
+    },
+    formatMoney(money) {
+      return postUtilities.formatMoney(money)
     }
   },
   created() {
@@ -258,6 +284,18 @@ hr {
     &:after {
       background-color: colour(colourPrimary);
     }
+  }
+}
+
+.pb-btn {
+  @include  mobile {
+    padding-bottom: 125px;
+  }
+  @include tablet {
+    padding-bottom: 115px;
+  }
+  @include desktop {
+    padding-bottom: 115px;
   }
 }
 </style>

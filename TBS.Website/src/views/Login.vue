@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5">
+  <div class="container pt-5 pb-5">
     <NarrowFormCard title="Login" :submit="submit" v-if="this.$route.name === 'login'">
       <div slot="card-information">
         <p v-if="redirect" class="text-danger text-center mb-3">You must be logged in to view this. Please login below.</p>
@@ -9,7 +9,6 @@
       <div slot="card-content" class="text-center">
         <EmailInput v-model="email" :validator="$v.email"/>
         <PasswordInput v-model="password" :validator="$v.password"/>
-
         <div class="mb-3">
           <router-link :to="{ name: 'register' }">Don't have an account? Register here</router-link>
         </div>
@@ -68,7 +67,7 @@ export default {
 			}
 			this.$store.dispatch('authentication/login', { email: this.email, password: this.password })
 				.then(() => {
-					this.$router.push({ name: 'home', params: { viewPosts: true } })
+					this.$router.push({ name: 'home'})
 				})
 				.catch(() => {
 					this.error = true

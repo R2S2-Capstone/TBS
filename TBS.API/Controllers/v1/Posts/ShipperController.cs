@@ -23,10 +23,10 @@ namespace TBS.API.Controllers.v1.Posts
             _service = service;
         }
 
-        // GET: api/v1/Posts/Shipper/{currentPage}/{count}
-        [HttpGet("{userFirebaseId}/{currentPage}/{count}")]
+        // GET: api/v1/Posts/Shipper/{currentPage}/{pageSize}
+        [HttpGet("{userFirebaseId}/{currentPage}/{pageSize}")]
         [Authorize]
-        public async Task<IActionResult> GetShippersPostsAsync(string userFirebaseId, int currentPage, int count) => Ok(new { result = await _service.GetAllUsersPostsAsync(userFirebaseId, new PaginationModel() { CurrentPage = currentPage, Count = count }) });
+        public async Task<IActionResult> GetShippersPostsAsync(string userFirebaseId, int currentPage, int pageSize) => Ok(new { result = await _service.GetAllUsersPostsAsync(userFirebaseId, new PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // GET: api/v1/Posts/Shipper/{currentPage}/{pageSize}
         [HttpGet("{currentPage}/{pageSize}")]

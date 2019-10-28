@@ -1,6 +1,6 @@
 <template>
   <div class="row w-100">
-    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+    <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
       <div class="card custom-card my-5">
         <div class="custom-card-body">
           <h3 class="custom-card-title text-center">{{ title }}</h3>

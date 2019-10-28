@@ -1,13 +1,13 @@
 const postUtilities = {
   parsePostStatus: (status) => {
     if (status === 0) {
-      return 'Open' 
-    } else if (status === 1) {
       return 'Closed'
+    } else if (status === 1) {
+      return 'Open'
     } else if (status === 2) {
       return 'Pending Delivery'
     } else if (status === 3) {
-      return 'Completed'
+      return 'Pending Delivery Approval'
     } else {
       return 'Unknown'
     }
@@ -34,7 +34,10 @@ const postUtilities = {
       return 'Unknown'
     }
   },
-  convertTime(value) {
+  parseDate(date) {
+    return new Date(date).toISOString().split('T')[0]
+  },
+  parseTime(value) {
     if (value === undefined) return
     var hour = value.substring ( 0,2 )
     var minutes = value.substring ( 3,5 )
@@ -53,9 +56,8 @@ const postUtilities = {
   formatAddress(address) {
     return `${address.addressLine}, ${address.city}, ${address.province}, ${address.country} ${address.postalCode}`
   },
-  //TODO: Remove all other occurences of the code below to use this method
-  trimDate(date) {
-    return new Date(date).toISOString().split('T')[0]
+  formatMoney(amount) {
+    return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
   }
 }
 export default postUtilities
