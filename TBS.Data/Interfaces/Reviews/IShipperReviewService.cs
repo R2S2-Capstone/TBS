@@ -10,7 +10,7 @@ namespace TBS.Data.Interfaces.Reviews
     public interface IShipperReviewService
     {
 
-        Task<PaginatedShipperReviews> GetAllReviewsByShipperIdAsync(Guid shipperId, PaginationModel paginationModel);
+        Task<Array> GetAllReviewsByShipperIdAsync(Guid shipperId);
 
         Task<bool> CreateReviewAsync(ShipperCreateReviewRequest request);
 

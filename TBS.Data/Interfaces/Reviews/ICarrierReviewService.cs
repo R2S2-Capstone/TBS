@@ -9,7 +9,7 @@ namespace TBS.Data.Interfaces.Reviews
 {
     public interface ICarrierReviewService
     {
-        Task<PaginatedCarrierReviews> GetAllReviewsByCarrierIdAsync(Guid carrierId, PaginationModel paginationModel);
+        Task<Array> GetAllReviewsByCarrierIdAsync(Guid carrierId);
 
         Task<bool> CreateReviewAsync(CarrierCreateReviewRequest request);
     }
