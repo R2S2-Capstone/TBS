@@ -66,8 +66,8 @@
         <div class="row pt-3">
           <div class="col-12" v-for="(review, index) in reviews" :key="index">
             <p>{{ review.rating }}</p>
-            <p>{{ review.carrier.name }} | {{ review.date }}</p>
-            <p>{{ review.comment }}</p>
+            <p>{{ review.reviewer }} | {{ review.date }}</p>
+            <p>{{ review.review }}</p>
           </div>
         </div>
       </div>
@@ -101,11 +101,9 @@ export default {
       reviews:[
           {
             rating: '3.5',
-            comment: "This is a test comment",
+            review: "This is a test comment",
             date: "10-20-2018",
-            carrier: {
-              name: "Testing person"
-            },
+            reviewer: "Testing",
           }
         ],
       error: false,
@@ -131,6 +129,18 @@ export default {
           })
           this.error = true
         })
+      this.$store.dispatch('profiles/getReviewsById', {profileId: this.id, type: 'carrier'})
+          .then((response) => {
+            this.reviews = response.data.result
+          })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
+          this.error = true
+        })  
     },
   },
   created() {

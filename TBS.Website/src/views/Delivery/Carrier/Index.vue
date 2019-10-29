@@ -79,6 +79,36 @@
         </div>
       </div>
     </div>
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
+      <div class="col-12 pt-3 pb-3">
+        <div class="fixed-bottom pb-btn text-center">
+          <div v-if="accountType == 'carrier'">
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Pending Delivery Approval')">Confirm Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="sendReminder()">Send Reminder</button>
+          </div>
+          <div v-else>
+            <button v-if="convertedBidStatus == 'Pending Delivery'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Force Delivery</button>
+            <button v-if="convertedBidStatus == 'Pending Delivery Approval'" type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="updateBid('Completed')">Approve Delivery</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+     <h5>Place a Review</h5><br>
+      <select v-model="bid.CarrierReviews.Rating">
+        <option disabled value="">Please select one</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+      <span>Enter comment here</span>
+      <p style="white-space: pre-line;"></p>
+      <br>
+      <textarea v-model="bid.CarrierReviews.review"/><br>
+      <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="confirmReview()">Enter Review</button><br>
+    </div>
   </div>
 </template>
 
@@ -151,6 +181,27 @@ export default {
             type: 'success',
             title: 'Completed',
             text: 'A reminder has been sent!',
+          })
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!',
+          })
+        })
+    },
+     createReview() {
+      var carrierBidType = false  
+      if(bid.Carrier == null){
+        carrierBidType = true
+      }
+      this.$store.dispatch('bids/createReview', { type: 'carrier', bidId: this.$route.params.id, isCarrierBid: carrierBidType, carrierReviews: bid.CarrierReview })
+        .then(() => {
+          Swal.fire({
+            type: 'success',
+            title: 'Completed',
+            text: 'The review has been created!',
           })
         })
         .catch(() => {

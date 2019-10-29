@@ -81,10 +81,15 @@
               <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="confirmDeclineBid(bid.id, bid.bidAmount, bid.shipper.name)">Decline Bid</button>
             </div>
           </div>
+          <div class="row">
+            <div class="col-12" v-if="parseBidStatus(bid.bidStatus) == 'Completed'">
+          </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
+  
 </template>
 
 <script>

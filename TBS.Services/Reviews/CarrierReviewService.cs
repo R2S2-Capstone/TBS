@@ -38,7 +38,7 @@ namespace TBS.Services.Reviews
         }
         public async Task<bool> CreateReviewAsync(CarrierCreateReviewRequest request)
         {
-            if (request.isCarrierBid)
+            if (request.bidBoolean)
             {
                 CarrierBid bid = await Task.FromResult(
                      _context.CarrierBids

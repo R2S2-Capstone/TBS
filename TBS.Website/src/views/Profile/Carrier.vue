@@ -68,7 +68,7 @@
             <div class="col-12" v-for="(review, index) in reviews" :key="index">
               <p>{{ review.rating }}</p>
               <p>{{ review.reviewer }} | {{ review.date }}</p>
-              <p>{{ review.comment }}</p>
+              <p>{{ review.review }}</p>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@ export default {
       reviews:[
           {
             rating: '3.5',
-            comment: "This is a test comment",
+            review: "This is a test comment",
             date: "10-20-2018",
             reviewer: "Testing",
           }

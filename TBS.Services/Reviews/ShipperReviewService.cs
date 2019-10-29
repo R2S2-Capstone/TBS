@@ -41,7 +41,7 @@ namespace TBS.Services.Reviews
         }
         public async Task<bool> CreateReviewAsync(ShipperCreateReviewRequest request) {
 
-            if (!request.isShipperBid) {
+            if (!request.bidBoolean) {
                 CarrierBid x = await Task.FromResult(
                 _context.CarrierBids
                .Include(b => b.Shipper)

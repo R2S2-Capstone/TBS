@@ -8,6 +8,6 @@ namespace TBS.Data.Models.Reviews
     {
         public Guid bidId { get; set; }
         public CarrierReviews review { get; set; }
-        public bool isCarrierBid { get; set; }
+        public bool bidBoolean { get; set; }
     }
 }
