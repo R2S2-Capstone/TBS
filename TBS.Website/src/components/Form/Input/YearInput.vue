@@ -1,5 +1,6 @@
 <template>
   <div class="form-label-group">
+    <label>Year</label>
     <select v-model="input" class="form-control text-center">
       <option v-for="(value, index) in years()" :key="index" :value="value" selected>
         {{ value }}

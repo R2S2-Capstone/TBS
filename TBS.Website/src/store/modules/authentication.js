@@ -6,7 +6,7 @@ const global = {
   namespaced: true,
   state: {
     email: '',
-    token: '',
+    token: null,
     accountType: '',
     refreshing: false,
   },
@@ -25,6 +25,7 @@ const global = {
     logout(state) {
       state.email = null
       state.token = null
+      state.accountType = ''
       firebase.auth().signOut()
     },
     refresh(state, refreshing) {
@@ -71,9 +72,10 @@ const global = {
         })
       })
     },
-    login({ commit }, payload) {
+    login({ rootGetters, commit }, payload) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
+        commit('authentication/refresh', true, { root: true })
         firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
           .then((response) => {
             if (!response.user.emailVerified) {
@@ -84,12 +86,12 @@ const global = {
             resolve()
           })
           .catch((error) => {
-            commit('logout')
-            reject(error)
-          })
-          .finally(() => {
+            if (rootGetters['authetncation/getToken'] != null) { // this shouldn't be the case but just in case
+              commit('logout')
+            }
             commit('global/setLoading', false, { root: true })
             commit('authentication/refresh', false, { root: true })
+            reject(error)
           })
       })
     },
