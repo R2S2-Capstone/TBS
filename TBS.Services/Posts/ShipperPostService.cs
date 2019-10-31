@@ -52,7 +52,7 @@ namespace TBS.Services.Post
                     .ThenInclude(p => p.DropoffLocation)
                 .FirstOrDefaultAsync(s => s.UserFirebaseId == userFirebaseId);
             var allUserPosts = user.Posts.ToList();
-            var orderedPosts = allUserPosts.OrderBy(p => p.PostStatus);
+            var orderedPosts = allUserPosts.OrderByDescending(p => p.PostStatus);
             model.Count = orderedPosts.Count();
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
@@ -75,6 +75,8 @@ namespace TBS.Services.Post
                 .Include(p => p.DropoffLocation)
                 .Include(p => p.DropoffContact)
                 .FirstOrDefaultAsync(p => p.Id == id);
+
+            shipperPost.Bids = shipperPost.Bids.OrderByDescending(b => b.BidStatus);
 
             if (shipperPost == null)
             {
@@ -148,6 +150,14 @@ namespace TBS.Services.Post
             if (post == null)
             {
                 throw new InvalidShipperPostException();
+            }
+
+            var bids = await _context.ShipperBids.Where(b => b.Post.Id == post.Id).ToListAsync();
+
+            foreach (var bid in bids)
+            {
+                _context.ShipperBids.Remove(bid);
+                _logger.LogInformation($"Shipper Post: Successfully automatically deleted a bid {bid.Id} for ${bid.BidAmount}. ({post.Id})");
             }
 
             _context.ShipperPosts.Remove(post);

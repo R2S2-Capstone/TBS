@@ -1,6 +1,41 @@
 # Changelog
 
-## v0.0.4 (September 18, 2019)
+## v0.0.8 (October 08, 2019)
+#### Features:
+ - Send reminder button for delivery
+#### Enhancements:
+ - Now showing highest/lowest bid
+ - Added labels to all inputs
+#### Bug Fixes:
+ - Fixed decline button
+ - Fixed pagination on 'My Board'
+ - Fixed autoloading of time on modify page
+
+---
+
+## v0.0.7 (October 03, 2019)
+#### Features:
+- Carrier/Shipper Profiles
+#### Enhancements:
+ - Redirects to new page after registration
+#### Bug Fixes:
+ - No longer redirects to homepage after invalid login
+
+---
+## v0.0.6 (September 24, 2019)
+#### Features:
+- Using Google's AutoComplete Places API for all address inputs
+#### Enhancements:
+ - Improved content on homepage
+ - Updated all UI to clients specifications
+ - Minor UI tweaks
+ - Better ordering of posts and bids (on dashboard)
+#### Bug Fixes:
+ - Can no longer submit bid once post is no longer accepting bids
+ - Now deleting all bids once a post has been deleted
+
+---
+## v0.0.5 (September 18, 2019)
 #### Features:
 - Vehicle delivery
 - Delivery confirmation
@@ -12,6 +47,7 @@
 #### Bug Fixes:
  - Fixed cancel bid issue
 
+---
 ## v0.0.4 (August 21, 2019)
 #### Features:
 - Created bid classes

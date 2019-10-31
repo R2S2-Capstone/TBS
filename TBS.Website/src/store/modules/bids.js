@@ -30,7 +30,7 @@ const bids = {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.count}`,
+          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.pageSize}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {
@@ -44,26 +44,6 @@ const bids = {
         })
       })
     },
-    //TODO: Remove if no longer required
-    // getBidsByPostId({ commit, rootGetters }, payload) {
-    //   commit('global/setLoading', true, { root: true })
-    //   return new Promise((resolve, reject) => {
-    //     axios({
-    //       method: 'GET',
-    //       url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.postId}/${payload.currentPage}/${payload.pageSize}`,
-    //       headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
-    //     })
-    //     .then((response) => {
-    //       resolve(response)
-    //     })
-    //     .catch((error) => {
-    //       reject(error)
-    //     })
-    //     .finally(() => {
-    //       commit('global/setLoading', false, { root: true })
-    //     })
-    //   })
-    // },
     createBid({ commit, rootGetters}, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
@@ -111,6 +91,25 @@ const bids = {
           method: 'POST',
           url: `reviews/${payload.type}`,
           data: {review: payload.review, isCarrierBid: payload.bidType, bidId: payload.bidId},
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
+    sendReminder({ commit, rootGetters}, payload) {
+      commit('global/setLoading', true, { root: true })
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'GET',
+          url: `bids/${payload.type}/${payload.bidId}/SendReminder`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {

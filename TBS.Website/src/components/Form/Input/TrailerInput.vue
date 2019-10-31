@@ -1,5 +1,6 @@
 <template>
   <div class="form-label-group">
+    <label>Trailer Type</label>                    
     <select v-model="input" class="form-control text-center">
       <option v-for="(value, index) in [ 'Enclosed', 'Flat bed', 'Car Carrier', 'Other' ]" :key="index" :value="value" selected>
         {{ value }}

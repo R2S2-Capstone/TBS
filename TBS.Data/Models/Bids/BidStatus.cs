@@ -2,11 +2,11 @@
 {
     public enum BidStatus
     {
-        Open,
-        Declined,
         Cancelled,
+        Declined,
+        Completed,
+        Open,
         PendingDelivery,
         PendingDeliveryApproval,
-        Completed,
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-5">
     <div class="container">
       <div class="row pt-5 pb-5">
         <div class="col-lg-8 col-md-8 col-sm-12">
@@ -21,7 +21,7 @@
             <p class="sub-heading pt-2">Fill your empty trailer spaces</p>
             <h3 class="heading">Find freight now</h3>
             <hr>
-            <p>Review and accept freight to instantly fill up your car-carrier-trailer</p>
+            <p>Review and accept freight to instantly fill up your trailer</p>
             <router-link class="how-link pb-2" :to="{ name: 'aboutCarrier' }">Find out more <i class="fas fa-arrow-right"></i></router-link>
           </div>
           <div class="col">
@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid bg-white">
+    <div class="container-fluid bg-white pb-1">
       <div class="container">
         <div class="row pt-5 pb-5 mb-5">
           <div class="col">
