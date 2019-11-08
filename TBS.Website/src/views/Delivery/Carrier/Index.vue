@@ -64,8 +64,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
+    </div>  
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading'] && convertedBidStatus !== 'Completed'">
       <div class="col-12 pt-3 pb-3">
         <div class="fixed-bottom pb-btn text-center">
           <div v-if="accountType == 'carrier'">
@@ -79,7 +79,7 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading']">
+    <div class="row pt-3 text-center" v-if="!$store.getters['global/isLoading'] && convertedBidStatus !== 'Completed'">
       <div class="col-12 pt-3 pb-3">
         <div class="fixed-bottom pb-btn text-center">
           <div v-if="accountType == 'carrier'">
@@ -93,150 +93,268 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="row pt-3" v-if="convertedBidStatus === 'Completed'">
+      <div class="col-12 background">
+        <p></p>
+        <h4 class="text-center">Reviews</h4>
+        <hr>
+        <div class="row pt-3" v-if="CarrierReview == null && accountType == 'carrier'" >
+      <div class="col-12 pt-3 pb-3"> 
      <h5>Place a Review</h5><br>
-      <select v-model="bid.CarrierReviews.Rating">
-        <option disabled value="">Please select one</option>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-      <span>Enter comment here</span>
-      <p style="white-space: pre-line;"></p>
+     <input type="radio" id="one" value=1 v-model="TempCarrierReview.rating">
+        <label for="one">&nbsp;1&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="two" value=2 v-model="TempCarrierReview.rating">
+        <label for="two">&nbsp;2&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="three" value=3 v-model="TempCarrierReview.rating">
+        <label for="three">&nbsp;3&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="four" value=4 v-model="TempCarrierReview.rating">
+        <label for="four">&nbsp;4&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="five" value=5 v-model="TempCarrierReview.rating">
+        <label for="five">&nbsp;5&nbsp;&nbsp;&nbsp;</label>
       <br>
-      <textarea v-model="bid.CarrierReviews.review"/><br>
-      <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="confirmReview()">Enter Review</button><br>
+      <span>Enter comment here </span>
+      <br>
+      <textarea style="min-width:35%" v-model="TempCarrierReview.review"/><br><br>
+        <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="createCarrierReview()">Enter Review</button><br>
+      </div>
+    </div>
+        <div class="row pt-3" v-if="ShipperReview == null && accountType == 'shipper'" >
+      <div class="col-12 pt-3 pb-3"> 
+     <h5>Place a Review</h5><br>
+     <input type="radio" id="one" value=1 v-model="TempShipperReview.rating">
+        <label for="one">&nbsp;1&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="two" value=2 v-model="TempShipperReview.rating">
+        <label for="two">&nbsp;2&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="three" value=3 v-model="TempShipperReview.rating">
+        <label for="three">&nbsp;3&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="four" value=4 v-model="TempShipperReview.rating">
+        <label for="four">&nbsp;4&nbsp;&nbsp;&nbsp;</label>
+      <input type="radio" id="five" value=5 v-model="TempShipperReview.rating">
+        <label for="five">&nbsp;5&nbsp;&nbsp;&nbsp;</label>
+      <br>
+      <span>Enter comment here </span>
+      <br>
+      <textarea style="min-width:35%" v-model="TempShipperReview.review"/><br><br>
+        <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="createShipperReview()">Enter Review</button><br>
+      </div>
+    </div>
+        <div class="row pt-3" v-if="CarrierReview != null || ShipperReview != null">
+          <div class="col-12" v-if="CarrierReview != null">
+            <p class="font-weight-bold">Carrier Review<p>
+            <p>{{ CarrierReview.reviewer }} | {{`${parseDate(CarrierReview.date)}` }} <star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="CarrierReview.rating"></star-rating></p>
+            <p>{{ CarrierReview.review }}</p>
+          </div>
+          <div class="col-12" v-if="ShipperReview != null">
+            <p class="font-weight-bold">Shipper Review<p>
+            <p>{{ ShipperReview.reviewer }} |  {{`${parseDate(ShipperReview.date)}` }}<star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="ShipperReview.rating"></star-rating></p>
+            <p>{{ ShipperReview.review }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Back from '@/components/Back.vue'
+import Back from "@/components/Back.vue";
 
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
-import postUtilities from '@/utils/postUtilities.js'
-import bidUtilities from '@/utils/bidUtilities.js'
-
+import postUtilities from "@/utils/postUtilities.js";
+import bidUtilities from "@/utils/bidUtilities.js";
+import StarRating from "vue-star-rating";
 export default {
-  name: 'carrierDelivery',
+  name: "carrierDelivery",
   components: {
-    Back
+    Back,
+    StarRating
   },
   props: {
     postId: String,
-    bidId: String,
+    bidId: String
   },
   data() {
     return {
-      accountType: '',
+      bidType: true,
+      accountType: "",
       post: null,
       bid: null,
+      TempCarrierReview: {
+        rating: 1,
+        review: ""
+      },
+      TempShipperReview: {
+        rating: 1,
+        review: ""
+      },
       error: null,
-      convertedBidStatus: null,
-    }
+      convertedBidStatus: null
+    };
   },
   methods: {
     loadDetails() {
-      this.$store.dispatch('posts/getPostById', { type: 'carrier', postId: this.$route.params.postId })
-        .then((response) => {
-          this.post = response.data.result
-          this.bid = this.post.bids.find((bid) => bid.id == this.bidId)
-          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
+      this.$store
+        .dispatch("posts/getPostById", {
+          type: "carrier",
+          postId: this.$route.params.postId
+        })
+        .then(response => {
+          this.post = response.data.result;
+          this.bid = this.post.bids.find(bid => bid.id == this.bidId);
+          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus);
+          this.loadBid();
         })
         .catch(() => {
           Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load the delivery details. Please try again!',
-          })
-          this.error = true
+            type: "error",
+            title: "Oops...",
+            text:
+              "Something went wrong! We are unable to load the delivery details. Please try again!"
+          });
+          this.error = true;
+        });
+    },
+    loadBid() {
+      this.$store
+        .dispatch("bids/getBidById", { type: "carrier", bidId: this.bid.id })
+        .then(response => {
+          var parseObject = response.data.result;
+          this.CarrierReview = parseObject.carrierReview
+          this.ShipperReview = parseObject.shipperReview
         })
+        .catch(() => {
+          Swal.fire({
+            type: "error",
+            title: "Oops...",
+            text:
+              "Something went wrong! We are unable to load the delivery . Please try again!"
+          });
+          this.error = true;
+        });
     },
     updateBid(newStatus) {
-      this.$store.dispatch('bids/updateBid', { type: 'carrier', bidId: this.bid.id, bidStatus: this.reverseBidStatus(newStatus.toLowerCase()) })
+      this.$store
+        .dispatch("bids/updateBid", {
+          type: "carrier",
+          bidId: this.bid.id,
+          bidStatus: this.reverseBidStatus(newStatus.toLowerCase())
+        })
         .then(() => {
-          this.bid.bidStatus = this.reverseBidStatus(newStatus.toLowerCase())
-          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
+          this.bid.bidStatus = this.reverseBidStatus(newStatus.toLowerCase());
+          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus);
+          
           Swal.fire({
-            type: 'success',
-            title: 'Updated',
-            text: 'Bid has successfully been updated!',
-          })
+            type: "success",
+            title: "Updated",
+            text: "Bid has successfully been updated!"
+          });
         })
         .catch(() => {
           Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! Please try again!',
-          })
-        })
+            type: "error",
+            title: "Oops...",
+            text: "Something went wrong! Please try again!"
+          });
+        });
     },
     sendReminder() {
-      this.$store.dispatch('bids/sendReminder', { type: 'carrier', bidId: this.bid.id })
+      this.$store
+        .dispatch("bids/sendReminder", { type: "carrier", bidId: this.bid.id })
         .then(() => {
           Swal.fire({
-            type: 'success',
-            title: 'Completed',
-            text: 'A reminder has been sent!',
-          })
+            type: "success",
+            title: "Completed",
+            text: "A reminder has been sent!"
+          });
         })
         .catch(() => {
           Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! Please try again!',
-          })
-        })
+            type: "error",
+            title: "Oops...",
+            text: "Something went wrong! Please try again!"
+          });
+        });
     },
-     createReview() {
-      var carrierBidType = false  
-      if(bid.Carrier == null){
-        carrierBidType = true
-      }
-      this.$store.dispatch('bids/createReview', { type: 'carrier', bidId: this.$route.params.id, isCarrierBid: carrierBidType, carrierReviews: bid.CarrierReview })
+    createCarrierReview() {
+      this.$store
+        .dispatch("bids/createReview", {
+          type: "carrier",
+          Review: {
+            bidId: this.bid.id,
+            bidBoolean: this.bidType,
+            rating: this.TempCarrierReview.rating,
+            review: this.TempCarrierReview.review
+          }
+        })
         .then(() => {
           Swal.fire({
-            type: 'success',
-            title: 'Completed',
-            text: 'The review has been created!',
-          })
+            type: "success",
+            title: "Completed",
+            text: "The review has been created!"
+          });
+          this.loadBid();
         })
         .catch(() => {
           Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! Please try again!',
-          })
+            type: "error",
+            title: "Oops...",
+            text: "Something went wrong! Please try again!"
+          });
+        });
+    },
+    createShipperReview() {
+      this.$store
+        .dispatch("bids/createReview", {
+          type: "shipper",
+          Review: {
+            bidId: this.bid.id,
+            bidBoolean: this.bidType,
+            rating: this.TempShipperReview.rating,
+            review: this.TempShipperReview.review
+          }
         })
+        .then(() => {
+          Swal.fire({
+            type: "success",
+            title: "Completed",
+            text: "The review has been created!"
+          });
+        })
+        .catch(() => {
+          Swal.fire({
+            type: "error",
+            title: "Oops...",
+            text: "Something went wrong! Please try again!"
+          });
+        });
     },
     parsePostStatus(status) {
-      return postUtilities.parsePostStatus(status)
+      return postUtilities.parsePostStatus(status);
     },
     reverseBidStatus(status) {
-      return bidUtilities.reverseBidStatus(status)
+      return bidUtilities.reverseBidStatus(status);
     },
     parseBidStatus(status) {
-      return bidUtilities.parseBidStatus(status)
+      return bidUtilities.parseBidStatus(status);
     },
     parseTrailerType(type) {
-      return postUtilities.parseTrailerType(type)
+      return postUtilities.parseTrailerType(type);
     },
     parseDate(time) {
-      return postUtilities.parseDate(time)
+      return postUtilities.parseDate(time);
     },
     formatMoney(money) {
-      return postUtilities.formatMoney(money)
+      return postUtilities.formatMoney(money);
     }
   },
   created() {
-    if (this.postId == null || this.bidId == null) this.$router.go(-1)
-    this.accountType = this.$store.getters['authentication/getAccountType'].toLowerCase()
-    this.loadDetails()
+    if (this.postId == null || this.bidId == null) this.$router.go(-1);
+    this.accountType = this.$store.getters[
+      "authentication/getAccountType"
+    ].toLowerCase();
+    this.loadDetails();
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -292,7 +410,7 @@ hr {
     &:after {
       width: 100%;
       height: 2px;
-      content: '';
+      content: "";
       position: absolute;
       background-color: #7d7d7d;
       top: 15px;
@@ -316,7 +434,7 @@ hr {
 }
 
 .pb-btn {
-  @include  mobile {
+  @include mobile {
     padding-bottom: 125px;
   }
   @include tablet {

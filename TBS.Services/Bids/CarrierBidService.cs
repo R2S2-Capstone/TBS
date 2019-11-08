@@ -35,6 +35,8 @@ namespace TBS.Services.Bids
         {
             return await Task.FromResult(
                 _context.CarrierBids
+                .Include(b => b.carrierReview)
+                .Include(b => b.shipperReview)
                 .Include(b => b.Shipper)
                 .Include(b => b.Post)
                 .Include(b => b.PickupLocation)
@@ -88,7 +90,8 @@ namespace TBS.Services.Bids
             {
                 throw new FailedToUpdateBidException("Post is no longer accepting bids");
             }
-
+            request.Bid.carrierReview = null;
+            request.Bid.shipperReview = null;
             await _context.CarrierBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 

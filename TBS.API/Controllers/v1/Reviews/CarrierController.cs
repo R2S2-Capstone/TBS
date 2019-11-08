@@ -23,8 +23,10 @@ namespace TBS.API.Controllers.v1.Reviews
             _service = service;
         }
 
+        [HttpGet("{reviewId}/{trigger}")]
+        public async Task<IActionResult> GetReviewByIdAsync(Guid reviewId) => Ok(new { result = await _service.GetReviewByIdAsync(reviewId) });
         // GET: api/v1/Reviews/Carrier/{carrier}/
-        [HttpGet("{carrier}/{currentPage}/{pageSize}")]
+        [HttpGet("{carrier}")]
         public async Task<IActionResult> GetReviewsAsync(Guid carrier) => Ok(new { result = await _service.GetAllReviewsByCarrierIdAsync(carrier) });
 
         // POST: api/v1/Reviews/Carrier

@@ -15,12 +15,14 @@ using TBS.Data.Interfaces.Bids;
 using TBS.Data.Interfaces.Notifications;
 using TBS.Data.Interfaces.Posts;
 using TBS.Data.Interfaces.Profiles;
+using TBS.Data.Interfaces.Reviews;
 using TBS.Data.Interfaces.Users.Authentication;
 using TBS.Services.Bids;
 using TBS.Services.Notifications;
 using TBS.Services.Post;
 using TBS.Services.Posts;
 using TBS.Services.Profiles;
+using TBS.Services.Reviews;
 using TBS.Services.Users.Authentication;
 
 namespace TBS.API
@@ -52,9 +54,11 @@ namespace TBS.API
             services.AddScoped<ICarrierPostService, CarrierPostService>();
             services.AddScoped<ICarrierBidService, CarrierBidService>();
             services.AddScoped<ICarrierProfileService, CarrierProfileService>();
+            services.AddScoped<ICarrierReviewService, CarrierReviewService>();
             services.AddScoped<IShipperPostService, ShipperPostService>();
             services.AddScoped<IShipperBidService, ShipperBidService>();
             services.AddScoped<IShipperProfileService, ShipperProfileService>();
+            services.AddScoped<IShipperReviewService, ShipperReviewService>();
 
             services.AddHealthChecks().AddDbContextCheck<DatabaseContext>();
 

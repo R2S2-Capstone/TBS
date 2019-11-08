@@ -66,8 +66,7 @@
         <div class="col-12 background">
           <div class="row pt-3">
             <div class="col-12" v-for="(review, index) in reviews" :key="index">
-              <p>{{ review.rating }}</p>
-              <p>{{ review.reviewer }} | {{ review.date }}</p>
+              <p>{{ review.reviewer }} |  {{`${parseDate(review.date)}` }}<star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="review.rating"></star-rating></p>
               <p>{{ review.review }}</p>
             </div>
           </div>
@@ -81,10 +80,11 @@
 import Swal from 'sweetalert2'
 
 import postUtilities from '@/utils/postUtilities.js'
-
+import StarRating from 'vue-star-rating'
 export default {
   name: 'detailedCarrierPost',
   components: {
+    StarRating
   },
   props: {
     id: String
@@ -108,12 +108,16 @@ export default {
             reviewer: "Testing",
           }
         ],
+      review: null,
       error: false,
     }
   },
   methods: {
     parseTrailerType(trailerType) {
       return postUtilities.parseTrailerType(trailerType)
+    },
+     parseDate(value) {
+      return postUtilities.parseDate(value)
     },
     formatAddress(address) {
       return postUtilities.formatAddress(address)

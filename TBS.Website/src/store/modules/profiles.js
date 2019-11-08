@@ -44,7 +44,7 @@ const profiles = {
         })
       })
     },
-    getReviewById({ commit, rootGetters }, payload) {
+    getReviewsById({ commit, rootGetters }, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
         axios({

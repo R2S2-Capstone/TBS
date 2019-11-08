@@ -25,6 +25,25 @@ const bids = {
         })
       })
     },
+    getReviewById({ commit, rootGetters }, payload) {
+      return new Promise((resolve, reject) => {
+        commit('global/setLoading', true, { root: true })
+        axios({
+          method: 'GET',
+          url: `reviews/${payload.type}/${payload.Id}/1`,
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
     getMyBids({ commit, rootGetters }, payload) {
       return new Promise((resolve, reject) => {
         commit('global/setLoading', true, { root: true })
@@ -90,7 +109,7 @@ const bids = {
         axios({
           method: 'POST',
           url: `reviews/${payload.type}`,
-          data: {review: payload.review, bidBoolean: payload.bidBoolean, bidId: payload.bidId},
+          data: payload.Review,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {

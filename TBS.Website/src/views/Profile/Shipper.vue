@@ -65,8 +65,7 @@
       <div class="col-12 background">
         <div class="row pt-3">
           <div class="col-12" v-for="(review, index) in reviews" :key="index">
-            <p>{{ review.rating }}</p>
-            <p>{{ review.reviewer }} | {{ review.date }}</p>
+            <p>{{ review.reviewer }} |  {{`${parseDate(review.date)}` }}<star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="review.rating"></star-rating></p>
             <p>{{ review.review }}</p>
           </div>
         </div>
@@ -79,10 +78,11 @@
 import Swal from 'sweetalert2'
 
 import postUtilities from '@/utils/postUtilities.js'
-
+import StarRating from 'vue-star-rating'
 export default {
   name: 'detailedCarrierPost',
   components: {
+    StarRating
   },
   props: {
     id: String
@@ -113,6 +113,9 @@ export default {
     parseTrailerType(trailerType) {
       return postUtilities.parseTrailerType(trailerType)
     },
+     parseDate(value) {
+      return postUtilities.parseDate(value)
+    },
     formatAddress(address) {
       return postUtilities.formatAddress(address)
     },
@@ -129,7 +132,9 @@ export default {
           })
           this.error = true
         })
-      this.$store.dispatch('profiles/getReviewsById', {profileId: this.id, type: 'carrier'})
+    },
+    fetchReviews(){
+       this.$store.dispatch('profiles/getReviewsById', {profileId: this.id, type: 'shipper'})
           .then((response) => {
             this.reviews = response.data.result
           })
@@ -141,11 +146,12 @@ export default {
           })
           this.error = true
         })  
-    },
+    }
   },
   created() {
     if (this.id == null) this.$router.go(-1)
     this.fetchProfile()
+    this.fetchReviews()
   }
 }
 </script>

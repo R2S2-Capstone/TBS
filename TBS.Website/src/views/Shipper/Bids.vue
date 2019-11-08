@@ -24,7 +24,7 @@
               <tr v-for="bid in bids" :key="bid.id">
                 <td><router-link :to="{ name: 'carrierProfile', params: { id: bid.carrier.id }}" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
                 <td>{{ format(bid.bidAmount) }}</td>
-                <td>COMING SOON <i class="fas fa-star"></i></td>
+                <td>{{rating}} <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
                   <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
@@ -65,6 +65,7 @@ export default {
       error: false,
       post: null,
       bids: [],
+      rating: 0
     }
   },
   methods: {
@@ -158,11 +159,27 @@ export default {
           })
           this.error = true
         })
-      },
+        
+      },  
+      fetchReviews(bid){
+       this.$store.dispatch('profiles/getReviewsById', {profileId: bid.shipper.id, type: 'shipper'})
+          .then((response) => {
+            this.reviews = response.data.result
+          })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this post. Please try again!',
+          })
+          this.error = true
+        })  
+    },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)
     }
   },
+  
   computed: {
     currentBidPage() {
       return this.bidPage
@@ -170,6 +187,7 @@ export default {
   },
   created() {
     this.fetchPost()
+    this.fetchBids
   }
 }
 </script>

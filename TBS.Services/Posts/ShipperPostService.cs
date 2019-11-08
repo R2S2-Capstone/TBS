@@ -74,6 +74,7 @@ namespace TBS.Services.Post
                 .Include(p => p.PickupContact)
                 .Include(p => p.DropoffLocation)
                 .Include(p => p.DropoffContact)
+           
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             shipperPost.Bids = shipperPost.Bids.OrderByDescending(b => b.BidStatus);

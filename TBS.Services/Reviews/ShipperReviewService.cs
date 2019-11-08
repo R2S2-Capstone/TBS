@@ -16,7 +16,7 @@ using TBS.Services.Bids;
 
 namespace TBS.Services.Reviews
 {
-    class ShipperReviewService : IShipperReviewService
+    public class ShipperReviewService : IShipperReviewService
     {
 
         private readonly DatabaseContext _context;
@@ -26,40 +26,48 @@ namespace TBS.Services.Reviews
         }
 
 
-        public async Task<Array> GetAllReviewsByShipperIdAsync(Guid shipperId) {
-
-             var reviews = await Task.FromResult(
+        public async Task<ShipperReview> GetReviewByIdAsync(Guid reviewId)
+        {
+            Console.WriteLine(reviewId);
+            return await Task.FromResult(
                 _context.ShipperReviews
-                .Include(b => b.rating)
-                .Include(b => b.review)
-                .Include(b => b.ID)
+                .FirstOrDefault(b => b.ID == reviewId)
+            );
+        }
+        public async Task<Array> GetAllReviewsByShipperIdAsync(Guid shipperId) {
+            Console.WriteLine(shipperId.ToString());
+            var reviews = await Task.FromResult(
+                _context.ShipperReviews
+                .Include(b => b.shipper)
                 .Where(b => b.shipper.Id == shipperId));
-
+           
             var ArrayReviews = reviews.ToArray<ShipperReview>();
+            Console.WriteLine(ArrayReviews[0].review);
             return ArrayReviews;
 
         }
         public async Task<bool> CreateReviewAsync(ShipperCreateReviewRequest request) {
 
-            if (!request.bidBoolean) {
+            ShipperReview createdReview = new ShipperReview();
+            createdReview.rating = request.rating;
+            createdReview.review = request.review;
+            createdReview.date = DateTime.Now;
+            Console.WriteLine(request.bidId.ToString());
+            if (request.bidBoolean) {
                 CarrierBid x = await Task.FromResult(
                 _context.CarrierBids
                .Include(b => b.Shipper)
-               .Include(b => b.Post)
+               .Include(b => b.Post.Carrier)
                .Include(b => b.carrierReview)
                .FirstOrDefault(b => b.Id == request.bidId));
-                request.review.date = DateTime.Now;
-                request.review.shipper = x.Shipper;
-                request.review.reviewer = x.Post.Carrier.Name;
-                await _context.ShipperReviews.AddAsync(request.review);
+                createdReview.shipper = x.Shipper;
+                Console.WriteLine(x.BidStatus.ToString());
+                createdReview.reviewer = x.Post.Carrier.Name;
+                await _context.ShipperReviews.AddAsync(createdReview);
                 await _context.SaveChangesAsync();
-                x.shipperReview = await _context.ShipperReviews
-                    .Include(b => b.rating)
-                    .Include(b => b.review)
-                    .Include(b => b.ID)
-                    .Include(b => b.shipper)
-                    .FirstOrDefaultAsync(b => b.review == request.review.review && b.date == request.review.date);
+                x.shipperReview = createdReview;
                 _context.CarrierBids.Update(x);
+                await _context.SaveChangesAsync();
                 return await Task.FromResult(true);
             }
 
@@ -69,18 +77,13 @@ namespace TBS.Services.Reviews
                 .Include(b => b.Post)
                 .Include(b => b.shipperReview)
                 .FirstOrDefault(b => b.Id == request.bidId));
-            request.review.date = DateTime.Now;
-            request.review.shipper = bid.Post.Shipper;
-            request.review.reviewer = bid.Carrier.Name;
-            await _context.ShipperReviews.AddAsync(request.review);
+            createdReview.shipper = bid.Post.Shipper;
+            createdReview.reviewer = bid.Carrier.Name;
+            await _context.ShipperReviews.AddAsync(createdReview);
             await _context.SaveChangesAsync();
-            bid.shipperReview = await _context.ShipperReviews
-                .Include(b => b.rating)
-                .Include(b => b.review)
-                .Include(b => b.ID)
-                .Include(b => b.shipper)
-                .FirstOrDefaultAsync(b => b.review == request.review.review && b.date == request.review.date);
+            bid.shipperReview = createdReview;
             _context.ShipperBids.Update(bid);
+            await _context.SaveChangesAsync();
             return await Task.FromResult(true);
         }
     }
