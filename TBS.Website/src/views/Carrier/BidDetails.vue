@@ -70,7 +70,7 @@
                   <td>{{ parseDate(bid.dateBidPlaced) }}</td>
                   <td>{{ formatMoney(bid.bidAmount) }}</td>
                   <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id }}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
-                  <td>Coming soon</td>
+                  <td><star-rating v-bind:inline=true v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="reviewScore"></star-rating></td>
                 </tr>
               </table>
             </div>
@@ -99,11 +99,12 @@ import Back from '@/components/Back.vue'
 
 import postUtilities from '@/utils/postUtilities.js'
 import bidUtilities from '@/utils/bidUtilities.js'
-
+import StarRating from "vue-star-rating";
 export default {
   name: 'carrierViewBidDetails',
   components: {
     Back,
+    StarRating
   },
   beforeCreate() {
     // A bid id must be passed, if not return to previous route
@@ -112,6 +113,7 @@ export default {
   data() {
     return {
       bid: null,
+      reviewScore: 0
     }
   },
   methods: {
@@ -185,6 +187,27 @@ export default {
       this.$store.dispatch('bids/getBidById', { type: 'carrier', bidId: this.$route.params.id })
         .then((response) => {
           this.bid = response.data.result
+          this.getReviewScore(this.bid)
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this bid. Please try again!',
+          })
+        })
+    },
+    getReviewScore(bid) {
+      this.$store.dispatch('profiles/getReviewsById', { type: 'shipper', profileId: bid.shipper.id })
+        .then((response) => {
+          var reviews = response.data.result
+          this.reviewScore = 0
+          var totalReviews = 0
+          reviews.forEach(review => {
+            this.reviewScore += review.rating
+            totalReviews += 1
+          });
+          this.reviewScore = this.reviewScore/totalReviews
         })
         .catch(() => {
           Swal.fire({

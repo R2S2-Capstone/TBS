@@ -73,7 +73,7 @@
                 </tr>
                 <tr>
                   <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
-                  <td>Coming Soon..</td>
+                  <td><star-rating v-bind:inline=true v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="reviewScore"></star-rating></td>
                   <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
                 </tr>
               </table>
@@ -121,7 +121,7 @@
 import Swal from 'sweetalert2'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
-
+import StarRating from "vue-star-rating";
 import postUtilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
@@ -130,6 +130,7 @@ export default {
   name: 'detailedShipperPost',
   components: {
     TextInput,
+    StarRating,
   },
   props: {
     id: String
@@ -143,6 +144,7 @@ export default {
       bidError: false,
       bidSuccess: false,
       showModal: false,
+      reviewScore: 0,
     }
   },
   methods: {
@@ -161,6 +163,7 @@ export default {
             }
             this.lowestBid = min
           }
+          this.getReviewScore(this.post)
         })
         .catch(() => {
           Swal.fire({
@@ -207,6 +210,26 @@ export default {
             type: 'error',
             title: 'Oops...',
             text: 'Something went wrong! Please try again!',
+          })
+        })
+    },
+     getReviewScore(post) {
+      this.$store.dispatch('profiles/getReviewsById', { type: 'shipper', profileId: post.shipper.id })
+        .then((response) => {
+          var reviews = response.data.result
+          this.reviewScore = 0
+          var totalReviews = 0
+          reviews.forEach(review => {
+            this.reviewScore += review.rating
+            totalReviews += 1
+          });
+          this.reviewScore = this.reviewScore/totalReviews
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this bid. Please try again!',
           })
         })
     },

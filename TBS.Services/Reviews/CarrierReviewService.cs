@@ -61,13 +61,6 @@ namespace TBS.Services.Reviews
                 bid.carrierReview = createdReview;
                 _context.CarrierBids.Update(bid);
                 await _context.SaveChangesAsync();
-                CarrierBid bid2 = await Task.FromResult(
-                    _context.CarrierBids
-                   .Include(b => b.Shipper)
-                   .Include(b => b.Post)
-                   .Include(b => b.carrierReview)
-                   .FirstOrDefault(b => b.Id == request.bidId));
-                Console.WriteLine(bid2.carrierReview.review);
                 return await Task.FromResult(true);
             }
 

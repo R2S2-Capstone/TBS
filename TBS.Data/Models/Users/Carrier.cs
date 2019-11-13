@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Reviews;
 using TBS.Data.Models.Users.Information;
 using TBS.Data.Models.Vehicle.Carrier;
 
@@ -31,5 +32,7 @@ namespace TBS.Data.Models.Users
         public CarrierVehicle Vehicle { get; set; }
 
         public virtual IEnumerable<CarrierPost> Posts { get; set; }
+
+        public virtual IEnumerable<CarrierReviews> Reviews { get; set; }
     }
 }

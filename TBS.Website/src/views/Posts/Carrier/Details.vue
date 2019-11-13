@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                   <td><router-link :to="{ name: 'carrierProfile', params: {id:post.carrier.id}}" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
-                  <td>Coming Soon..</td>
+                  <td><star-rating v-bind:inline=true v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="reviewScore"></star-rating></td>
                   <td><a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a></td>
                 </tr>
               </table>
@@ -204,7 +204,7 @@ import TextInput from '@/components/Form/Input/TextInput.vue'
 import DateInput from '@/components/Form/Input/DateInput.vue'
 import ConditionInput from '@/components/Form/Input/ConditionInput.vue'
 import YearInput from '@/components/Form/Input/YearInput.vue'
-
+import StarRating from "vue-star-rating";
 import postUtilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
@@ -216,6 +216,7 @@ export default {
     DateInput,
     ConditionInput,
     YearInput,
+    StarRating,
   },
   props: {
     id: String
@@ -256,6 +257,7 @@ export default {
       toShowModal: false,
       validPickupAddress: null,
       validDropoffAddress: null,
+      reviewScore: 0,
     }
   },
   methods: {
@@ -274,6 +276,7 @@ export default {
             }
             this.highestBid = max
           }
+          this.getReviewScore(this.post)
         })
         .catch(() => {
           Swal.fire({
@@ -320,6 +323,26 @@ export default {
             type: 'error',
             title: 'Oops...',
             text: 'Something went wrong! Please try again!',
+          })
+        })
+    },
+    getReviewScore(post) {
+      this.$store.dispatch('profiles/getReviewsById', { type: 'carrier', profileId: post.carrier.id })
+        .then((response) => {
+          var reviews = response.data.result
+          this.reviewScore = 0
+          var totalReviews = 0
+          reviews.forEach(review => {
+            this.reviewScore += review.rating
+            totalReviews += 1
+          });
+          this.reviewScore = this.reviewScore/totalReviews
+        })
+        .catch(() => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load this bid. Please try again!',
           })
         })
     },

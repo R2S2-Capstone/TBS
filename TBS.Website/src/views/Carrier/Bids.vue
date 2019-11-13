@@ -23,7 +23,7 @@
               <tr v-for="bid in bids" :key="bid.id">
                 <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id} }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                 <td>{{ format(bid.bidAmount) }}</td>
-                <td>COMING SOON <i class="fas fa-star"></i></td>
+                <td>{{bid.reviewScore}} <i class="fas fa-star"></i></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td v-if="bid.id"><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
@@ -150,6 +150,15 @@ export default {
         .then((response) => {
           this.post = response.data.result
           this.bids = this.post.bids
+          this.bids.forEach(bid => {
+            var reviewScore = 0
+            var amountOfReviews = 0
+            bid.shipper.reviews.forEach(review => {
+              reviewScore += review.rating
+              amountOfReviews += amountOfReviews + 1
+            })
+            bid.reviewScore = Math.ceil(reviewScore/amountOfReviews) 
+          })
         })
         .catch(() => {
           Swal.fire({

@@ -24,8 +24,10 @@
               <tr v-for="bid in bids" :key="bid.id">
                 <td><router-link :to="{ name: 'carrierProfile', params: { id: bid.carrier.id }}" class="fade-on-hover text-blue">{{ bid.carrier.name }}</router-link></td>
                 <td>{{ format(bid.bidAmount) }}</td>
-                <td>{{rating}} <i class="fas fa-star"></i></td>
-                <td>{{ parseBidStatus(bid.bidStatus) }}</td>
+                <!-- <td>{{getReviewScore(bid)}} <i class="fas fa-star"></i></td> -->
+                <td>
+                  <p v-if="bid.reviewScore">{{(bid.reviewScore)}} <i class="fas fa-star"></i> </p></td>
+                <td>{{parseBidStatus(bid.bidStatus)}}</td>
                 <td>
                   <div v-if="parseBidStatus(bid.bidStatus) == 'Open'">
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white m-1" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.carrier.name)">Accept</button>
@@ -48,11 +50,10 @@ import Swal from 'sweetalert2'
 import Back from '@/components/Back.vue'
 
 import bidUtilities from '@/utils/bidUtilities.js'
-
 export default {
   name: 'shipperManageBids',
   components: {
-    Back
+    Back,
   },
   beforeCreate() {
     // A post ID must be passed, if not return to previous route
@@ -150,6 +151,15 @@ export default {
         .then((response) => {
           this.post = response.data.result
           this.bids = this.post.bids
+          this.bids.forEach(bid => {
+            var reviewScore = 0
+            var amountOfReviews = 0
+            bid.carrier.reviews.forEach(review => {
+              reviewScore += review.rating
+              amountOfReviews += amountOfReviews + 1
+            })
+            bid.reviewScore = Math.ceil(reviewScore/amountOfReviews) 
+          })
         })
         .catch(() => {
           Swal.fire({
@@ -161,20 +171,6 @@ export default {
         })
         
       },  
-      fetchReviews(bid){
-       this.$store.dispatch('profiles/getReviewsById', {profileId: bid.shipper.id, type: 'shipper'})
-          .then((response) => {
-            this.reviews = response.data.result
-          })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load this post. Please try again!',
-          })
-          this.error = true
-        })  
-    },
     parseBidStatus(status) {
       return bidUtilities.parseBidStatus(status)
     }

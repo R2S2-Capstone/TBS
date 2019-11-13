@@ -61,6 +61,7 @@ namespace TBS.Services.Posts
                 .Include(p => p.Carrier.Company.Contact)
                 .Include(p => p.Bids)
                 .ThenInclude(b => b.Shipper)
+                .ThenInclude(c => c.Reviews)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             carrierPost.Bids = carrierPost.Bids.OrderByDescending(b => b.BidStatus);
