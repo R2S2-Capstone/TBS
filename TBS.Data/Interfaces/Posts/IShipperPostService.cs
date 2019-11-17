@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TBS.Data.Models;
 using TBS.Data.Models.Posts.Response;
 using TBS.Data.Models.Posts.Shipper;
-using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Posts.Request;
 
 namespace TBS.Data.Interfaces.Posts
 {
@@ -15,9 +15,10 @@ namespace TBS.Data.Interfaces.Posts
 
         Task<ShipperPost> GetPostByIdAsync(Guid id);
 
+        Task<PaginatedShipperPosts> GetSearchAllActivePostsAsync(SearchModel request, PaginationModel model);
+
         Task<bool> CreatePostAsync(string userFirebaseId, ShipperPost post);
 
-        Task<PaginatedShipperPosts> SearchAllActivePostsAsync(SearchModel request, PaginationModel model);
 
         Task<bool> UpdatePostAsync(Guid id, ShipperPost post);
 

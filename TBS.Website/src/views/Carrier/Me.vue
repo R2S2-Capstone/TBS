@@ -7,6 +7,30 @@
         <div>
           <TextInput v-model="profile.driversLicense" placeHolder="Drivers License" errorMessage="Please enter a drivers license number" :validator="$v.profile.driversLicense"/>
         </div>
+        <h5>Vehicle Information</h5>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <YearInput v-model="profile.vehicle.year" />
+            </div>
+            <div class="col-sm-12 col-mg-6 col-lg-6">
+              <TextInput v-model="profile.vehicle.vin" placeHolder="VIN" errorMessage="Please enter your vehicles VIN" :validator="$v.profile.vehicle.vin"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <TextInput v-model="profile.vehicle.make" placeHolder="Make" errorMessage="Please enter your vehicles make" :validator="$v.profile.vehicle.make"/>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <TextInput v-model="profile.vehicle.model" placeHolder="Model" errorMessage="Please enter your vehicles model" :validator="$v.profile.vehicle.model"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <TrailerInput v-model="profile.vehicle.trailerType" />
+            </div>
+          </div>
+        </div>
         <h5>Company Information</h5>
         <div class="row">
           <div class="col-12">
@@ -45,9 +69,13 @@
 <script>
 import Swal from 'sweetalert2'
 
+import postUtilities from '@/utils/postUtilities.js'
+
 import WideFormCard from '@/components/Form/Card/WideFormCard.vue'
 import EmailInput from '@/components/Form/Input/EmailInput.vue'
 import TextInput from '@/components/Form/Input/TextInput.vue'
+import YearInput from '@/components/Form/Input/YearInput.vue'
+import TrailerInput from '@/components/Form/Input/TrailerInput.vue'
 
 import { required, email, helpers } from 'vuelidate/lib/validators'
 const phoneNumberRegex = helpers.regex('phoneNumberRegex', /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
@@ -58,6 +86,8 @@ export default {
     WideFormCard,
     EmailInput,
     TextInput,
+    YearInput,
+    TrailerInput,
   },
   data() {
     return {
@@ -83,6 +113,13 @@ export default {
           }
         },
         driversLicense: '',
+        vehicle: {
+          vin: '',
+          make: '',
+          model: '',
+          year: '2019',
+          trailerType: 'Car Carrier'
+        }
       },
     }
   },
@@ -112,19 +149,35 @@ export default {
       driversLicense: {
         required
       },
+      vehicle: {
+        vin: {
+          required,
+        },
+        make: {
+          required,
+        },
+        model: {
+          required,
+        }
+      }
     },
   },
   methods: {
     update() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        return;
+        return
       }
-      this.$store.dispatch('profiles/updateProfile', this.profile)
+      let tempProfile = this.profile
+      delete tempProfile.reviews
+      delete tempProfile.posts
+      let trailerType = tempProfile.vehicle.trailerType
+      tempProfile.vehicle.trailerType = postUtilities.reverseParseTrailerType(tempProfile.vehicle.trailerType).toString()
+      this.$store.dispatch('profiles/updateProfile', tempProfile)
         .then(() => {
           this.error = false
           this.success = true
-
+          this.profile.vehicle.trailerType = trailerType
           Swal.fire({
             type: 'success',
             title: 'Success',
@@ -140,6 +193,18 @@ export default {
       this.$store.dispatch('profiles/getMyProfile')
         .then((response) => {
           this.profile = response.data.result
+          if (this.profile.vehicle == null) {
+            this.profile.vehicle = {
+              vin: '',
+              make: '',
+              model: '',
+              trailerType: 'Car Carrier',
+              year: '2019',
+            }
+          } else {
+            this.profile.vehicle.year = this.profile.vehicle.year.toString()
+            this.profile.vehicle.trailerType = postUtilities.parseTrailerType(this.profile.vehicle.trailerType)
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -152,11 +217,11 @@ export default {
     },
     parseAddress(address) {
       try {
-        this.profile.company.address.addressLine = `${address[0].long_name} ${address[1].long_name}`
-        this.profile.company.address.city = address[2].long_name
-        this.profile.company.address.province = address[4].short_name
-        this.profile.company.address.country = address[5].long_name
-        this.profile.company.address.postalCode = address[6].long_name
+        this.profile.company.address.addressLine = `${address.find(a => a.types.includes("street_number")).short_name} ${address.find(a => a.types.includes("route")).long_name}`
+        this.profile.company.address.city = address.find(a => a.types.includes("locality")).long_name
+        this.profile.company.address.province = address.find(a => a.types.includes("administrative_area_level_1")).short_name
+        this.profile.company.address.country = address.find(a => a.types.includes("country")).long_name
+        this.profile.company.address.postalCode = address.find(a => a.types.includes("postal_code")).long_name
         this.validCompanyAddress = true
       } catch {
         this.validCompanyAddress = false

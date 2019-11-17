@@ -176,6 +176,34 @@ namespace TBS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CarrierReviews",
+                columns: table => new
+                {
+                    ID = table.Column<byte[]>(nullable: false),
+                    CarrierId = table.Column<byte[]>(nullable: true),
+                    ShipperId = table.Column<byte[]>(nullable: true),
+                    Rating = table.Column<double>(nullable: false),
+                    Review = table.Column<string>(nullable: true),
+                    ReviewDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarrierReviews", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CarrierReviews_Carriers_CarrierId",
+                        column: x => x.CarrierId,
+                        principalTable: "Carriers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarrierReviews_Shippers_ShipperId",
+                        column: x => x.ShipperId,
+                        principalTable: "Shippers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShipperPosts",
                 columns: table => new
                 {
@@ -235,6 +263,34 @@ namespace TBS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ShipperReviews",
+                columns: table => new
+                {
+                    ID = table.Column<byte[]>(nullable: false),
+                    ShipperId = table.Column<byte[]>(nullable: true),
+                    CarrierId = table.Column<byte[]>(nullable: true),
+                    Rating = table.Column<double>(nullable: false),
+                    Review = table.Column<string>(nullable: true),
+                    ReviewDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShipperReviews", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ShipperReviews_Carriers_CarrierId",
+                        column: x => x.CarrierId,
+                        principalTable: "Carriers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ShipperReviews_Shippers_ShipperId",
+                        column: x => x.ShipperId,
+                        principalTable: "Shippers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CarrierBids",
                 columns: table => new
                 {
@@ -248,11 +304,19 @@ namespace TBS.Data.Migrations
                     DropoffDate = table.Column<DateTime>(nullable: false),
                     BidAmount = table.Column<double>(nullable: false),
                     DateBidPlaced = table.Column<DateTime>(nullable: false),
-                    BidStatus = table.Column<int>(nullable: false)
+                    BidStatus = table.Column<int>(nullable: false),
+                    CarrierReviewID = table.Column<byte[]>(nullable: true),
+                    ShipperReviewID = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CarrierBids", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarrierBids_CarrierReviews_CarrierReviewID",
+                        column: x => x.CarrierReviewID,
+                        principalTable: "CarrierReviews",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CarrierBids_Address_DropoffLocationId",
                         column: x => x.DropoffLocationId,
@@ -278,6 +342,12 @@ namespace TBS.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_CarrierBids_ShipperReviews_ShipperReviewID",
+                        column: x => x.ShipperReviewID,
+                        principalTable: "ShipperReviews",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_CarrierBids_PostedVehicle_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "PostedVehicle",
@@ -294,7 +364,9 @@ namespace TBS.Data.Migrations
                     PostId = table.Column<byte[]>(nullable: true),
                     BidAmount = table.Column<double>(nullable: false),
                     DateBidPlaced = table.Column<DateTime>(nullable: false),
-                    BidStatus = table.Column<int>(nullable: false)
+                    BidStatus = table.Column<int>(nullable: false),
+                    CarrierReviewID = table.Column<byte[]>(nullable: true),
+                    ShipperReviewID = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -306,12 +378,29 @@ namespace TBS.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_ShipperBids_CarrierReviews_CarrierReviewID",
+                        column: x => x.CarrierReviewID,
+                        principalTable: "CarrierReviews",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_ShipperBids_ShipperPosts_PostId",
                         column: x => x.PostId,
                         principalTable: "ShipperPosts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ShipperBids_ShipperReviews_ShipperReviewID",
+                        column: x => x.ShipperReviewID,
+                        principalTable: "ShipperReviews",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_CarrierReviewID",
+                table: "CarrierBids",
+                column: "CarrierReviewID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarrierBids_DropoffLocationId",
@@ -334,6 +423,11 @@ namespace TBS.Data.Migrations
                 column: "ShipperId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CarrierBids_ShipperReviewID",
+                table: "CarrierBids",
+                column: "ShipperReviewID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CarrierBids_VehicleId",
                 table: "CarrierBids",
                 column: "VehicleId");
@@ -342,6 +436,16 @@ namespace TBS.Data.Migrations
                 name: "IX_CarrierPosts_CarrierId",
                 table: "CarrierPosts",
                 column: "CarrierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierReviews_CarrierId",
+                table: "CarrierReviews",
+                column: "CarrierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrierReviews_ShipperId",
+                table: "CarrierReviews",
+                column: "ShipperId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carriers_CompanyId",
@@ -369,9 +473,19 @@ namespace TBS.Data.Migrations
                 column: "CarrierId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShipperBids_CarrierReviewID",
+                table: "ShipperBids",
+                column: "CarrierReviewID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShipperBids_PostId",
                 table: "ShipperBids",
                 column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShipperBids_ShipperReviewID",
+                table: "ShipperBids",
+                column: "ShipperReviewID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShipperPosts_DropoffContactId",
@@ -404,6 +518,16 @@ namespace TBS.Data.Migrations
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShipperReviews_CarrierId",
+                table: "ShipperReviews",
+                column: "CarrierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShipperReviews_ShipperId",
+                table: "ShipperReviews",
+                column: "ShipperId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Shippers_CompanyId",
                 table: "Shippers",
                 column: "CompanyId");
@@ -421,16 +545,22 @@ namespace TBS.Data.Migrations
                 name: "CarrierPosts");
 
             migrationBuilder.DropTable(
+                name: "CarrierReviews");
+
+            migrationBuilder.DropTable(
                 name: "ShipperPosts");
+
+            migrationBuilder.DropTable(
+                name: "ShipperReviews");
+
+            migrationBuilder.DropTable(
+                name: "PostedVehicle");
 
             migrationBuilder.DropTable(
                 name: "Carriers");
 
             migrationBuilder.DropTable(
                 name: "Shippers");
-
-            migrationBuilder.DropTable(
-                name: "PostedVehicle");
 
             migrationBuilder.DropTable(
                 name: "CarrierVehicle");

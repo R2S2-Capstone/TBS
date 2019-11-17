@@ -14,7 +14,7 @@ namespace TBS.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity("TBS.Data.Models.Bids.Carrier.CarrierBid", b =>
                 {
@@ -25,6 +25,9 @@ namespace TBS.Data.Migrations
                     b.Property<double>("BidAmount");
 
                     b.Property<int>("BidStatus");
+
+                    b.Property<byte[]>("CarrierReviewID")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.Property<DateTime>("DateBidPlaced");
 
@@ -46,17 +49,16 @@ namespace TBS.Data.Migrations
                     b.Property<byte[]>("ShipperId")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
+                    b.Property<byte[]>("ShipperReviewID")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
+
                     b.Property<byte[]>("VehicleId")
                         .IsRequired()
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<byte[]>("carrierReviewID")
-                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
-
-                    b.Property<byte[]>("shipperReviewID")
-                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CarrierReviewID");
 
                     b.HasIndex("DropoffLocationId");
 
@@ -66,11 +68,9 @@ namespace TBS.Data.Migrations
 
                     b.HasIndex("ShipperId");
 
+                    b.HasIndex("ShipperReviewID");
+
                     b.HasIndex("VehicleId");
-
-                    b.HasIndex("carrierReviewID");
-
-                    b.HasIndex("shipperReviewID");
 
                     b.ToTable("CarrierBids");
                 });
@@ -88,26 +88,26 @@ namespace TBS.Data.Migrations
                     b.Property<byte[]>("CarrierId")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
+                    b.Property<byte[]>("CarrierReviewID")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
+
                     b.Property<DateTime>("DateBidPlaced");
 
                     b.Property<byte[]>("PostId")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<byte[]>("carrierReviewID")
-                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
-
-                    b.Property<byte[]>("shipperReviewID")
+                    b.Property<byte[]>("ShipperReviewID")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarrierId");
 
+                    b.HasIndex("CarrierReviewID");
+
                     b.HasIndex("PostId");
 
-                    b.HasIndex("carrierReviewID");
-
-                    b.HasIndex("shipperReviewID");
+                    b.HasIndex("ShipperReviewID");
 
                     b.ToTable("ShipperBids");
                 });
@@ -234,7 +234,7 @@ namespace TBS.Data.Migrations
                     b.ToTable("ShipperPosts");
                 });
 
-            modelBuilder.Entity("TBS.Data.Models.Reviews.CarrierReviews", b =>
+            modelBuilder.Entity("TBS.Data.Models.Reviews.CarrierReview", b =>
                 {
                     b.Property<byte[]>("ID")
                         .ValueGeneratedOnAdd()
@@ -243,20 +243,22 @@ namespace TBS.Data.Migrations
                     b.Property<byte[]>("CarrierId")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<DateTime>("date");
+                    b.Property<double>("Rating");
 
-                    b.Property<int>("rating");
+                    b.Property<string>("Review");
 
-                    b.Property<string>("review");
+                    b.Property<DateTime>("ReviewDate");
 
-                    b.Property<string>("reviewer")
-                        .IsRequired();
+                    b.Property<byte[]>("ShipperId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("ID");
 
                     b.HasIndex("CarrierId");
 
-                    b.ToTable("CarrierReview");
+                    b.HasIndex("ShipperId");
+
+                    b.ToTable("CarrierReviews");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Reviews.ShipperReview", b =>
@@ -265,21 +267,23 @@ namespace TBS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<DateTime>("date");
+                    b.Property<byte[]>("CarrierId")
+                        .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
-                    b.Property<int>("rating");
+                    b.Property<double>("Rating");
 
-                    b.Property<string>("review");
+                    b.Property<string>("Review");
 
-                    b.Property<string>("reviewer")
-                        .IsRequired();
+                    b.Property<DateTime>("ReviewDate");
 
-                    b.Property<byte[]>("shipperId")
+                    b.Property<byte[]>("ShipperId")
                         .HasConversion(new ValueConverter<byte[], byte[]>(v => default(byte[]), v => default(byte[]), new ConverterMappingHints(size: 16)));
 
                     b.HasKey("ID");
 
-                    b.HasIndex("shipperId");
+                    b.HasIndex("CarrierId");
+
+                    b.HasIndex("ShipperId");
 
                     b.ToTable("ShipperReviews");
                 });
@@ -446,6 +450,10 @@ namespace TBS.Data.Migrations
 
             modelBuilder.Entity("TBS.Data.Models.Bids.Carrier.CarrierBid", b =>
                 {
+                    b.HasOne("TBS.Data.Models.Reviews.CarrierReview", "CarrierReview")
+                        .WithMany()
+                        .HasForeignKey("CarrierReviewID");
+
                     b.HasOne("TBS.Data.Models.General.Address", "DropoffLocation")
                         .WithMany()
                         .HasForeignKey("DropoffLocationId")
@@ -464,18 +472,14 @@ namespace TBS.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ShipperId");
 
+                    b.HasOne("TBS.Data.Models.Reviews.ShipperReview", "ShipperReview")
+                        .WithMany()
+                        .HasForeignKey("ShipperReviewID");
+
                     b.HasOne("TBS.Data.Models.Vehicle.PostedVehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TBS.Data.Models.Reviews.CarrierReviews", "carrierReview")
-                        .WithMany()
-                        .HasForeignKey("carrierReviewID");
-
-                    b.HasOne("TBS.Data.Models.Reviews.ShipperReview", "shipperReview")
-                        .WithMany()
-                        .HasForeignKey("shipperReviewID");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Bids.Shipper.ShipperBid", b =>
@@ -484,17 +488,17 @@ namespace TBS.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CarrierId");
 
+                    b.HasOne("TBS.Data.Models.Reviews.CarrierReview", "CarrierReview")
+                        .WithMany()
+                        .HasForeignKey("CarrierReviewID");
+
                     b.HasOne("TBS.Data.Models.Posts.Shipper.ShipperPost", "Post")
                         .WithMany("Bids")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("TBS.Data.Models.Reviews.CarrierReviews", "carrierReview")
+                    b.HasOne("TBS.Data.Models.Reviews.ShipperReview", "ShipperReview")
                         .WithMany()
-                        .HasForeignKey("carrierReviewID");
-
-                    b.HasOne("TBS.Data.Models.Reviews.ShipperReview", "shipperReview")
-                        .WithMany()
-                        .HasForeignKey("shipperReviewID");
+                        .HasForeignKey("ShipperReviewID");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Posts.Carrier.CarrierPost", b =>
@@ -536,18 +540,26 @@ namespace TBS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TBS.Data.Models.Reviews.CarrierReviews", b =>
+            modelBuilder.Entity("TBS.Data.Models.Reviews.CarrierReview", b =>
                 {
                     b.HasOne("TBS.Data.Models.Users.Carrier", "Carrier")
                         .WithMany("Reviews")
                         .HasForeignKey("CarrierId");
+
+                    b.HasOne("TBS.Data.Models.Users.Shipper", "Shipper")
+                        .WithMany()
+                        .HasForeignKey("ShipperId");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Reviews.ShipperReview", b =>
                 {
-                    b.HasOne("TBS.Data.Models.Users.Shipper", "shipper")
+                    b.HasOne("TBS.Data.Models.Users.Carrier", "Carrier")
+                        .WithMany()
+                        .HasForeignKey("CarrierId");
+
+                    b.HasOne("TBS.Data.Models.Users.Shipper", "Shipper")
                         .WithMany("Reviews")
-                        .HasForeignKey("shipperId");
+                        .HasForeignKey("ShipperId");
                 });
 
             modelBuilder.Entity("TBS.Data.Models.Users.Carrier", b =>

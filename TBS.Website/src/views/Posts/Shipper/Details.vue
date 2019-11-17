@@ -73,7 +73,7 @@
                 </tr>
                 <tr>
                   <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
-                  <td><star-rating v-bind:inline=true v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="reviewScore"></star-rating></td>
+                  <td><star-rating :inline=true :show-rating=false :increment="0.5" :read-only=true :star-size=30 v-model="reviewScore"></star-rating></td>
                   <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
                 </tr>
               </table>
@@ -90,7 +90,7 @@
               <table class="table">
                 <tr>
                   <th style="width: 33.3%">Date Posted</th>
-                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Maximum Bid</th>
                   <th style="width: 33.3%">Lowest Bid</th>
                 </tr>
                 <tr>
@@ -163,7 +163,16 @@ export default {
             }
             this.lowestBid = min
           }
-          this.getReviewScore(this.post)
+          let reviews = this.post.shipper.reviews
+          this.reviewScore = 0
+          if (reviews != null) {
+            let totalReviews = 0
+            reviews.forEach(review => {
+              this.reviewScore += review.rating
+              totalReviews += 1
+            })
+            this.reviewScore = this.reviewScore / totalReviews
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -210,26 +219,6 @@ export default {
             type: 'error',
             title: 'Oops...',
             text: 'Something went wrong! Please try again!',
-          })
-        })
-    },
-     getReviewScore(post) {
-      this.$store.dispatch('profiles/getReviewsById', { type: 'shipper', profileId: post.shipper.id })
-        .then((response) => {
-          var reviews = response.data.result
-          this.reviewScore = 0
-          var totalReviews = 0
-          reviews.forEach(review => {
-            this.reviewScore += review.rating
-            totalReviews += 1
-          });
-          this.reviewScore = this.reviewScore/totalReviews
-        })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load this bid. Please try again!',
           })
         })
     },

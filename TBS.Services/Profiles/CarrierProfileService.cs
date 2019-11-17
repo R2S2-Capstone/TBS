@@ -35,6 +35,8 @@ namespace TBS.Services.Profiles
                 .Include(c => c.Company.Address)
                 .Include(c => c.Company.Contact)
                 .Include(c => c.Vehicle)
+                .Include(c => c.Reviews)
+                    .ThenInclude(r => r.Shipper)
                 .FirstOrDefaultAsync(c => c.Id == profileId);
         }
 

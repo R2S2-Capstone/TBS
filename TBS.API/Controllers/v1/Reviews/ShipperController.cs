@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TBS.Data.Interfaces.Reviews;
@@ -22,19 +19,9 @@ namespace TBS.API.Controllers.v1.Reviews
             _service = service;
         }
 
-        [HttpGet("{reviewId}/{trigger}")]
-        public async Task<IActionResult> GetReviewByIdAsync(Guid reviewId) => Ok(new { result = await _service.GetReviewByIdAsync(reviewId) });
-
-        // GET: api/v1/Reviews/Shipper/
-        [HttpGet("{shipper}")]
-        public async Task<IActionResult> GetReviewsAsync(Guid shipper) => Ok(new { result = await _service.GetAllReviewsByShipperIdAsync(shipper) });
-
         // POST: api/v1/Reviews/Shipper
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostShipperReviewAsync(ShipperCreateReviewRequest review)
-        {
-            return Ok(new { result = await _service.CreateReviewAsync(review) });
-        }
+        public async Task<IActionResult> PostShipperReviewAsync(ShipperCreateReviewRequest review) => Ok(new { result = await _service.CreateReviewAsync(review) });
     }
 }

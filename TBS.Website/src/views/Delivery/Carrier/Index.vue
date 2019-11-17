@@ -28,7 +28,7 @@
                 <thead>
                   <th style="width: 33.3%">Pickup</th>
                   <th style="width: 33.3%">Dropoff</th>
-                  <th style="width: 33.3%">Vehicle Information</th>
+                  <th style="width: 33.3%">Carrier Vehicle Information</th>
                 </thead>
                 <tbody>
                   <td>{{ post.pickupLocation }} - {{ parseDate(post.pickupDate) }}</td>
@@ -93,61 +93,44 @@
         </div>
       </div>
     </div>
-    <div class="row pt-3" v-if="convertedBidStatus === 'Completed'">
+    <div class="row pt-3 text-center" v-if="convertedBidStatus == 'Completed'">
       <div class="col-12 background">
         <p></p>
-        <h4 class="text-center">Reviews</h4>
+        <h4>Review</h4>
         <hr>
-        <div class="row pt-3" v-if="CarrierReview == null && accountType == 'carrier'" >
-      <div class="col-12 pt-3 pb-3"> 
-     <h5>Place a Review</h5><br>
-     <input type="radio" id="one" value=1 v-model="TempCarrierReview.rating">
-        <label for="one">&nbsp;1&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="two" value=2 v-model="TempCarrierReview.rating">
-        <label for="two">&nbsp;2&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="three" value=3 v-model="TempCarrierReview.rating">
-        <label for="three">&nbsp;3&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="four" value=4 v-model="TempCarrierReview.rating">
-        <label for="four">&nbsp;4&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="five" value=5 v-model="TempCarrierReview.rating">
-        <label for="five">&nbsp;5&nbsp;&nbsp;&nbsp;</label>
-      <br>
-      <span>Enter comment here </span>
-      <br>
-      <textarea style="min-width:35%" v-model="TempCarrierReview.review"/><br><br>
-        <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="createCarrierReview()">Enter Review</button><br>
-      </div>
-    </div>
-        <div class="row pt-3" v-if="ShipperReview == null && accountType == 'shipper'" >
-      <div class="col-12 pt-3 pb-3"> 
-     <h5>Place a Review</h5><br>
-     <input type="radio" id="one" value=1 v-model="TempShipperReview.rating">
-        <label for="one">&nbsp;1&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="two" value=2 v-model="TempShipperReview.rating">
-        <label for="two">&nbsp;2&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="three" value=3 v-model="TempShipperReview.rating">
-        <label for="three">&nbsp;3&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="four" value=4 v-model="TempShipperReview.rating">
-        <label for="four">&nbsp;4&nbsp;&nbsp;&nbsp;</label>
-      <input type="radio" id="five" value=5 v-model="TempShipperReview.rating">
-        <label for="five">&nbsp;5&nbsp;&nbsp;&nbsp;</label>
-      <br>
-      <span>Enter comment here </span>
-      <br>
-      <textarea style="min-width:35%" v-model="TempShipperReview.review"/><br><br>
-        <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="createShipperReview()">Enter Review</button><br>
-      </div>
-    </div>
-        <div class="row pt-3" v-if="CarrierReview != null || ShipperReview != null">
-          <div class="col-12" v-if="CarrierReview != null">
-            <p class="font-weight-bold">Carrier Review<p>
-            <p>{{ CarrierReview.reviewer }} | {{`${parseDate(CarrierReview.date)}` }} <star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="CarrierReview.rating"></star-rating></p>
-            <p>{{ CarrierReview.review }}</p>
+        <div class="row" v-if="carrierReview == null && accountType == 'carrier' && !carrierReviewPlaced" >
+          <div class="col-12 pt-3 pb-3"> 
+            <h5>Place a Review</h5>
+            <p><star-rating style="display: inline-block;" :increment="0.5" @rating-selected="setCarrierReview" :show-rating=false :star-size=30></star-rating></p>
+            <span>Enter comment here </span>
+            <br>
+            <textarea style="min-width:35%" v-model="tempCarrierReview.review"/><br><br>
+            <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="createReview('carrier', tempCarrierReview)">Enter Review</button><br>
           </div>
-          <div class="col-12" v-if="ShipperReview != null">
-            <p class="font-weight-bold">Shipper Review<p>
-            <p>{{ ShipperReview.reviewer }} |  {{`${parseDate(ShipperReview.date)}` }}<star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="ShipperReview.rating"></star-rating></p>
-            <p>{{ ShipperReview.review }}</p>
+        </div>
+        <div class="row" v-if="shipperReview == null && accountType == 'shipper' && !shipperReviewPlaced">
+          <div class="col-12 pt-3 pb-3"> 
+            <h5>Place a Review</h5>
+            <p><star-rating style="display: inline-block;" :increment="0.5" @rating-selected="setShipperReview" :show-rating=false :star-size=30></star-rating></p>
+            <span>Enter comment here </span>
+            <br>
+            <textarea style="min-width:35%" v-model="tempShipperReview.review"/><br><br>
+            <button type="button" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="createReview('shipper', tempShipperReview)">Enter Review</button><br>
+          </div>
+        </div>
+        <div class="row pt-3">
+          <div class="col-12" v-if="carrierReview != null">
+            <p class="font-weight-bold">Review from Shipper<p>
+            <p>{{ carrierReview.shipper.name }} | {{`${parseDate(carrierReview.reviewDate)}` }}</p>
+            <p><star-rating style="display: inline-block;" :increment="0.5" :show-rating=false :read-only=true :star-size=30 v-model="carrierReview.rating"></star-rating></p>
+            <p>{{ carrierReview.review }}</p>
+          </div>
+          <hr v-if="carrierReview && shipperReview" class="pb-3">
+          <div class="col-12 text-center" v-if="shipperReview != null">
+            <p class="font-weight-bold">Review from Carrier<p>
+            <p>{{ shipperReview.carrier.name }} |  {{`${parseDate(shipperReview.reviewDate)}` }}</p>
+            <p><star-rating style="display: inline-block;" :increment="0.5" :show-rating=false :read-only=true :star-size=30 v-model="shipperReview.rating"></star-rating></p>
+            <p>{{ shipperReview.review }}</p>
           </div>
         </div>
       </div>
@@ -156,15 +139,15 @@
 </template>
 
 <script>
-import Back from "@/components/Back.vue";
+import Back from '@/components/Back.vue'
 
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
 
-import postUtilities from "@/utils/postUtilities.js";
-import bidUtilities from "@/utils/bidUtilities.js";
-import StarRating from "vue-star-rating";
+import postUtilities from '@/utils/postUtilities.js'
+import bidUtilities from '@/utils/bidUtilities.js'
+import StarRating from 'vue-star-rating'
 export default {
-  name: "carrierDelivery",
+  name: 'carrierDelivery',
   components: {
     Back,
     StarRating
@@ -176,185 +159,158 @@ export default {
   data() {
     return {
       bidType: true,
-      accountType: "",
+      accountType: '',
       post: null,
       bid: null,
-      TempCarrierReview: {
+      carrierReview: null,
+      carrierReviewPlaced: false,
+      shipperReviewPlaced: false,
+      tempCarrierReview: {
         rating: 1,
-        review: ""
+        review: ''
       },
-      TempShipperReview: {
+      shipperReview: null,
+      tempShipperReview: {
         rating: 1,
-        review: ""
+        review: ''
       },
       error: null,
       convertedBidStatus: null
-    };
+    }
   },
   methods: {
     loadDetails() {
       this.$store
-        .dispatch("posts/getPostById", {
-          type: "carrier",
+        .dispatch('posts/getPostById', {
+          type: 'carrier',
           postId: this.$route.params.postId
         })
         .then(response => {
-          this.post = response.data.result;
-          this.bid = this.post.bids.find(bid => bid.id == this.bidId);
-          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus);
-          this.loadBid();
+          this.post = response.data.result
+          this.bid = this.post.bids.find(bid => bid.id == this.bidId)
+          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
+          this.carrierReview = this.bid.carrierReview
+          this.shipperReview = this.bid.shipperReview
         })
         .catch(() => {
           Swal.fire({
-            type: "error",
-            title: "Oops...",
-            text:
-              "Something went wrong! We are unable to load the delivery details. Please try again!"
-          });
-          this.error = true;
-        });
-    },
-    loadBid() {
-      this.$store
-        .dispatch("bids/getBidById", { type: "carrier", bidId: this.bid.id })
-        .then(response => {
-          var parseObject = response.data.result;
-          this.CarrierReview = parseObject.carrierReview
-          this.ShipperReview = parseObject.shipperReview
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! We are unable to load the delivery details. Please try again!'
+          })
+          this.error = true
         })
-        .catch(() => {
-          Swal.fire({
-            type: "error",
-            title: "Oops...",
-            text:
-              "Something went wrong! We are unable to load the delivery . Please try again!"
-          });
-          this.error = true;
-        });
     },
     updateBid(newStatus) {
       this.$store
-        .dispatch("bids/updateBid", {
-          type: "carrier",
+        .dispatch('bids/updateBid', {
+          type: 'carrier',
           bidId: this.bid.id,
           bidStatus: this.reverseBidStatus(newStatus.toLowerCase())
         })
         .then(() => {
-          this.bid.bidStatus = this.reverseBidStatus(newStatus.toLowerCase());
-          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus);
-          
+          this.bid.bidStatus = this.reverseBidStatus(newStatus.toLowerCase())
+          this.convertedBidStatus = this.parseBidStatus(this.bid.bidStatus)
           Swal.fire({
-            type: "success",
-            title: "Updated",
-            text: "Bid has successfully been updated!"
-          });
+            type: 'success',
+            title: 'Updated',
+            text: 'Bid has successfully been updated!'
+          })
         })
         .catch(() => {
           Swal.fire({
-            type: "error",
-            title: "Oops...",
-            text: "Something went wrong! Please try again!"
-          });
-        });
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!'
+          })
+        })
     },
     sendReminder() {
       this.$store
-        .dispatch("bids/sendReminder", { type: "carrier", bidId: this.bid.id })
+        .dispatch('bids/sendReminder', { type: 'carrier', bidId: this.bid.id })
         .then(() => {
           Swal.fire({
-            type: "success",
-            title: "Completed",
-            text: "A reminder has been sent!"
-          });
+            type: 'success',
+            title: 'Completed',
+            text: 'A reminder has been sent!'
+          })
         })
         .catch(() => {
           Swal.fire({
-            type: "error",
-            title: "Oops...",
-            text: "Something went wrong! Please try again!"
-          });
-        });
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong! Please try again!'
+          })
+        })
     },
-    createCarrierReview() {
-      this.$store
-        .dispatch("bids/createReview", {
-          type: "carrier",
-          Review: {
-            bidId: this.bid.id,
-            bidBoolean: this.bidType,
-            rating: this.TempCarrierReview.rating,
-            review: this.TempCarrierReview.review
-          }
+    createReview(type, tempReview) {
+      let review = {
+        bidId: this.bid.id,
+        bidBoolean: this.bidType,
+        rating: tempReview.rating,
+        review: tempReview.review
+      }
+      this.$store.dispatch('bids/createReview', {
+        type: type,
+        Review: review
+      })
+      .then(() => {
+        if (type == 'carrier') {
+          this.carrierReview = review
+          this.carrierReview.shipper = this.bid.shipper
+          this.carrierReview.reviewDate = new Date()
+          this.carrierReviewPlaced = true
+        } else {
+          this.shipperReview = review
+          this.shipperReview.carrier = this.post.carrier
+          this.shipperReview.reviewDate = new Date()
+          this.shipperReviewPlaced = true
+        }
+        Swal.fire({
+          type: 'success',
+          title: 'Completed',
+          text: 'The review has been created!'
         })
-        .then(() => {
-          Swal.fire({
-            type: "success",
-            title: "Completed",
-            text: "The review has been created!"
-          });
-          this.loadBid();
+      })
+      .catch(() => {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong! Please try again!'
         })
-        .catch(() => {
-          Swal.fire({
-            type: "error",
-            title: "Oops...",
-            text: "Something went wrong! Please try again!"
-          });
-        });
+      })
     },
-    createShipperReview() {
-      this.$store
-        .dispatch("bids/createReview", {
-          type: "shipper",
-          Review: {
-            bidId: this.bid.id,
-            bidBoolean: this.bidType,
-            rating: this.TempShipperReview.rating,
-            review: this.TempShipperReview.review
-          }
-        })
-        .then(() => {
-          Swal.fire({
-            type: "success",
-            title: "Completed",
-            text: "The review has been created!"
-          });
-        })
-        .catch(() => {
-          Swal.fire({
-            type: "error",
-            title: "Oops...",
-            text: "Something went wrong! Please try again!"
-          });
-        });
+    setCarrierReview(rating) {
+      this.tempCarrierReview.rating = rating
+    },
+    setShipperReview(rating) {
+      this.tempShipperReview.rating = rating
     },
     parsePostStatus(status) {
-      return postUtilities.parsePostStatus(status);
+      return postUtilities.parsePostStatus(status)
     },
     reverseBidStatus(status) {
-      return bidUtilities.reverseBidStatus(status);
+      return bidUtilities.reverseBidStatus(status)
     },
     parseBidStatus(status) {
-      return bidUtilities.parseBidStatus(status);
+      return bidUtilities.parseBidStatus(status)
     },
     parseTrailerType(type) {
-      return postUtilities.parseTrailerType(type);
+      return postUtilities.parseTrailerType(type)
     },
     parseDate(time) {
-      return postUtilities.parseDate(time);
+      return postUtilities.parseDate(time)
     },
     formatMoney(money) {
-      return postUtilities.formatMoney(money);
+      return postUtilities.formatMoney(money)
     }
   },
   created() {
-    if (this.postId == null || this.bidId == null) this.$router.go(-1);
-    this.accountType = this.$store.getters[
-      "authentication/getAccountType"
-    ].toLowerCase();
-    this.loadDetails();
+    if (this.postId == null || this.bidId == null) this.$router.go(-1)
+    this.accountType = this.$store.getters["authentication/getAccountType"].toLowerCase()
+    this.loadDetails()
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

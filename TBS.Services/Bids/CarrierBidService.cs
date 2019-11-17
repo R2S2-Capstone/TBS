@@ -33,17 +33,15 @@ namespace TBS.Services.Bids
         // Get a bid by id, used on details page
         public async Task<CarrierBid> GetBidByIdAsync(Guid bidId)
         {
-            return await Task.FromResult(
-                _context.CarrierBids
-                .Include(b => b.carrierReview)
-                .Include(b => b.shipperReview)
+            return await  _context.CarrierBids
+                .Include(b => b.CarrierReview)
+                .Include(b => b.ShipperReview)
                 .Include(b => b.Shipper)
                 .Include(b => b.Post)
                 .Include(b => b.PickupLocation)
                 .Include(b => b.Vehicle)
                 .Include(b => b.DropoffLocation)
-                .FirstOrDefault(b => b.Id == bidId)
-            );
+                .FirstOrDefaultAsync(b => b.Id == bidId);
         }
 
         // Get all bids assoicated with a post given a post id, used on personal dashboard post detailed page
@@ -53,12 +51,15 @@ namespace TBS.Services.Bids
                 .Include(p => p.Bids)
                     .ThenInclude(b => b.Shipper)
                 .FirstOrDefaultAsync(p => p.Id == postId);
+
             model.Count = post.Bids.Count();
+
             var paginatedBids = post.Bids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize)
                 .OrderByDescending(b => b.BidStatus)
                 .ToArray();
+
             return new PaginatedCarrierBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
@@ -72,10 +73,13 @@ namespace TBS.Services.Bids
                 .Where(b => b.Shipper.UserFirebaseId == userFirebaseId)
                 .OrderByDescending(p => p.BidStatus)
                 .ToListAsync();
+
             model.Count = allBids.Count();
+
             var paginatedBids = allBids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
+
             return new PaginatedCarrierBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
@@ -86,12 +90,12 @@ namespace TBS.Services.Bids
             request.Bid.Post = _context.CarrierPosts
                 .Include(p => p.Carrier)
                 .FirstOrDefault(p => p.Id == request.PostId);
+
             if (request.Bid.Post.PostStatus != Data.Models.Posts.PostStatus.Open)
             {
                 throw new FailedToUpdateBidException("Post is no longer accepting bids");
             }
-            request.Bid.carrierReview = null;
-            request.Bid.shipperReview = null;
+
             await _context.CarrierBids.AddAsync(request.Bid);
             await _context.SaveChangesAsync();
 
@@ -120,6 +124,7 @@ namespace TBS.Services.Bids
                 .Include(b => b.Shipper)
                 .Include(b => b.Vehicle)
                 .First(p => p.Id == request.BidId);
+
             if (bid.Post.PostStatus == Data.Models.Posts.PostStatus.Closed)
             {
                 throw new FailedToUpdateBidException("Post is no longer accepting bids");

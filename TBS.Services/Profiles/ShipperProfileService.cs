@@ -33,6 +33,8 @@ namespace TBS.Services.Profiles
             return await _context.Shippers
                 .Include(s => s.Company.Address)
                 .Include(s => s.Company.Contact)
+                .Include(c => c.Reviews)
+                    .ThenInclude(r => r.Carrier)
                 .FirstOrDefaultAsync(c => c.Id == profileId);
         }
 
@@ -42,15 +44,6 @@ namespace TBS.Services.Profiles
             {
                 throw new InvalidProfileException();
             }
-
-            //_context.Attach(profile);
-
-            //IEnumerable<EntityEntry> unchangedEntities = _context.ChangeTracker.Entries().Where(x => x.State == EntityState.Unchanged);
-
-            //foreach (EntityEntry ee in unchangedEntities)
-            //{
-            //    ee.State = EntityState.Modified;
-            //}
 
             _context.Shippers.Update(profile);
 

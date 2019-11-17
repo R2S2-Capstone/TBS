@@ -22,13 +22,8 @@ namespace TBS.Data.Models.Bids.Shipper
 
         public BidStatus BidStatus { get; set; } = BidStatus.Open;
 
-        public Reviews.CarrierReviews carrierReview { get; set; }
+        public CarrierReview CarrierReview { get; set; }
 
-        public Reviews.ShipperReview shipperReview { get; set; }
-
-        public static implicit operator ShipperBid(ShipperReview v)
-        {
-            throw new NotImplementedException();
-        }
+        public ShipperReview ShipperReview { get; set; }
     }
 }

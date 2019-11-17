@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                   <td><router-link :to="{ name: 'carrierProfile', params: {id:post.carrier.id}}" class="fade-on-hover text-blue">{{ post.carrier.name }}</router-link></td>
-                  <td><star-rating v-bind:inline=true v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="reviewScore"></star-rating></td>
+                  <td><star-rating :inline=true :show-rating=false :increment="0.5" :read-only=true :star-size=30 v-model="reviewScore"></star-rating></td>
                   <td><a :href="'mailto:' + post.carrier.email">{{ post.carrier.email }}</a></td>
                 </tr>
               </table>
@@ -69,7 +69,7 @@
                       <th style="width: 25%">Trailer Type</th>
                     </tr>
                     <tr>
-                      <td>Coming soon</td> 
+                      <td>{{ `${post.carrier.vehicle.year} ${post.carrier.vehicle.make} ${post.carrier.vehicle.model}` }}</td> 
                       <td>{{ post.spacesAvailable }}</td>
                       <td>{{ parseTrailerType(post.trailerType) }}</td>
                     </tr>
@@ -89,7 +89,7 @@
               <table class="table">
                 <tr>
                   <th style="width: 33.3%">Date Posted</th>
-                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Minimum Bid</th>
                   <th style="width: 33.3%">Highest Bid</th>
                 </tr>
                 <tr>
@@ -276,7 +276,16 @@ export default {
             }
             this.highestBid = max
           }
-          this.getReviewScore(this.post)
+          let reviews = this.post.carrier.reviews
+          this.reviewScore = 0
+          if (reviews !== null) {            
+            var totalReviews = 0
+            reviews.forEach(review => {
+              this.reviewScore += review.rating
+              totalReviews += 1
+            })
+            this.reviewScore = this.reviewScore / totalReviews
+          }
         })
         .catch(() => {
           Swal.fire({
@@ -326,26 +335,6 @@ export default {
           })
         })
     },
-    getReviewScore(post) {
-      this.$store.dispatch('profiles/getReviewsById', { type: 'carrier', profileId: post.carrier.id })
-        .then((response) => {
-          var reviews = response.data.result
-          this.reviewScore = 0
-          var totalReviews = 0
-          reviews.forEach(review => {
-            this.reviewScore += review.rating
-            totalReviews += 1
-          });
-          this.reviewScore = this.reviewScore/totalReviews
-        })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load this bid. Please try again!',
-          })
-        })
-    },
     parseDate(value) {
       return postUtilities.parseDate(value)
     },
@@ -360,11 +349,12 @@ export default {
     },
     parsePickupLocationAddress(address) {
       try {
-        this.bidPost.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-        this.bidPost.pickupLocation.city = address[2].long_name
-        this.bidPost.pickupLocation.province = address[4].short_name
-        this.bidPost.pickupLocation.country = address[5].long_name
-        this.bidPost.pickupLocation.postalCode = address[6].long_name
+        // TODO FIX
+        this.bidPost.pickupLocation.addressLine = `${address.find(a => a.types.includes("street_number")).short_name} ${address.find(a => a.types.includes("route")).long_name}`
+        this.bidPost.pickupLocation.city = address.find(a => a.types.includes("locality")).long_name
+        this.bidPost.pickupLocation.province = address.find(a => a.types.includes("administrative_area_level_1")).short_name
+        this.bidPost.pickupLocation.country = address.find(a => a.types.includes("country")).long_name
+        this.bidPost.pickupLocation.postalCode = address.find(a => a.types.includes("postal_code")).long_name
         this.validPickupAddress = true
       } catch {
         this.validPickupAddress = false

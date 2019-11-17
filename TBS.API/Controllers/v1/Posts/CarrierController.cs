@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TBS.Data.Interfaces.Posts;
 using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Posts.Request;
 
 namespace TBS.API.Controllers.v1.Posts
 {
@@ -34,8 +35,6 @@ namespace TBS.API.Controllers.v1.Posts
         [HttpGet("{postId}")]
         public async Task<IActionResult> GetCarrierPostByIdAsync(string postId) => Ok(new { result = await _service.GetPostByIdAsync(Guid.Parse(postId)) });
 
-   
-
         // POST: api/v1/Posts/Carrier
         [HttpPost]
         [Authorize]
@@ -47,7 +46,7 @@ namespace TBS.API.Controllers.v1.Posts
 
         [HttpPost("{currentPage}/{pageSize}/Search")]
         [Authorize]
-        public async Task<IActionResult> SearchAllActiveResultsAsync([FromBody] SearchModel search, int currentPage, int pageSize) => Ok(new {result = await _service.SearchAllActivePostsAsync(search, new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
+        public async Task<IActionResult> SearchAllActiveResultsAsync([FromBody] SearchModel search, int currentPage, int pageSize) => Ok(new {result = await _service.GetSearchAllActivePostsAsync(search, new Data.Models.PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // POST: api/v1/Posts/Carrier/{PostId}
         [HttpPost("{postId}")]

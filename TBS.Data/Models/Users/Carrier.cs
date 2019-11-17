@@ -33,6 +33,6 @@ namespace TBS.Data.Models.Users
 
         public virtual IEnumerable<CarrierPost> Posts { get; set; }
 
-        public virtual IEnumerable<CarrierReviews> Reviews { get; set; }
+        public virtual IEnumerable<CarrierReview> Reviews { get; set; }
     }
 }

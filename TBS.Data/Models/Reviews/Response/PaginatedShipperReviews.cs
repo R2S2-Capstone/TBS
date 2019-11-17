@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TBS.Data.Models.Reviews
 {
@@ -8,6 +6,6 @@ namespace TBS.Data.Models.Reviews
     {
         public PaginationModel PaginationModel { get; set; }
 
-        public IEnumerable<ShipperReview> ShipperReviews{ get; set; }
+        public IEnumerable<ShipperReview> ShipperReviews { get; set; }
     }
 }

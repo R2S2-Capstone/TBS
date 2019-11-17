@@ -7,10 +7,10 @@
         <h6 @click="$router.go(-1)" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Click here to return</h6>
       </div>
     </div>
-    <div>
+    <div v-if="profile">
       <div class="row pt-3 text-center">
         <div class="col-12">
-          <h3>{{profile.name}}</h3>
+          <h3>{{ profile.name }}</h3>
         </div>
       </div>
       <div class="row pt-3 text-center">
@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                   <td><a :href="'mailto:' + profile.email">{{profile.email}}</a></td> 
-                  <td>Coming Soon</td>
+                  <td>{{ `${profile.vehicle.year} ${profile.vehicle.make} ${profile.vehicle.model} (${parseTrailerType(profile.vehicle.trailerType)})` }}</td>
                 </tr>
               </table>
             </div>
@@ -33,8 +33,8 @@
       </div>
       <div class="row pt-3 text-center">
         <div class="col-12">
-          <h3>{{profile.company.name}}</h3>
-          <h6>{{formatAddress(profile.company.address)}}</h6>
+          <h3>{{ profile.company.name }}</h3>
+          <h6>{{ formatAddress(profile.company.address) }}</h6>
         </div>
       </div>
       <div class="row pt-3 text-center">
@@ -59,15 +59,18 @@
       </div>
       <div class="row pt-3 text-center">
         <div class="col-12">
-          <h3>Reviews</h3>
+          <h3 v-if="reviews.length != 0">Reviews</h3>
+          <h3 v-else>No Reviews</h3>
         </div>     
       </div>
-      <div class="row pt-3">
+      <div class="row pt-3" v-if="reviews.length != 0">
         <div class="col-12 background">
           <div class="row pt-3">
-            <div class="col-12" v-for="(review, index) in reviews" :key="index">
-              <p>{{ review.reviewer }} |  {{`${parseDate(review.date)}` }}<star-rating v-bind:show-rating=false v-bind:read-only=true v-bind:star-size=30 v-model="review.rating"></star-rating></p>
+            <div class="col-12 text-center" v-for="(review, index) in reviews" :key="index">
+              <p>{{ review.shipper.name }} | {{`${parseDate(review.reviewDate)}` }}</p>
+              <p><star-rating style="display: inline-block;" :increment="0.5" :show-rating=false :read-only=true :star-size=30 v-model="review.rating"></star-rating></p>
               <p>{{ review.review }}</p>
+              <hr v-if="reviews.length - 1 != index" class="pt-3">
             </div>
           </div>
         </div>
@@ -91,23 +94,8 @@ export default {
   },
   data() {
     return {
-      profile: {
-        vehicle: {
-          year: new Date().getUTCFullYear().toString(),
-          make: '',
-          model: '',
-          VIN: '',
-          condition: 'New',
-        },       
-      },
-      reviews:[
-          {
-            rating: '3.5',
-            review: "This is a test comment",
-            date: "10-20-2018",
-            reviewer: "Testing",
-          }
-        ],
+      profile: null,
+      reviews:[],
       review: null,
       error: false,
     }
@@ -126,6 +114,7 @@ export default {
       this.$store.dispatch('profiles/getProfileById', {profileId: this.id, type: 'carrier'})
         .then((response) => {
           this.profile = response.data.result
+          this.reviews = this.profile.reviews
         })
         .catch(() => {
           Swal.fire({
@@ -135,18 +124,6 @@ export default {
           })
           this.error = true
         })
-        this.$store.dispatch('profiles/getReviewsById', {profileId: this.id, type: 'carrier'})
-          .then((response) => {
-            this.reviews = response.data.result
-          })
-        .catch(() => {
-          Swal.fire({
-            type: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! We are unable to load this post. Please try again!',
-          })
-          this.error = true
-        })  
     },
   },
   created() {

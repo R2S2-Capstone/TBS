@@ -21,6 +21,6 @@ namespace TBS.Data.Database
         public DbSet<ShipperPost> ShipperPosts { get; set; }
         public DbSet<ShipperBid> ShipperBids { get; set; }
         public DbSet<ShipperReview> ShipperReviews { get; set; }
-        public DbSet<CarrierReviews> CarrierReview { get; set; }
+        public DbSet<CarrierReview> CarrierReviews { get; set; }
     }
 }

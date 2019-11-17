@@ -49,12 +49,16 @@ namespace TBS.API
 
             services.AddSingleton(Configuration);
             services.AddScoped<IEmailService, EmailService>();
+
             services.AddScoped<DatabaseContext, DatabaseContext>();
+
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             services.AddScoped<ICarrierPostService, CarrierPostService>();
             services.AddScoped<ICarrierBidService, CarrierBidService>();
             services.AddScoped<ICarrierProfileService, CarrierProfileService>();
             services.AddScoped<ICarrierReviewService, CarrierReviewService>();
+
             services.AddScoped<IShipperPostService, ShipperPostService>();
             services.AddScoped<IShipperBidService, ShipperBidService>();
             services.AddScoped<IShipperProfileService, ShipperProfileService>();
@@ -65,7 +69,7 @@ namespace TBS.API
             services.AddDbContext<DatabaseContext>(options =>
               options.UseMySQL(
                   //Use dev database if in development or use the prod database if not
-                  _environment.IsDevelopment() == true ? Configuration["ConnectionStrings:DevMySQL"] : Configuration["ConnectionStrings:DevMySQL"],
+                  _environment.IsDevelopment() == true ? Configuration["ConnectionStrings:DevMySQL"] : Configuration["ConnectionStrings:MySQL"],
                   optionsBuilder => { optionsBuilder.MigrationsAssembly("TBS.Data"); }
                   )
               );

@@ -1,6 +1,6 @@
 <template>
   <div class="form-label-group text-center">
-    <label>Date</label>
+    <label>{{ label }}</label>
     <input 
       v-model="input"
       type="date" 
@@ -15,6 +15,11 @@
 export default {
   name: 'dateInput',
   props: {
+    label: {
+      type: String,
+      required: false,
+      default: 'Date'
+    },
     value: {
       type: String,
       required: false,

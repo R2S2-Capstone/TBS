@@ -44,30 +44,11 @@ const profiles = {
         })
       })
     },
-    getReviewsById({ commit, rootGetters }, payload) {
-      commit('global/setLoading', true, { root: true })
-      return new Promise((resolve, reject) => {
-        axios({
-          method: 'GET',
-          url: `reviews/${payload.type || rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.profileId}`,
-          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
-        })
-        .then((response) => {
-          resolve(response)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-        .finally(() => {
-          commit('global/setLoading', false, { root: true })
-        })
-      })
-    },
     updateProfile({ commit, rootGetters }, payload) {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
         axios({
-          method: 'POST',
+          method: 'PATCH',
           url: `profiles/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
           data: payload,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
