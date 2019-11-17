@@ -11,6 +11,7 @@ using TBS.Data.Models;
 using TBS.Data.Models.Posts;
 using TBS.Data.Models.Posts.Response;
 using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Models.Posts.Request;
 
 namespace TBS.Services.Post
 {
@@ -33,10 +34,13 @@ namespace TBS.Services.Post
                 .Include(p => p.DropoffLocation)
                 .Where(p => p.PostStatus == PostStatus.Open)
                 .ToListAsync();
+
             model.Count = allPosts.Count();
+
             var paginatedPosts = allPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
+
             return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
@@ -50,12 +54,16 @@ namespace TBS.Services.Post
                 .Include(s => s.Posts)
                     .ThenInclude(p => p.DropoffLocation)
                 .FirstOrDefaultAsync(s => s.UserFirebaseId == userFirebaseId);
+
             var allUserPosts = user.Posts.ToList();
             var orderedPosts = allUserPosts.OrderByDescending(p => p.PostStatus);
+
             model.Count = orderedPosts.Count();
+
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
+
             return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
@@ -66,8 +74,16 @@ namespace TBS.Services.Post
                 .Include(p => p.Shipper.Company)
                 .Include(p => p.Shipper.Company.Address)
                 .Include(p => p.Shipper.Company.Contact)
+                .Include(p => p.Shipper.Reviews)
                 .Include(p => p.Bids)
                     .ThenInclude(b => b.Carrier)
+                    .ThenInclude(c => c.Reviews)
+                .Include(p => p.Bids)
+                    .ThenInclude(b => b.CarrierReview)
+                        .ThenInclude(r => r.Carrier)
+                .Include(p => p.Bids)
+                    .ThenInclude(b => b.ShipperReview)
+                        .ThenInclude(r => r.Shipper)
                 .Include(p => p.Vehicle)
                 .Include(p => p.PickupLocation)
                 .Include(p => p.PickupContact)
@@ -75,19 +91,42 @@ namespace TBS.Services.Post
                 .Include(p => p.DropoffContact)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            shipperPost.Bids = shipperPost.Bids.OrderByDescending(b => b.BidStatus);
-
             if (shipperPost == null)
             {
                 throw new InvalidShipperPostException();
             }
 
+            shipperPost.Bids = shipperPost.Bids.OrderByDescending(b => b.BidStatus);
+
             return shipperPost;
+        }
+
+        public async Task<PaginatedShipperPosts> GetSearchAllActivePostsAsync(SearchModel request, PaginationModel model)
+        {
+            var filteredPosts = await _context.ShipperPosts
+                .Include(p => p.Vehicle)
+                .Include(p => p.PickupLocation)
+                .Include(p => p.DropoffLocation)
+                .Where(p => p.PostStatus == PostStatus.Open)
+                .Where(p => request.DropoffDate == DateTime.Parse("10/10/1000") || p.PickupDate.DayOfYear >= request.PickupDate.DayOfYear)
+                .Where(p => request.DropoffDate == DateTime.Parse("10/10/1000") || p.DropoffDate.DayOfYear <= request.DropoffDate.DayOfYear)
+                .Where(p => request.PickupCity == "" || (p.PickupLocation.City.ToLower().Contains(request.PickupCity.ToLower())))
+                .Where(p => request.DropoffCity == "" || p.DropoffLocation.City.ToLower().Contains(request.DropoffCity.ToLower()))
+                .ToListAsync();
+
+            model.Count = filteredPosts.Count();
+
+            var paginatedPosts = filteredPosts
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize).ToArray();
+
+            return new PaginatedShipperPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
         public async Task<bool> CreatePostAsync(string userFirebaseId, ShipperPost post)
         {
             post.Shipper = _context.Shippers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
+
             await _context.ShipperPosts.AddAsync(post);
             await _context.SaveChangesAsync();
 

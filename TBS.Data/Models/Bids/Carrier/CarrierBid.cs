@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.General;
 using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Reviews;
 using TBS.Data.Models.Vehicle;
 
 namespace TBS.Data.Models.Bids.Carrier
@@ -37,5 +38,9 @@ namespace TBS.Data.Models.Bids.Carrier
         public DateTime DateBidPlaced { get; set; } = DateTime.Now;
 
         public BidStatus BidStatus { get; set; } = BidStatus.Open;
+
+        public CarrierReview CarrierReview { get; set; }
+
+        public ShipperReview ShipperReview { get; set; }
     }
 }

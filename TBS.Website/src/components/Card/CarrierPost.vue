@@ -18,7 +18,7 @@
         <td>{{ parseDate(post.dropoffDate) }}</td>
       </tr>
     </table>
-    <p>Starting Bid: {{ formatMoney(post.startingBid) }}</p>
+    <p>Minimum Bid: {{ formatMoney(post.startingBid) }}</p>
     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white ml-5 mr-5 mb-3" @click="showDetailedPost()">Details</button>
   </div>
 </template>

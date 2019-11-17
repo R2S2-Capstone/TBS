@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Models.Reviews;
 using TBS.Data.Models.Users.Information;
 
 namespace TBS.Data.Models.Users
@@ -31,5 +32,7 @@ namespace TBS.Data.Models.Users
         public string DealerNumber { get; set; }
 
         public virtual IEnumerable<ShipperPost> Posts { get; set; }
+
+        public virtual IEnumerable<ShipperReview> Reviews { get; set; }
     }
 }

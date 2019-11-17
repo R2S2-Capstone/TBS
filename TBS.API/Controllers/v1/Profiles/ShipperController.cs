@@ -35,10 +35,10 @@ namespace TBS.API.Controllers.v1.Profiles
         [HttpGet("{profileId}")]
         public async Task<IActionResult> GetShippersProfileAsync(string profileId) => Ok(new { result = await _service.GetProfileByIdAsync(Guid.Parse(profileId)) });
 
-        // POST: api/v1/Profiles/Shipper
-        [HttpPost]
+        // PATCH: api/v1/Profiles/Shipper
+        [HttpPatch]
         [Authorize]
-        public async Task<IActionResult> PutShipperUpdateAsync(Shipper shipper)
+        public async Task<IActionResult> PatchShipperUpdateAsync(Shipper shipper)
         {
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
             return Ok(new { result = await _service.UpdateProfileAsync(id, shipper) });

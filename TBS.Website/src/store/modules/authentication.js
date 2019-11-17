@@ -9,24 +9,29 @@ const global = {
     token: null,
     accountType: '',
     refreshing: false,
+    uid: null,
   },
   getters: {
     getToken: state => state.token,
     isAuthenticated: state => state.token,
     getAccountType: state => state.accountType,
     isRefreshing: state => state.refreshing,
-    getFirebaseUser() { return firebase.auth().currentUser } 
+    getFirebaseUserId: state => state.uid, 
   },
   mutations: {
     authenticate(state, data) {
       state.email = data.email
       state.token = data._lat
+      state.uid = data.uid
     },
     logout(state) {
       state.email = null
       state.token = null
       state.accountType = ''
+      state.uid = null
       firebase.auth().signOut()
+        .then(() => {
+        })
     },
     refresh(state, refreshing) {
       state.refreshing = refreshing

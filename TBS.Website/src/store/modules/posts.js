@@ -41,7 +41,7 @@ const posts = {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `posts/${rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.pageSize}`,
+          url: `posts/${payload.type || rootGetters['authentication/getAccountType'].toLowerCase()}/${rootGetters['authentication/getFirebaseUserId']}/${payload.currentPage}/${payload.pageSize}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {
@@ -61,6 +61,27 @@ const posts = {
         axios({
           method: 'GET',
           url: `posts/${payload.type || rootGetters['authentication/getAccountType'].toLowerCase()}/${payload.postId}`,
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
+    searchPosts({ commit, rootGetters}, payload) {
+      commit('global/setLoading', true, { root: true })
+      let oppositeAccountType = rootGetters['authentication/getAccountType'].toLowerCase() == 'carrier' ? 'shipper' : 'carrier';
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'POST',
+          url: `posts/${oppositeAccountType}/${payload.currentPage}/${payload.pageSize}/Search`,
+          data: payload.searchModel,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {

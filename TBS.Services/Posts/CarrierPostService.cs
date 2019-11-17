@@ -10,6 +10,7 @@ using TBS.Data.Interfaces.Posts;
 using TBS.Data.Models;
 using TBS.Data.Models.Posts;
 using TBS.Data.Models.Posts.Carrier;
+using TBS.Data.Models.Posts.Request;
 using TBS.Data.Models.Posts.Response;
 
 namespace TBS.Services.Posts
@@ -18,7 +19,6 @@ namespace TBS.Services.Posts
     {
         private readonly DatabaseContext _context;
         private readonly ILogger<CarrierPostService> _logger;
-
 
         public CarrierPostService(DatabaseContext databaseContext, ILogger<CarrierPostService> logger)
         {
@@ -31,10 +31,13 @@ namespace TBS.Services.Posts
             var allPosts = await _context.CarrierPosts
                 .Where(p => p.PostStatus == PostStatus.Open)
                 .ToListAsync();
+
             model.Count = allPosts.Count();
+
             var paginatedPosts = allPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
+
             return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
@@ -43,12 +46,16 @@ namespace TBS.Services.Posts
             var user = await _context.Carriers
                 .Include(c => c.Posts)
                 .FirstOrDefaultAsync(c => c.UserFirebaseId == userFirebaseId);
+
             var allUserPosts = user.Posts.ToList();
             var orderedPosts = allUserPosts.OrderByDescending(p => p.PostStatus);
+
             model.Count = orderedPosts.Count();
+
             var paginatedPosts = orderedPosts
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
+
             return await Task.FromResult(new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts });
         }
 
@@ -58,23 +65,52 @@ namespace TBS.Services.Posts
                 .Include(p => p.Carrier)
                 .Include(p => p.Carrier.Company)
                 .Include(p => p.Carrier.Company.Contact)
+                .Include(p => p.Carrier.Reviews)
+                .Include(p => p.Carrier.Vehicle)
                 .Include(p => p.Bids)
-                .ThenInclude(b => b.Shipper)
+                    .ThenInclude(b => b.Shipper)
+                    .ThenInclude(b => b.Reviews)
+                .Include(p => p.Bids)
+                    .ThenInclude(b => b.CarrierReview)
+                        .ThenInclude(r => r.Carrier)
+                .Include(p => p.Bids)
+                    .ThenInclude(b => b.ShipperReview)
+                        .ThenInclude(r => r.Shipper)
                 .FirstOrDefaultAsync(p => p.Id == id);
-
-            carrierPost.Bids = carrierPost.Bids.OrderByDescending(b => b.BidStatus);
 
             if (carrierPost == null)
             {
                 throw new InvalidCarrierPostException();
             }
 
+            carrierPost.Bids = carrierPost.Bids.OrderByDescending(b => b.BidStatus);
+
             return carrierPost;
+        }
+
+        public async Task<PaginatedCarrierPosts> GetSearchAllActivePostsAsync(SearchModel request, PaginationModel model)
+        {
+            var filteredPosts = await _context.CarrierPosts
+                .Where(p => p.PostStatus == PostStatus.Open)
+                .Where(p => request.DropoffDate == DateTime.Parse("10/10/1000") || p.PickupDate.DayOfYear >= request.PickupDate.DayOfYear)
+                .Where(p => request.DropoffDate == DateTime.Parse("10/10/1000") || p.DropoffDate.DayOfYear <= request.DropoffDate.DayOfYear)
+                .Where(p => request.PickupCity == "" || (p.PickupLocation.ToLower().Contains(request.PickupCity.ToLower())))
+                .Where(p => request.DropoffCity == "" || p.DropoffLocation.ToLower().Contains(request.DropoffCity.ToLower()))
+                .ToListAsync();
+
+            model.Count = filteredPosts.Count();
+
+            var paginatedPosts = filteredPosts
+                .Skip((model.CurrentPage - 1) * model.PageSize)
+                .Take(model.PageSize).ToArray();
+
+            return new PaginatedCarrierPosts() { PaginationModel = model, Posts = paginatedPosts };
         }
 
         public async Task<bool> CreatePostAsync(string userFirebaseId, CarrierPost post)
         {
             post.Carrier = _context.Carriers.FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
+
             await _context.CarrierPosts.AddAsync(post);
             await _context.SaveChangesAsync();
 

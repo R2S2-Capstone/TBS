@@ -73,7 +73,7 @@
                 </tr>
                 <tr>
                   <td><router-link :to="{ name: 'shipperProfile', params: { id: post.shipper.id} }" class="fade-on-hover text-blue">{{ post.shipper.name }}</router-link></td>
-                  <td>Coming Soon..</td>
+                  <td><star-rating :inline=true :show-rating=false :increment="0.5" :read-only=true :star-size=30 v-model="reviewScore"></star-rating></td>
                   <td><a :href="'mailto:' + post.shipper.email">{{ post.shipper.email }}</a></td>
                 </tr>
               </table>
@@ -90,7 +90,7 @@
               <table class="table">
                 <tr>
                   <th style="width: 33.3%">Date Posted</th>
-                  <th style="width: 33.3%">Starting Bid</th>
+                  <th style="width: 33.3%">Maximum Bid</th>
                   <th style="width: 33.3%">Lowest Bid</th>
                 </tr>
                 <tr>
@@ -121,7 +121,7 @@
 import Swal from 'sweetalert2'
 
 import TextInput from '@/components/Form/Input/TextInput.vue'
-
+import StarRating from "vue-star-rating";
 import postUtilities from '@/utils/postUtilities.js'
 import { required, helpers } from 'vuelidate/lib/validators'
 const bidRegex = helpers.regex('bidRegex', /^[+]?([0-9]+(?:[.][0-9]*)?|\.[0-9]+)$/)
@@ -130,6 +130,7 @@ export default {
   name: 'detailedShipperPost',
   components: {
     TextInput,
+    StarRating,
   },
   props: {
     id: String
@@ -143,6 +144,7 @@ export default {
       bidError: false,
       bidSuccess: false,
       showModal: false,
+      reviewScore: 0,
     }
   },
   methods: {
@@ -160,6 +162,16 @@ export default {
               max = (v > max) ? v : max;
             }
             this.lowestBid = min
+          }
+          let reviews = this.post.shipper.reviews
+          this.reviewScore = 0
+          if (reviews != null) {
+            let totalReviews = 0
+            reviews.forEach(review => {
+              this.reviewScore += review.rating
+              totalReviews += 1
+            })
+            this.reviewScore = this.reviewScore / totalReviews
           }
         })
         .catch(() => {

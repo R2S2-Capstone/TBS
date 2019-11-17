@@ -33,16 +33,17 @@ namespace TBS.Services.Bids
         // Get a bid by id, used on details page
         public async Task<ShipperBid> GetBidByIdAsync(Guid bidId)
         {
-            return await Task.FromResult(
-                _context.ShipperBids
+            return await _context.ShipperBids
+                .Include(b => b.CarrierReview)
+                .Include(b => b.ShipperReview)
                 .Include(b => b.Carrier)
                 .Include(b => b.Post)
                 .Include(b => b.Post.Shipper)
                 .Include(b => b.Post.Vehicle)
                 .Include(b => b.Post.PickupLocation)
                 .Include(b => b.Post.DropoffLocation)
-                .FirstOrDefault(b => b.Id == bidId)
-            );
+                .FirstOrDefaultAsync(b => b.Id == bidId)
+;
         }
 
         // Get all bids assoicated with a post given a post id, used on personal dashboard post detailed page
@@ -52,12 +53,15 @@ namespace TBS.Services.Bids
                 .Include(p => p.Bids)
                     .ThenInclude(b => b.Carrier)
                 .FirstOrDefaultAsync(p => p.Id == postId);
+
             model.Count = post.Bids.Count();
+
             var paginatedBids = post.Bids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize)
                 .OrderByDescending(p => p.BidStatus)
                 .ToArray();
+
             return new PaginatedShipperBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
@@ -73,10 +77,13 @@ namespace TBS.Services.Bids
                 .Where(b => b.Carrier.UserFirebaseId == userFirebaseId)
                 .OrderByDescending(p => p.BidStatus)
                 .ToListAsync();
+
             model.Count = allBids.Count();
+
             var paginatedBids = allBids
                 .Skip((model.CurrentPage - 1) * model.PageSize)
                 .Take(model.PageSize).ToArray();
+
             return new PaginatedShipperBids() { PaginationModel = model, Bids = paginatedBids };
         }
 
@@ -85,6 +92,7 @@ namespace TBS.Services.Bids
         {
             request.Bid.Carrier = _context.Carriers
                 .FirstOrDefault(s => s.UserFirebaseId == userFirebaseId);
+
             request.Bid.Post = _context.ShipperPosts
                 .Include(p => p.Shipper)
                 .Include(p => p.PickupLocation)

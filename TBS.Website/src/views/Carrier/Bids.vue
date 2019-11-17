@@ -23,7 +23,7 @@
               <tr v-for="bid in bids" :key="bid.id">
                 <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id} }" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
                 <td>{{ format(bid.bidAmount) }}</td>
-                <td>COMING SOON <i class="fas fa-star"></i></td>
+                <td><star-rating style="display: inline-block;" :increment="0.5" :show-rating=false :read-only=true :star-size=30 v-model="bid.reviewScore"></star-rating></td>
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td v-if="bid.id"><router-link :to="{ name: 'carrierViewBidDetails', params: { id: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">View Details</router-link></td>
                 <td >
@@ -31,7 +31,7 @@
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white m-1" @click="confirmAcceptBid(bid.id, bid.bidAmount, bid.shipper.name)">Accept</button>
                     <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" @click="confirmDeclineBid(bid.id, bid.bidAmount, bid.shipper.name)">Decline</button>
                   </div>
-                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'carrierDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Delivery</router-link>                       
+                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'carrierDelivery', params: { postId: post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Delivery Information</router-link>                       
                 </td>
               </tr>
             </tbody>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import StarRating from 'vue-star-rating'
 import Swal from 'sweetalert2'
 
 import Back from '@/components/Back.vue'
@@ -53,7 +54,8 @@ import bidUtilities from '@/utils/bidUtilities.js'
 export default {
   name: 'carrierManageBids',
   components: {
-    Back
+    StarRating,
+    Back,
   },
   beforeCreate() {
     // A post ID must be passed, if not return to previous route
@@ -150,6 +152,19 @@ export default {
         .then((response) => {
           this.post = response.data.result
           this.bids = this.post.bids
+          this.bids.forEach(bid => {
+            if (bid.shipper.reviews != null) {              
+              let reviewScore = 0
+              let amountOfReviews = 0
+              bid.shipper.reviews.forEach(review => {
+                reviewScore += review.rating
+                amountOfReviews += 1
+              })
+              bid.reviewScore = reviewScore / amountOfReviews 
+            } else {
+              bid.reviewScore = 0
+            }
+          })
         })
         .catch(() => {
           Swal.fire({
