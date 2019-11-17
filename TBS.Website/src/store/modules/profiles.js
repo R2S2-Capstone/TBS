@@ -48,7 +48,7 @@ const profiles = {
       commit('global/setLoading', true, { root: true })
       return new Promise((resolve, reject) => {
         axios({
-          method: 'POST',
+          method: 'PATCH',
           url: `profiles/${rootGetters['authentication/getAccountType'].toLowerCase()}`,
           data: payload,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}

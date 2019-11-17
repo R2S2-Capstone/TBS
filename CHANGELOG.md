@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.0.9 (November 15, 2019)
+#### Features:
+ - Search posts
+ - Review system
+#### Enhancements:
+ - Minor UI tweaks
+#### Bug Fixes:
+ - Fixed auto-complete address bug
+ - Fixed issue where on first load of 'My Board' after signing in it would throw an error
+
+---
+
 ## v0.0.8 (October 08, 2019)
 #### Features:
  - Send reminder button for delivery

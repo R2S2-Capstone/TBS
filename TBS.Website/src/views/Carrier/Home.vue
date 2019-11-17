@@ -24,8 +24,8 @@
                 </td>
                 <td>{{ parsePostStatus(post.postStatus) }}</td>
                 <td>
-                  <router-link v-if="parsePostStatus(post.postStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">Manage Bids</router-link>
-                  <router-link v-else class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">View Bids</router-link>
+                  <router-link v-if="parsePostStatus(post.postStatus) == 'Open' || parsePostStatus(post.postStatus) == 'Pending Delivery' || parsePostStatus(post.postStatus) == 'Pending Delivery Approval'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">Manage Bids</router-link>
+                  <router-link v-else class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierManageBids', params: { id: post.id } }">Archived Bids</router-link>
                 </td>
                 <td>
                   <router-link v-if="parsePostStatus(post.postStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white" :to="{ name: 'carrierEditPost', params: { id: post.id } }">Edit</router-link>
@@ -80,7 +80,7 @@
                 <td>{{ parseBidStatus(bid.bidStatus) }}</td>
                 <td>
                   <button v-if="parseBidStatus(bid.bidStatus) == 'Open'" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mr-1" @click="confirmCancelBid(bid.id, bid.bidAmount)">Cancel</button>
-                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Delivery</router-link>     
+                  <router-link v-if="parseBidStatus(bid.bidStatus) == 'Pending Delivery' || parseBidStatus(bid.bidStatus) == 'Pending Delivery Approval' || parseBidStatus(bid.bidStatus) == 'Completed'" :to="{ name: 'shipperDelivery', params: { postId: bid.post.id, bidId: bid.id } }" class="btn btn-main bg-blue fade-on-hover text-uppercase text-white">Delivery Information</router-link>     
                 </td>
               </tr>
             </tbody>
@@ -171,7 +171,7 @@ export default {
         })
     },
     fetchPosts() {
-      this.$store.dispatch('posts/getMyPosts', { currentPage: this.postPage, pageSize: 5 })
+      this.$store.dispatch('posts/getMyPosts', { type: 'carrier', currentPage: this.postPage, pageSize: 5 })
         .then((response) => {
           this.postPageCount = response.data.result.paginationModel.totalPages
           this.posts = response.data.result.posts

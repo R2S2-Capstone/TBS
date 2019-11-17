@@ -201,7 +201,6 @@ export default {
           country: '',
           postalCode: '',
         },
-        // TODO: Set the minimum for this date to be the same date as pickup
         dropoffDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split('T')[0], // This is the one passed to the API and will be a combination of the two fields above
         dropoffContact: {
           name: '',
@@ -332,11 +331,11 @@ export default {
     },
     parsePickupLocationAddress(address) {
       try {
-        this.post.pickupLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-        this.post.pickupLocation.city = address[2].long_name
-        this.post.pickupLocation.province = address[4].short_name
-        this.post.pickupLocation.country = address[5].long_name
-        this.post.pickupLocation.postalCode = address[6].long_name
+        this.post.pickupLocation.addressLine = `${address.find(a => a.types.includes("street_number")).short_name} ${address.find(a => a.types.includes("route")).long_name}`
+        this.post.pickupLocation.city = address.find(a => a.types.includes("locality")).long_name
+        this.post.pickupLocation.province = address.find(a => a.types.includes("administrative_area_level_1")).short_name
+        this.post.pickupLocation.country = address.find(a => a.types.includes("country")).long_name
+        this.post.pickupLocation.postalCode = address.find(a => a.types.includes("postal_code")).long_name
         this.validPickupAddress = true
       } catch {
         this.validPickupAddress = false
@@ -344,11 +343,11 @@ export default {
     },
     parseDropoffLocationAddress(address) {
       try {
-        this.post.dropoffLocation.addressLine = `${address[0].long_name} ${address[1].long_name}`
-        this.post.dropoffLocation.city = address[2].long_name
-        this.post.dropoffLocation.province = address[4].short_name
-        this.post.dropoffLocation.country = address[5].long_name
-        this.post.dropoffLocation.postalCode = address[6].long_name
+        this.post.dropoffLocation.addressLine = `${address.find(a => a.types.includes("street_number")).short_name} ${address.find(a => a.types.includes("route")).long_name}`
+        this.post.dropoffLocation.city = address.find(a => a.types.includes("locality")).long_name
+        this.post.dropoffLocation.province = address.find(a => a.types.includes("administrative_area_level_1")).short_name
+        this.post.dropoffLocation.country = address.find(a => a.types.includes("country")).long_name
+        this.post.dropoffLocation.postalCode = address.find(a => a.types.includes("postal_code")).long_name
         this.validDropoffAddress = true
       } catch {
         this.validDropoffAddress = false

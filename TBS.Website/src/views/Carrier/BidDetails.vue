@@ -70,7 +70,7 @@
                   <td>{{ parseDate(bid.dateBidPlaced) }}</td>
                   <td>{{ formatMoney(bid.bidAmount) }}</td>
                   <td><router-link :to="{ name: 'shipperProfile', params: { id: bid.shipper.id }}" class="fade-on-hover text-blue">{{ bid.shipper.name }}</router-link></td>
-                  <td>Coming soon</td>
+                  <td><star-rating :increment="0.5" :inline=true :show-rating=false :read-only=true :star-size=30 v-model="reviewScore"></star-rating></td>
                 </tr>
               </table>
             </div>
@@ -81,10 +81,15 @@
               <button class="btn btn-main bg-blue fade-on-hover text-uppercase text-white mb-3" @click="confirmDeclineBid(bid.id, bid.bidAmount, bid.shipper.name)">Decline Bid</button>
             </div>
           </div>
+          <div class="row">
+            <div class="col-12" v-if="parseBidStatus(bid.bidStatus) == 'Completed'">
+          </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
+  
 </template>
 
 <script>
@@ -94,11 +99,12 @@ import Back from '@/components/Back.vue'
 
 import postUtilities from '@/utils/postUtilities.js'
 import bidUtilities from '@/utils/bidUtilities.js'
-
+import StarRating from "vue-star-rating";
 export default {
   name: 'carrierViewBidDetails',
   components: {
     Back,
+    StarRating
   },
   beforeCreate() {
     // A bid id must be passed, if not return to previous route
@@ -107,6 +113,7 @@ export default {
   data() {
     return {
       bid: null,
+      reviewScore: 0
     }
   },
   methods: {
@@ -180,6 +187,16 @@ export default {
       this.$store.dispatch('bids/getBidById', { type: 'carrier', bidId: this.$route.params.id })
         .then((response) => {
           this.bid = response.data.result
+          let reviews = this.bid.shipper.reviews
+          this.reviewScore = 0
+          if (reviews != null) {            
+            let totalReviews = 0
+            reviews.forEach(review => {
+              this.reviewScore += review.rating
+              totalReviews += 1
+            })
+            this.reviewScore = this.reviewScore / totalReviews
+          }
         })
         .catch(() => {
           Swal.fire({

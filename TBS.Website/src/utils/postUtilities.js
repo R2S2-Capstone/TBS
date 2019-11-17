@@ -25,6 +25,19 @@ const postUtilities = {
       return 'Unknown'
     }
   },
+  reverseParseTrailerType: (type) => {
+    if (type == 'Enclosed') {
+      return 0
+    } else if (type == 'Flat Bed') {
+      return 1
+    } else if (type == 'Car Carrier') {
+      return 2
+    } else if (type == 'Other') {
+      return 3
+    } else {
+      return 0
+    }
+  },
   parseVehicleCondition(condition) {
     if (condition === 0) {
       return 'New' 

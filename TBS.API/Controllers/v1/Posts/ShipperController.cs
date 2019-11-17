@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TBS.Data.Interfaces.Posts;
 using TBS.Data.Models;
 using TBS.Data.Models.Posts.Shipper;
+using TBS.Data.Models.Posts.Request;
 
 namespace TBS.API.Controllers.v1.Posts
 {
@@ -43,6 +44,10 @@ namespace TBS.API.Controllers.v1.Posts
             var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value;
             return Ok(new { result = await _service.CreatePostAsync(id, post) });
         }
+        // POST: api/v1/Posts/Shipper/{currentPage}/{pageSize}/Search
+        [HttpPost("{currentPage}/{pageSize}/Search")]
+        [Authorize]
+        public async Task<IActionResult> SearchAllActiveResultsAsync([FromBody] SearchModel search, int currentPage, int pageSize) => Ok(new { result = await _service.GetSearchAllActivePostsAsync(search, new PaginationModel() { CurrentPage = currentPage, PageSize = pageSize }) });
 
         // POST: api/v1/Posts/Shipper/{PostId}
         [HttpPost("{postId}")]

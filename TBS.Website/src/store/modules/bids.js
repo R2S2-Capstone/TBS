@@ -30,7 +30,7 @@ const bids = {
         commit('global/setLoading', true, { root: true })
         axios({
           method: 'GET',
-          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUser'].uid}/${payload.currentPage}/${payload.pageSize}`,
+          url: `bids/${payload.type}/${rootGetters['authentication/getFirebaseUserId']}/${payload.currentPage}/${payload.pageSize}`,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}` }
         })
         .then((response) => {
@@ -71,6 +71,26 @@ const bids = {
           method: 'PUT',
           url: `bids/${payload.type}`,
           data: { bidId: payload.bidId, status: payload.bidStatus },
+          headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
+        })
+        .then((response) => {
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+        .finally(() => {
+          commit('global/setLoading', false, { root: true })
+        })
+      })
+    },
+    createReview({ commit, rootGetters}, payload) {
+      commit('global/setLoading', true, { root: true })
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'POST',
+          url: `reviews/${payload.type}`,
+          data: payload.Review,
           headers: { Authorization: `Bearer ${rootGetters['authentication/getToken']}`}
         })
         .then((response) => {
